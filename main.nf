@@ -11,14 +11,6 @@ nextflow.enable.dsl = 2
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    GENOME PARAMETER VALUES
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*/
-
-params.fasta = WorkflowMain.getGenomeAttribute(params, 'fasta')
-
-/*
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     VALIDATE & PRINT PARAMETER SUMMARY
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -31,13 +23,13 @@ WorkflowMain.initialise(workflow, params, log)
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
-include { LOWFRAC-VARIANT-BENCHMARK } from './workflows/lowfrac-variant-benchmark'
+include { LOWFRAC_VARIANT_BENCHMARK } from './workflows/benchmark'
 
 //
 // WORKFLOW: Run main dincalcilab/lowfrac-variant-benchmark analysis pipeline
 //
-workflow DINCALCILAB_LOWFRAC-VARIANT-BENCHMARK {
-    LOWFRAC-VARIANT-BENCHMARK ()
+workflow DINCALCILAB_LOWFRAC_VARIANT_BENCHMARK {
+    LOWFRAC_VARIANT_BENCHMARK ()
 }
 
 /*
@@ -51,7 +43,7 @@ workflow DINCALCILAB_LOWFRAC-VARIANT-BENCHMARK {
 // See: https://github.com/nf-core/rnaseq/issues/619
 //
 workflow {
-    DINCALCILAB_LOWFRAC-VARIANT-BENCHMARK ()
+    DINCALCILAB_LOWFRAC_VARIANT_BENCHMARK ()
 }
 
 /*

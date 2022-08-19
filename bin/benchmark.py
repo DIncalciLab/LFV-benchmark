@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-#CHANGE LOCATION FOR THIS FILE IF NEEDED
 import pandas as pd
+import argparse
 from pathlib import Path
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -19,7 +19,8 @@ def load_germinal(vcf):
     df_neat = pd.DataFrame()
 
     for file in vcf:
-        samplename = file.name.split('.')[0]
+        print(file)
+        samplename = file.replace('neat_', '').replace('.vcf.gz', '')
         for variant in VCF(file):
             df_neat = df_neat.append(
                 [
@@ -35,45 +36,27 @@ def load_germinal(vcf):
 
 
 
-def load_ground_truth(vcf_snv, vcf_indel):
+def load_ground_truth(vcf):
     """
     Create grount truth dataframes from BAMSurgeon VCF files (spike-in variants)
     """
-    df_cols = ["sample", "chrom", "pos", "REF", "ALT"]
+    df_cols = ["sample", "chrom", "pos", "REF", "ALT", "VAF"]
 
-    df_groundtruth_snv = pd.DataFrame()
-    df_groundtruth_indel = pd.DataFrame()
+    df_bamsurgeon = pd.DataFrame()
 
-
-    for file in vcf_snv:
-        samplename = file.name.split('.')[0]
+    for file in vcf:
+        samplename = file.replace('bamsurgeon_', '').replace('.vcf.gz', '')
         for variant in VCF(file):
-            df_groundtruth_snv = df_groundtruth_snv.append(
+            df_bamsurgeon = df_bamsurgeon.append(
                 [
                     [samplename, variant.CHROM,
                     variant.POS, variant.REF,
                     variant.ALT[0], variant.INFO['VAF']
                     ]
                 ]
-            )
-            
-    df_groundtruth_snv.columns = ["sample", "chrom", "pos", "REF", "ALT", "VAF"]
-
-    for file in vcf_indel:
-        samplename = file.name.split('.')[0]
-        for variant in VCF(file):
-            df_groundtruth_indel = df_groundtruth_indel.append(
-                [
-                    [samplename, variant.CHROM,
-                    variant.POS, variant.REF,
-                    variant.ALT[0], variant.INFO['VAF']
-                    ]
-                ]
-            )
-            
-    df_groundtruth_indel.columns = ["sample", "chrom", "pos", "REF", "ALT", "VAF"]
-
-    return df_groundtruth_snv, df_groundtruth_indel
+            )         
+    df_bamsurgeon.columns = df_cols
+    return df_bamsurgeon
 
 def load_vardict(vcf):
     """
@@ -84,8 +67,8 @@ def load_vardict(vcf):
     df_vardict_snv = pd.DataFrame()
     df_vardict_indel = pd.DataFrame()
 
-    for file in vardict_files:
-        samplename = file.name.split('.')[0]
+    for file in vcf:
+        samplename = file.replace('vardictjava_', '').replace('.vcf.gz', '')
         for variant in VCF(file):
             if variant.is_snp:
                 df_vardict_snv = df_vardict_snv.append(
@@ -124,7 +107,7 @@ def load_mutect(vcf):
     df_mutect_indel = pd.DataFrame()
 
     for file in vcf:
-        samplename = file.name.split('.')[0]
+        samplename = file.replace('mutect_', '').replace('.vcf.gz', '')
         for variant in VCF(file):
             if variant.is_snp:
                 df_mutect_snv = df_mutect_snv.append(
@@ -161,8 +144,8 @@ def load_varscan(vcf):
     df_varscan_snv = pd.DataFrame()
     df_varscan_indel = pd.DataFrame()
 
-    for file in varscan_files:
-        samplename = file.name.split('.')[0]
+    for file in vcf:
+        samplename = file.replace('varscan_', '').replace('.vcf.gz', '')
         for variant in VCF(file):
             if variant.is_snp:
                 df_varscan_snv = df_varscan_snv.append(
@@ -189,13 +172,13 @@ def load_varscan(vcf):
     return df_varscan_snv, df_varscan_indel
 
 
-def calculate_spikein(df, df_truth, df_germinal):
+def calculate_spikein(df, df_bamsurgeon, df_neat):
     """
     Calculate the number of spiked-in variants called in the input variant caller
     """
 
-    df_spiked = df.merge(df_truth, on=['sample','chrom', 'pos', 'REF', 'ALT'], how="inner")
-    df_spiked_germinal = df.merge(df_germinal, on=['sample','chrom', 'pos', 'REF', 'ALT'], how="inner")
+    df_spiked = df.merge(df_bamsurgeon, on=['sample','chrom', 'pos', 'REF', 'ALT'], how="inner")
+    df_spiked_germinal = df.merge(df_neat, on=['sample','chrom', 'pos', 'REF', 'ALT'], how="inner")
 
     return df_spiked, df_spiked_germinal
 
@@ -218,10 +201,9 @@ def calculate_performance(df, df_spiked, df_spiked_germinal, df_truth):
 
     performance.columns = ['TP', 'FP', 'FN', 'TPR', 'PPV', 'FDR']
 
-    performance.to_csv(output)
     return performance
 
-def plot_performance(performance):
+def plot_performance(vardict, mutect, varscan):
     """
     Plot performance for the input variant caller
     """
@@ -229,8 +211,9 @@ def plot_performance(performance):
     #Set Black and white cmap
     from matplotlib import lines, markers
 
-    d = {'VarDict': vardict_performance_tot, 
-         'Mutect2': mutect_performance_tot, 'VarScan2': varscan_performance_tot}
+    d = {'VarDict': vardict, 
+         'Mutect2': mutect, 
+         'VarScan2': varscan}
 
     # line cyclers adapted to colourblind people
     from cycler import cycler
@@ -255,14 +238,14 @@ def plot_performance(performance):
     ax3.set_prop_cycle(marker_cycler)
 
     # Plot the sample
-    for key, df in d_snv.items():
+    for key, df in d.items():
         ax1.plot(df['PPV'], df['TPR'], markersize=15, label=key)
         
-    for key, df in d_ind.items():
-        ax2.plot(df['PPV'], df['TPR'], markersize=15, label=key)
+    #for key, df in d_ind.items():
+    #    ax2.plot(df['PPV'], df['TPR'], markersize=15, label=key)
         
-    for key, df in d_tot.items():
-        ax3.plot(df['PPV'], df['TPR'], markersize=15, label=key)
+    #for key, df in d_tot.items():
+    #    ax3.plot(df['PPV'], df['TPR'], markersize=15, label=key)
 
     # Edit the major and minor tick locations of x and y axes
     #ax.xaxis.set_major_locator(mpl.ticker.MultipleLocator(10))
@@ -315,36 +298,64 @@ def plot_performance(performance):
 
 
     # Save figure
-    plt.savefig(output_path, dpi=350, transparent=False, bbox_inches='tight')
+    plt.savefig('benchmark.png', dpi=350, transparent=False, bbox_inches='tight')
 
 
-    def main():
+def main():
 
-        #Load pseudo-germinal variants (generated from NEAT)
-        df_germinal = load_germinal(vcf_germinal)
+    parser = argparse.ArgumentParser(description='Generate plots for artificial mutation benchmark')
 
-        #Load ground-truth variants (spiked-in from BAMSurgeon)
-        df_truth = load_ground_truth(vcf_truth)
+    parser.add_argument('-n', '--neat',       required=True, nargs='+', help='Pseudo-germinal variants generated from NEAT')
 
-        #Load VarDict variants
-        df_vardict = load_vardict(vcf_vardict)
+    parser.add_argument('-b', '--bamsurgeon', required=True, nargs='+', help='Mutations spiked-in from BamSurgeon')
 
-        #Load Mutect2 variants
-        df_mutect = load_mutect(vcf_mutect)
+    parser.add_argument('-v', '--vardict',    required=True, nargs='+', help='VarDict VCF with spiked-in artificial mutations')
+    parser.add_argument('-m', '--mutect',     required=True, nargs='+', help='Mutect2 VCF with spiked-in artificial mutations')
+    parser.add_argument('-s', '--varscan',    required=True, nargs='+', help='VarScan2 VCF with spiked-in artificial mutations')
 
-        #Load VarScan2 variants
-        df_varscan = load_varscan(vcf_varscan)
+    args = parser.parse_args()
+
+    #Load pseudo-germinal variants (generated from NEAT)
+    df_neat = load_germinal(args.neat)
+    df_neat.to_csv("neat_variants.txt", sep="\t")
+        
+    #Load ground-truth variants (spiked-in from BAMSurgeon)
+    df_bamsurgeon = load_ground_truth(args.bamsurgeon)
+    df_bamsurgeon.to_csv("bamsurgeon_variants.txt", sep = "\t")
+
+    #Load VarDict variants
+    df_vardict_snv, df_vardict_indel = load_vardict(args.vardict)
+    df_vardict_tot = df_vardict_snv.append(df_vardict_indel)
+    df_vardict_tot.to_csv("vardict_variants.txt", sep = "\t")
+
+    #Load Mutect2 variants
+    df_mutect_snv, df_mutect_indel = load_mutect(args.mutect)
+    df_mutect_tot = df_mutect_snv.append(df_mutect_indel)
+    df_mutect_tot.to_csv("mutect_variants.txt", sep = "\t")
+
+    #Load VarScan2 variants
+    df_varscan_snv, df_varscan_indel = load_varscan(args.varscan)
+    df_varscan_tot = df_varscan_snv.append(df_varscan_indel)
+    df_varscan_tot.to_csv("varscan_variants.txt", sep = "\t")
 
 
-        #Calculate spiked-in variants for each caller
-        df_spikein_vardict, df_spikein_vardict_germinal = calculate_spikein(df_vardict, df_truth, df_germinal)
-        df_spikein_mutect, df_spikein_mutect_germinal = calculate_spikein(df_mutect, df_truth, df_germinal)
-        df_spikein_varscan, df_spikein_varscan_germinal = calculate_spikein(df_varscan, df_truth, df_germinal)
+    #Calculate spiked-in variants for each caller
+    df_spikein_vardict, df_spikein_vardict_germinal = calculate_spikein(df_vardict_tot, df_bamsurgeon, df_neat)
+    df_spikein_mutect, df_spikein_mutect_germinal = calculate_spikein(df_mutect_tot, df_bamsurgeon, df_neat)
+    df_spikein_varscan, df_spikein_varscan_germinal = calculate_spikein(df_varscan_tot, df_bamsurgeon, df_neat)
 
-        #Calculate performance for each caller
-        df_performance_vardict = calculate_performance(df_vardict, df_spikein_vardict, df_spikein_vardict_germinal, df_truth)
-        df_performance_mutect = calculate_performance(df_mutect, df_spikein_mutect, df_spikein_mutect_germinal, df_truth)
-        df_performance_varscan = calculate_performance(df_varscan, df_spikein_varscan, df_spikein_varscan_germinal, df_truth)
+    #Calculate performance for each caller
+    df_performance_vardict = calculate_performance(df_vardict_tot, df_spikein_vardict, df_spikein_vardict_germinal, df_neat)
+    df_performance_vardict.to_csv("vardict_performance.txt", sep = "\t")
 
-        #Plot performance
-        plot_performance(df_performance_vardict, df_performance_mutect, df_performance_varscan)
+    df_performance_mutect = calculate_performance(df_mutect_tot, df_spikein_mutect, df_spikein_mutect_germinal, df_neat)
+    df_performance_mutect.to_csv("mutect_performance.txt", sep = "\t")
+
+    df_performance_varscan = calculate_performance(df_varscan_tot, df_spikein_varscan, df_spikein_varscan_germinal, df_neat)
+    df_performance_varscan.to_csv("varscan_performance.txt", sep = "\t")
+
+    #Plot performance
+    plot_performance(df_performance_vardict, df_performance_mutect, df_performance_varscan)
+
+if __name__ == '__main__':
+    main()
