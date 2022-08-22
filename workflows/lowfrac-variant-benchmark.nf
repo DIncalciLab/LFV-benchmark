@@ -37,6 +37,7 @@ for (param in checkPathParamList) {
 include { NEAT        } from '../modules/local/neat.nf'
 include { RANDOMSITES } from '../modules/local/randomsites.nf'
 include { BAMSURGEON  } from '../modules/local/bamsurgeon.nf'
+include { BENCHMARK  } from '../modules/local/benchmark.nf'
 include { INPUT_CHECK } from '../subworkflows/local/input_check'
 
 /*
@@ -51,7 +52,7 @@ include { INPUT_CHECK } from '../subworkflows/local/input_check'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
 include { NUTECT2 } from '../modules/nf-core/modules/gtak4/mutect2/main'
 include { VARDICT } from '../modules/nf-core/modules/vardictjava/main'
-include { VARSCAN } from '../modules/nf-core/modules/varscan2/main'
+include { VARSCAN2 } from '../modules/nf-core/modules/varscan2/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -71,9 +72,9 @@ workflow LOWFRAC-VARIANT-BENCHMARK {
     
     ch_versions = ch_versions.mix(NEAT.out.versions)
     
-    RANDOMSITE(ch.input)
+    RANDOMSITES(ch.input)
     
-    BAMSURGEON(NEAT.out.bam, RANDOMSITE.out.mut)
+    BAMSURGEON(NEAT.out.bam, RANDOMSITES.out.mut)
     
     ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
     
