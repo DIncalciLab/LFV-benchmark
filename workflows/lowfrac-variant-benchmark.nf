@@ -66,19 +66,31 @@ def multiqc_report = []
 workflow LOWFRAC-VARIANT-BENCHMARK {
 
     ch_versions = Channel.empty()
-    ch_input = Channel.empty() // FIXME
 
-    NEAT(ch.input)
+    NEAT(
+        params.coverage, 
+        params.error_model,
+        params.mutation_model,
+        params.gc_model,
+        params.fraglen_model
+        )
     
     ch_versions = ch_versions.mix(NEAT.out.versions)
     
-    RANDOMSITES(ch.input)
+    RANDOMSITES(
+        params.min_fraction,
+        params.max_fraction
+    )
     
-    BAMSURGEON(NEAT.out.bam, RANDOMSITES.out.mut)
+    BAMSURGEON(
+        NEAT.out.bam, 
+        RANDOMSITES.out.mut)
     
     ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
     
-    BENCHMARK(BAMSURGEON.out.bam, BAMSURGEON.out.vcf)
+    BENCHMARK(
+        BAMSURGEON.out.bam, 
+        BAMSURGEON.out.vcf)
     
     ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
     
