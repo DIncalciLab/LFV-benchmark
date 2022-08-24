@@ -5,12 +5,12 @@ process NEAT {
     input:
     val readlen
     val coverage
+    path bed
     path fasta
     path fraglenmodel
     path seqerrormodel
-    path gcbiasmodel
-    path bed
     path mutmodel
+    path gcbiasmodel
 
     output:
     tuple val(meta), path("*.vcf.gz")     , emit: vcf

@@ -68,29 +68,57 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     ch_versions = Channel.empty()
 
     NEAT(
-        params.coverage, 
+        params.readlen,
+        params.coverage,
+        params.bed, 
+        params.fasta,
+        params.fraglen_model,
         params.error_model,
         params.mutation_model,
-        params.gc_model,
-        params.fraglen_model
+        params.gc_model
         )
     
     ch_versions = ch_versions.mix(NEAT.out.versions)
     
     RANDOMSITES(
+        params.mut_number,
         params.min_fraction,
-        params.max_fraction
+        params.max_fraction,
+        params.type,
+        params.maxlen,
+        params.fasta,
+        params.bed
     )
     
     BAMSURGEON(
         NEAT.out.bam, 
-        RANDOMSITES.out.mut)
+        RANDOMSITES.out.bed,
+        params.picardjar)
     
     ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
-    
+
+    VARDICTJAVA(
+        BAMSURGEON.out.bam,
+        BAMSURGEON.out.bai,
+        params.bed
+    )
+
+    GATK4_MUTECT2(
+        BAMSURGEON.out.bam,
+        BAMSURGEON.out.bai,
+        params.bed
+    )
+
+    VARSCAN2(
+        BAMSURGEON.out.bam,
+        BAMSURGEON.out.bai,
+        params.bed
+    )
+
     BENCHMARK(
-        BAMSURGEON.out.bam, 
-        BAMSURGEON.out.vcf)
+        VARDICTJAVA.out.vcf, 
+        GATK4_MUTECT2.out.vcf,
+        VARSCAN2.out.vcf)
     
     ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
     

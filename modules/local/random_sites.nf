@@ -1,4 +1,4 @@
-process RANDOM_SITES {
+process RANDOMSITES {
     tag "$meta.id"
     label 'process_low'
 

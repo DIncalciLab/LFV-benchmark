@@ -9,14 +9,8 @@ process GATK4_MUTECT2 {
 
     input:
     //FIXME: Change inputs to match benchmark
-    tuple val(meta), path(input), path(input_index), path(intervals)
+    tuple val(meta), path(bam), path(bai)
     path fasta
-    path fai
-    path dict
-    path germline_resource
-    path germline_resource_tbi
-    path panel_of_normals
-    path panel_of_normals_tbi
 
     output:
     tuple val(meta), path("*.vcf.gz")     , emit: vcf_mutect
@@ -31,10 +25,10 @@ process GATK4_MUTECT2 {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.id}"
-    def inputs = input.collect{ "--input $it"}.join(" ")
-    def interval_command = intervals ? "--intervals $intervals" : ""
-    def pon_command = panel_of_normals ? "--panel-of-normals $panel_of_normals" : ""
-    def gr_command = germline_resource ? "--germline-resource $germline_resource" : ""
+    //def inputs = input.collect{ "--input $it"}.join(" ")
+    //def interval_command = intervals ? "--intervals $intervals" : ""
+    //def pon_command = panel_of_normals ? "--panel-of-normals $panel_of_normals" : ""
+    //def gr_command = germline_resource ? "--germline-resource $germline_resource" : ""
 
     def avail_mem = 3
     if (!task.memory) {
@@ -44,7 +38,7 @@ process GATK4_MUTECT2 {
     }
     """
     gatk --java-options "-Xmx${avail_mem}g" Mutect2 \\
-        $inputs \\
+        -I $bam \\
         --output ${prefix}.vcf.gz \\
         --reference $fasta \\
         --tmp-dir . \\

@@ -3,16 +3,14 @@ process BAMSURGEON {
     label 'process_high'
 
     input:
-    val mut_number
-    val minvaf
-    val maxvaf
-    val type
-    val maxlen
-    path fasta
+    path bam
     path bed
+    path fasta
+    path picardjar
 
     output:
-    tuple val(meta), path("*.bed")        , emit: bed
+    tuple val(meta), path("*.bam")        , emit: bam
+    tuple val(meta), path("*.vcf")        , emit: vcf
     path "versions.yml"                   , emit: versions
     
     when:
