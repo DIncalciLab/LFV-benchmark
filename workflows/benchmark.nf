@@ -37,7 +37,7 @@ for (param in checkPathParamList) {
 include { NEAT        } from '../modules/local/neat.nf'
 include { RANDOMSITES } from '../modules/local/randomsites.nf'
 include { BAMSURGEON  } from '../modules/local/bamsurgeon.nf'
-include { BENCHMARK  } from '../modules/local/benchmark.nf'
+include { BENCHMARK  }  from '../modules/local/benchmark.nf'
 include { INPUT_CHECK } from '../subworkflows/local/input_check'
 
 /*

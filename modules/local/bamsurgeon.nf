@@ -43,7 +43,7 @@ process BAMSURGEON {
     """
     }
     
-    else if (spike_type == 'indel')
+    else if (spike_type == 'indel') {
     """
     addindel.py \\
         $args \\
@@ -57,8 +57,9 @@ process BAMSURGEON {
         --tmpdir "tmp" \
         --seed ${RANDOM} \\  INSERT RANDOM FUNCTION FROM BASH
     """
+    }
 
-    else if (spike_type == 'both')
+    else if (spike_type == 'both') {
     """
     addsnv.py \\
         $args \\
@@ -84,6 +85,7 @@ process BAMSURGEON {
         --tmpdir "tmp" \
         --seed ${RANDOM} \\  INSERT RANDOM FUNCTION FROM BASH
     """
+    }
 
     """
     cat <<-END_VERSIONS > versions.yml
@@ -93,5 +95,5 @@ process BAMSURGEON {
         BED used: $bed
         FASTA used: $fasta
     END_VERSIONS
-    """
+    """    
 }

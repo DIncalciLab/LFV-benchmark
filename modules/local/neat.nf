@@ -86,4 +86,4 @@ process NEAT {
         Read length: $readlen
     END_VERSIONS
     """
-    }
+}

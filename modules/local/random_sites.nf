@@ -30,7 +30,7 @@ process RANDOMSITES {
         avail_mem = task.memory.giga
     }
 
-    if (type == 'snv')
+    if (type == 'snv') {
         """
         python3 path/to/random_sites \\
             $args \\
@@ -42,8 +42,9 @@ process RANDOMSITES {
             --maxvaf $maxvaf \\
             snv > "random_snv_${prefix}.bed"
         """
+    }
 
-    else if (type == 'indel')
+    else if (type == 'indel'){
         """
         python3 path/to/random_sites \\
             $args \\
@@ -55,8 +56,9 @@ process RANDOMSITES {
             --maxvaf $maxvaf \\
             indel --maxlen $maxlen > "random_indels_${prefix}.bed"
         """
+    }
 
-    else if (type == 'both')
+    else if (type == 'both'){
         """
         python3 path/to/random_sites \\
             $args \\
@@ -79,6 +81,7 @@ process RANDOMSITES {
             --maxvaf $maxvaf \\
             indel --maxlen $maxlen > "random_indels_${prefix}.bed"
         """
+    }
 
     """
     cat <<-END_VERSIONS > versions.yml
@@ -105,4 +108,4 @@ process RANDOMSITES {
     "${task.process}":
     END_VERSIONS
     """
-    }
+}
