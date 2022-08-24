@@ -11,7 +11,7 @@ WorkflowLowfrac-variant-benchmark.initialise(params, log)
 
 // TODO nf-core: Add all file path parameters for the pipeline to the list below
 // Check input path parameters to see if they exist
-def checkPathParamList = [ params.input]
+def checkPathParamList = []
 for (param in checkPathParamList) { 
     if (param) { 
         file(param, checkIfExists: true) 
@@ -63,7 +63,7 @@ include { VARSCAN2 } from '../modules/nf-core/modules/varscan2/main'
 // Info required for completion email and summary
 def multiqc_report = []
 
-workflow LOWFRAC-VARIANT-BENCHMARK {
+workflow LOWFRAC_VARIANT_BENCHMARK {
 
     ch_versions = Channel.empty()
 
