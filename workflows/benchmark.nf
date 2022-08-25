@@ -85,6 +85,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.coverage,
         params.bed, 
         params.fasta,
+        params.neat_path,
         params.fraglen_model,
         params.error_model,
         params.mutation_model,
@@ -100,12 +101,14 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.type,
         params.maxlen,
         params.fasta,
-        params.bed
+        params.bed,
+        params.bamsurgeon_path
     )
     
     BAMSURGEON(
         NEAT.out.bam, 
         RANDOMSITES.out.bed,
+        params.bamsurgeon_path,
         params.picardjar)
     
     ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
