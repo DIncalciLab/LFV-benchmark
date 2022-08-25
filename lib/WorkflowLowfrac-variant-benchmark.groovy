@@ -1,8 +1,8 @@
 //
 // This file holds several functions specific to the workflow/lowfrac-variant-benchmark.nf in the dincalcilab/lowfrac-variant-benchmark pipeline
 //
-
-class WorkflowLowfrac_variant_benchmark {
+/*
+class WorkflowLowfrac {
 
     //
     // Check and validate parameters
@@ -51,3 +51,4 @@ class WorkflowLowfrac_variant_benchmark {
         }
     }
 }
+*/
