@@ -37,7 +37,7 @@ process RANDOMSITES {
             $args \\
             -g $fasta \\
             -b $bed \\
-            -s ${RANDOM} \\ //SET RANDOM FUNCTION FROM BASH
+            -s $RANDOM \\ //SET RANDOM FUNCTION FROM BASH
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
@@ -51,7 +51,7 @@ process RANDOMSITES {
             $args \\
             -g $fasta \\
             -b $bed \\
-            -s ${RANDOM} \\ //SET RANDOM FUNCTION FROM BASH
+            -s $RANDOM \\ //SET RANDOM FUNCTION FROM BASH
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
@@ -65,7 +65,7 @@ process RANDOMSITES {
             $args \\
             -g $fasta \\
             -b $bed \\
-            -s ${RANDOM} \\ //SET RANDOM FUNCTION FROM BASH
+            -s $RANDOM \\ //SET RANDOM FUNCTION FROM BASH
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
