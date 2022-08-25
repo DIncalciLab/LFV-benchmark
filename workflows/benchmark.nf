@@ -63,7 +63,7 @@ include { BENCHMARK  }  from '../modules/local/benchmark.nf'
 // MODULE: Installed directly from nf-core/modules
 //
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
-include { NUTECT2 } from '../modules/nf-core/modules/gtak4/mutect2/main'
+include { NUTECT2 } from '../modules/nf-core/modules/gatk4/mutect2/main'
 include { VARDICT } from '../modules/nf-core/modules/vardictjava/main'
 include { VARSCAN2 } from '../modules/nf-core/modules/varscan2/main'
 
