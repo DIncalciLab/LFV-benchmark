@@ -1,5 +1,5 @@
 process VARSCAN2 {
-    tag "$meta.id"
+    //tag "$meta.id"
     label 'process_medium'
 
     // ADJUST THIS SECTION

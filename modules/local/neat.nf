@@ -1,5 +1,5 @@
 process NEAT {
-    tag "$meta.id"
+    //tag "$meta.id"
     label 'process_high'
 
     input:

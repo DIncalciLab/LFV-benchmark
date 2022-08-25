@@ -1,5 +1,5 @@
 process BENCHMARK {
-    tag "$meta.id"
+    //tag "$meta.id"
     label 'process_low'
 
     // ADJUST THIS SECTION

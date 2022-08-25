@@ -1,5 +1,5 @@
 process GATK4_MUTECT2 {
-    tag "$meta.id"
+    //tag "$meta.id"
     label 'process_medium'
 
     conda (params.enable_conda ? "bioconda::gatk4=4.2.6.1" : null)

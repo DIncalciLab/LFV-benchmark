@@ -1,5 +1,5 @@
 process RANDOMSITES {
-    tag "$meta.id"
+    //tag "$meta.id"
     label 'process_low'
 
     input:
