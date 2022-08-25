@@ -10,7 +10,10 @@ process BENCHMARK {
         'quay.io/biocontainers/vardict-java:1.8.3--hdfd78af_0' }"
 
     input:
-    tuple val(meta), path(vcf_vardict), path(vcf_mutect), path(vcf_varscan)
+    //tuple val(meta), path(vcf_vardict), path(vcf_mutect), path(vcf_varscan)
+    path      vcf_vardict
+    path      vcf_mutect
+    path      vcf_varscan
 
     output:
     tuple val(meta), path("*.txt")   , emit: benchmark
