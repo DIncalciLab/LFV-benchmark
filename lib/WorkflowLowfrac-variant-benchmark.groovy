@@ -1,7 +1,7 @@
 //
 // This file holds several functions specific to the workflow/lowfrac-variant-benchmark.nf in the dincalcilab/lowfrac-variant-benchmark pipeline
 //
-/*
+
 class WorkflowLowfrac {
 
     //
@@ -40,6 +40,7 @@ class WorkflowLowfrac {
     //
     // Exit pipeline if incorrect --genome key provided
     //
+    /*
     private static void genomeExistsError(params, log) {
         if (params.genomes && params.genome && !params.genomes.containsKey(params.genome)) {
             log.error "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
@@ -49,6 +50,5 @@ class WorkflowLowfrac {
                 "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~"
             System.exit(1)
         }
-    }
+    }*/
 }
-*/
