@@ -47,7 +47,7 @@ process NEAT {
         -e $seqerrormodel \\
         --gc-model $gcbiasmodel \\
         -tr $bed \\
-        --rng ${RANDOM} \\ //COME PASSARE RANDOM DI BASH?
+        --rng $RANDOM \\
         -m $mutmodel \\
         -o $prefix
 
