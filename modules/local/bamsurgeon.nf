@@ -6,6 +6,7 @@ process BAMSURGEON {
     path bam
     path bed
     path fasta
+    path bamsurgeon_path
     path picardjar
 
     output:
@@ -22,14 +23,14 @@ process BAMSURGEON {
 
     def avail_mem = 3
     if (!task.memory) {
-        log.info '[BAMSurgeon/add_snv.py] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
+        log.info '[BAMSurgeon] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
     } else {
         avail_mem = task.memory.giga
     }
 
     if (spike_type == 'snv') {
     """
-    addsnv.py \\
+    python3 -O ${bamsurgeon_path}/bin/addsnv.py \\
         $args \\
         -v $bed \
         -f $bam \
@@ -45,7 +46,7 @@ process BAMSURGEON {
     
     else if (spike_type == 'indel') {
     """
-    addindel.py \\
+    python 3 -O ${bamsurgeon_path}/bin/addindel.py \\
         $args \\
         -v $bed \
         -f $bam \
@@ -61,7 +62,7 @@ process BAMSURGEON {
 
     else if (spike_type == 'both') {
     """
-    addsnv.py \\
+    python3 -O ${bamsurgeon_path}/bin/addsnv.py \\
         $args \\
         -v $bed \
         -f $bam \
@@ -73,7 +74,7 @@ process BAMSURGEON {
         --tmpdir "tmp" \
         --seed ${RANDOM} \\  INSERT RANDOM FUNCTION FROM BASH
 
-        addindel.py \\
+        python3 -O ${bamsurgeon_path}/bin/addindel.py \\
         $args \\
         -v $bed \
         -f $bam \

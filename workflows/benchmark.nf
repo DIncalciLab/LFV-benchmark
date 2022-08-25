@@ -14,12 +14,14 @@ def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 def checkPathParamList = [
     params.fasta,
     params.bed,
+    params.neat_path,
     params.readlen,
     params.coverage,
     params.error_model,
     params.mutation_model,
     params.gc_model,
     params.fraglen_model,
+    params.bamsurgeon_path,
     params.picardjar
 ]
 /*

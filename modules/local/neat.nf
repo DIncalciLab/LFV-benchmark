@@ -7,6 +7,7 @@ process NEAT {
     val coverage
     path bed
     path fasta
+    path neat_path
     path fraglenmodel
     path seqerrormodel
     path mutmodel
@@ -37,7 +38,7 @@ process NEAT {
 
 
     """
-    python3 /path/to/NEAT/gen_reads.py \\
+    python3 ${neat_path}/gen_reads.py \\
         $args \\
         -r $fasta \\
         -R $readlen \\
