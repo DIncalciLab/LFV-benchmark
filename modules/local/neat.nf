@@ -67,7 +67,7 @@ process NEAT {
      """
 
     stub:
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "neat"
     """
     touch ${prefix}.vcf.gz
     touch ${prefix}.vcf.gz.tbi

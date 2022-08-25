@@ -25,7 +25,7 @@ process VARDICTJAVA {
     script:
     def args = task.ext.args ?: ''
     def args2 = task.ext.args2 ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "vardict"
     def VERSION = '1.8.3' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
 
 

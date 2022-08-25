@@ -22,7 +22,7 @@ process RANDOMSITES {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "randomsites"
 
     def avail_mem = 3
     if (!task.memory) {
