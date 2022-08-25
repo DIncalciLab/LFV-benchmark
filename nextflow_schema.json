@@ -193,6 +193,10 @@
             "description": "Parameters for NEAT",
             "default": "",
             "properties": {
+                "neat_path": {
+                    "type": "string",
+                    "default": "None"
+                },
                 "readlen": {
                     "type": "integer",
                     "default": 151
@@ -224,7 +228,28 @@
                 "error_model",
                 "mutation_model",
                 "gc_model",
-                "fraglen_model"
+                "fraglen_model",
+                "neat_path"
+            ]
+        },
+        "bamsurgeon_option": {
+            "title": "BAMSurgeon option",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "bamsurgeon_path": {
+                    "type": "string",
+                    "default": "None"
+                },
+                "picardjar": {
+                    "type": "string",
+                    "default": "None"
+                }
+            },
+            "required": [
+                "bamsurgeon_path",
+                "picardjar"
             ]
         },
         "bamsurgeon_random_sites_py_options": {
@@ -278,19 +303,11 @@
                     "type": "integer",
                     "default": 2
                 }
-            }
-        },
-        "bamsurgeon_option": {
-            "title": "BAMSurgeon option",
-            "type": "object",
-            "description": "",
-            "default": "",
-            "properties": {
-                "picardjar": {
-                    "type": "string",
-                    "default": "None"
-                }
-            }
+            },
+            "required": [
+                "fasta",
+                "bed"
+            ]
         }
     },
     "allOf": [
@@ -310,13 +327,13 @@
             "$ref": "#/definitions/neat_parameters"
         },
         {
+            "$ref": "#/definitions/bamsurgeon_option"
+        },
+        {
             "$ref": "#/definitions/bamsurgeon_random_sites_py_options"
         },
         {
             "$ref": "#/definitions/workflow_options"
-        },
-        {
-            "$ref": "#/definitions/bamsurgeon_option"
         }
     ]
 }
