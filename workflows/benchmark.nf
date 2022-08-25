@@ -66,6 +66,7 @@ include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/
 include { GATK4_MUTECT2 } from '../modules/nf-core/modules/gatk4/mutect2/main'
 include { VARDICTJAVA } from '../modules/nf-core/modules/vardictjava/main'
 include { VARSCAN2 } from '../modules/nf-core/modules/varscan2/main'
+include { MULTIQC                     } from '../modules/nf-core/modules/multiqc/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
