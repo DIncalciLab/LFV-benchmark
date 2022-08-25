@@ -135,10 +135,10 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.fasta
     )
 
-    BENCHMARK(
+    /*BENCHMARK(
         VARDICTJAVA.out.vcf, 
         GATK4_MUTECT2.out.vcf,
-        VARSCAN2.out.vcf)
+        VARSCAN2.out.vcf)*/
     
     ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
     
