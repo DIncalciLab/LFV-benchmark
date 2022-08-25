@@ -10,9 +10,6 @@
             "type": "object",
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
-            "required": [
-                "outdir"
-            ],
             "properties": {
                 "input": {
                     "type": "string",
@@ -209,27 +206,27 @@
             "properties": {
                 "readlen": {
                     "type": "string",
-                    "default": null
+                    "default": "None"
                 },
                 "coverage": {
                     "type": "string",
-                    "default": null
+                    "default": "None"
                 },
                 "error_model": {
                     "type": "string",
-                    "default": null
+                    "default": "None"
                 },
                 "mutation_model": {
                     "type": "string",
-                    "default": null
+                    "default": "None"
                 },
                 "gc_model": {
                     "type": "string",
-                    "default": null
+                    "default": "None"
                 },
                 "fraglen_model": {
                     "type": "string",
-                    "default": null
+                    "default": "None"
                 }
             },
             "required": [
@@ -240,6 +237,59 @@
                 "gc_model",
                 "fraglen_model"
             ]
+        },
+        "bamsurgeon_random_sites_py_options": {
+            "title": "BAMSurgeon/random_sites.py options",
+            "type": "object",
+            "description": "Parameters for BAMSurgeon/random_sites.py",
+            "default": "",
+            "properties": {
+                "mut_number": {
+                    "type": "integer",
+                    "default": 100,
+                    "description": "Number of somatic mutations to be generated"
+                },
+                "maxlen": {
+                    "type": "integer",
+                    "default": 30,
+                    "description": "Maximum length for INDELs mutations"
+                },
+                "max_fraction": {
+                    "type": "number",
+                    "default": 0.05,
+                    "description": "Maximum fraction of simulated mutations"
+                },
+                "min_fraction": {
+                    "type": "number",
+                    "default": 0.001,
+                    "description": "Minimum fraction of simulated mutations"
+                },
+                "type": {
+                    "type": "string",
+                    "default": "both",
+                    "description": "Type of mutations to be generated"
+                }
+            }
+        },
+        "workflow_options": {
+            "title": "Workflow options",
+            "type": "object",
+            "description": "General parameters",
+            "default": "",
+            "properties": {
+                "fasta": {
+                    "type": "string",
+                    "default": "None"
+                },
+                "bed": {
+                    "type": "string",
+                    "default": "None"
+                },
+                "samples": {
+                    "type": "integer",
+                    "default": 2
+                }
+            }
         }
     },
     "allOf": [
@@ -257,37 +307,18 @@
         },
         {
             "$ref": "#/definitions/neat_parameters"
+        },
+        {
+            "$ref": "#/definitions/bamsurgeon_random_sites_py_options"
+        },
+        {
+            "$ref": "#/definitions/workflow_options"
         }
     ],
     "properties": {
-        "mut_number": {
-            "type": "integer",
-            "default": 100,
-            "description": "Number of somatic mutations to be generated"
-        },
-        "maxlen": {
-            "type": "integer",
-            "default": 30,
-            "description": "Maximum length for INDELs mutations"
-        },
-        "min_fraction": {
-            "type": "number",
-            "default": 0.001,
-            "description": "Minimum fraction of simulated mutations"
-        },
-        "max_fraction": {
-            "type": "number",
-            "default": 0.05,
-            "description": "Maximum fraction of simulated mutations"
-        },
-        "type": {
-            "type": "string",
-            "default": "both",
-            "description": "Type of mutations to be generated"
-        },
         "picardjar": {
             "type": "string",
-            "default": null
+            "default": "None"
         }
     }
 }
