@@ -108,6 +108,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     BAMSURGEON(
         NEAT.out.bam, 
         RANDOMSITES.out.bed,
+        params.fasta,
         params.bamsurgeon_path,
         params.picardjar)
     
