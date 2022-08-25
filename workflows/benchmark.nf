@@ -7,7 +7,7 @@
 def summary_params = NfcoreSchema.paramsSummaryMap(workflow, params)
 
 // Validate input parameters
-WorkflowLowfrac-variant-benchmark.initialise(params, log)
+WorkflowLowfrac_variant_benchmark.initialise(params, log)
 
 // TODO nf-core: Add all file path parameters for the pipeline to the list below
 // Check input path parameters to see if they exist
@@ -131,8 +131,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     //
     // MODULE: MultiQC
     //
-    /*
-    workflow_summary    = WorkflowLowfrac-variant-benchmark.paramsSummaryMultiqc(workflow, summary_params)
+    
+    workflow_summary    = WorkflowLowfrac_variant_benchmark.paramsSummaryMultiqc(workflow, summary_params)
     ch_workflow_summary = Channel.value(workflow_summary)
 
     ch_multiqc_files = Channel.empty()
@@ -148,7 +148,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     multiqc_report = MULTIQC.out.report.toList()
     ch_versions    = ch_versions.mix(MULTIQC.out.versions)
     
-    */
+    
 }
 
 /*
