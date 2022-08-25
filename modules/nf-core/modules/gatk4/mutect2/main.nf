@@ -9,7 +9,9 @@ process GATK4_MUTECT2 {
 
     input:
     //FIXME: Change inputs to match benchmark
-    tuple val(meta), path(bam), path(bai)
+    //tuple val(meta), path(bam), path(bai)
+    path bam
+    path bed
     path fasta
 
     output:

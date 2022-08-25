@@ -9,9 +9,11 @@ process VARDICTJAVA {
         'quay.io/biocontainers/vardict-java:1.8.3--hdfd78af_0' }"
 
     input:
-    tuple val(meta), path(bam), path(bai)
-    tuple path(fasta), path(fasta_fai)
-    file  path(bed)
+    //tuple val(meta), path(bam), path(bai)
+    //tuple path(fasta), path(fasta_fai)
+    path   bam
+    path   fasta
+    path   bed 
 
     output:
     tuple val(meta), path("*.vcf.gz"), emit: vcf_vardict

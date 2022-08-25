@@ -116,7 +116,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     VARDICTJAVA(
         BAMSURGEON.out.bam,
-        BAMSURGEON.out.bai,
+        //BAMSURGEON.out.bai,
         params.fasta,
         params.bed
     )
@@ -129,7 +129,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     VARSCAN2(
         BAMSURGEON.out.bam,
-        BAMSURGEON.out.bai,
+        //BAMSURGEON.out.bai,
         params.bed,
         params.fasta
     )

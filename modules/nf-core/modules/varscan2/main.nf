@@ -10,8 +10,11 @@ process VARSCAN2 {
         'quay.io/biocontainers/vardict-java:1.8.3--hdfd78af_0' }"
 
     input:
-    tuple val(meta), path(bam), path(bai), path(bed)
-    tuple path(fasta), path(fasta_fai)
+    //tuple val(meta), path(bam), path(bai), path(bed)
+    //tuple path(fasta), path(fasta_fai)
+    path bam
+    path bed
+    path fasta
 
     output:
     tuple val(meta), path("*.vcf.gz"), emit: vcf_varscan
