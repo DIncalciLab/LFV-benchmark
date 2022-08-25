@@ -205,12 +205,12 @@
             "default": "",
             "properties": {
                 "readlen": {
-                    "type": "string",
-                    "default": "None"
+                    "type": "integer",
+                    "default": 151
                 },
                 "coverage": {
-                    "type": "string",
-                    "default": "None"
+                    "type": "integer",
+                    "default": 1000
                 },
                 "error_model": {
                     "type": "string",
@@ -290,6 +290,18 @@
                     "default": 2
                 }
             }
+        },
+        "bamsurgeon_option": {
+            "title": "BAMSurgeon option",
+            "type": "object",
+            "description": "",
+            "default": "",
+            "properties": {
+                "picardjar": {
+                    "type": "string",
+                    "default": "None"
+                }
+            }
         }
     },
     "allOf": [
@@ -313,12 +325,9 @@
         },
         {
             "$ref": "#/definitions/workflow_options"
+        },
+        {
+            "$ref": "#/definitions/bamsurgeon_option"
         }
-    ],
-    "properties": {
-        "picardjar": {
-            "type": "string",
-            "default": "None"
-        }
-    }
+    ]
 }
