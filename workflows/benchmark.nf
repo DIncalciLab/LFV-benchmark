@@ -87,7 +87,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     .map { row -> tuple([//patient: row.patient ? row.patient : "patient",
                     //id: row.samplename,
                     samplename: row.samplename,
-                    info: row.info
+                    info: row.info])
                     //type: row.type ? row.type : "tissue"],
                     //file(row.bamfile), file(row.bamfile + ".bai"))
     }
