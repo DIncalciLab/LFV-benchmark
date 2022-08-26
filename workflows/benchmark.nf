@@ -63,10 +63,10 @@ include { BENCHMARK  }  from '../modules/local/benchmark.nf'
 // MODULE: Installed directly from nf-core/modules
 //
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
-include { GATK4_MUTECT2 } from '../modules/nf-core/modules/gatk4/mutect2/main'
-include { VARDICTJAVA } from '../modules/nf-core/modules/vardictjava/main'
-include { VARSCAN2 } from '../modules/nf-core/modules/varscan2/main'
-include { MULTIQC                     } from '../modules/nf-core/modules/multiqc/main'
+include { GATK4_MUTECT2 }               from '../modules/nf-core/modules/gatk4/mutect2/main'
+include { VARDICTJAVA }                 from '../modules/nf-core/modules/vardictjava/main'
+include { VARSCAN2 }                    from '../modules/nf-core/modules/varscan2/main'
+include { MULTIQC }                     from '../modules/nf-core/modules/multiqc/main'
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -82,7 +82,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     ch_versions = Channel.empty()
 
     ch_input = Channel
-    .fromPath("${params.input}")
+    .fromPath(${params.input})
     .map {
         meta, info ->
         fmeta = [:]
