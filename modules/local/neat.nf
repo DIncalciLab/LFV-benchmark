@@ -28,9 +28,9 @@ process NEAT {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "neat"
     def version = '3.2' //VERSION IS HARDCODED
-    def random = ${RANDOM}
+    def random = $RANDOM
 
-    
+
     """
     python3 ${neat_path}/gen_reads.py \\
         $args \\
