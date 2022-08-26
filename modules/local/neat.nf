@@ -3,7 +3,7 @@ process NEAT {
     label 'process_high'
 
     input:
-    tuple val(samplename), val(info)
+    val meta
     val rng
     val readlen
     val coverage
@@ -28,7 +28,7 @@ process NEAT {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "neat_${samplename}"
+    def prefix = task.ext.prefix ?: "neat_${meta.samplename}"
     def version = '3.2' //VERSION IS HARDCODED
 
     """
@@ -58,7 +58,7 @@ process NEAT {
         Coverage: $coverage
         Read length: $readlen
         RNG: $rng
-        META: $samplename
+        META: $meta.samplename
     END_VERSIONS
      """
 
