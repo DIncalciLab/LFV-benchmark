@@ -58,7 +58,7 @@ process NEAT {
         Coverage: $coverage
         Read length: $readlen
         RNG: $rng
-        META: $meta.samplename
+        META: $meta
     END_VERSIONS
      """
 
