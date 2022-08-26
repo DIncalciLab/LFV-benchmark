@@ -8,6 +8,7 @@ process BAMSURGEON {
     path fasta
     path bamsurgeon_path
     path picardjar
+    val  rng
 
     output:
     tuple val(meta), path("*.bam")        , emit: bam
@@ -20,7 +21,6 @@ process BAMSURGEON {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "bamsurgeon"
-    def random = "$RANDOM"
 
     def avail_mem = 3
     if (!task.memory) {
@@ -41,7 +41,7 @@ process BAMSURGEON {
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir "tmp" \
-        --seed $random
+        --seed $rng
     """
     }
     
@@ -57,7 +57,7 @@ process BAMSURGEON {
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir "tmp" \
-        --seed $random
+        --seed $rng
     """
     }
 
@@ -73,7 +73,7 @@ process BAMSURGEON {
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir "tmp" \
-        --seed $random
+        --seed $rng
 
         python3 -O ${bamsurgeon_path}/bin/addindel.py \\
         $args \\
@@ -85,7 +85,7 @@ process BAMSURGEON {
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir "tmp" \
-        --seed $random
+        --seed $rng
     """
     }
 
@@ -96,7 +96,7 @@ process BAMSURGEON {
         Script: 'BAMSurgeon'
         BED used: $bed
         FASTA used: $fasta
-        RNG: $random
+        RNG: $rng
     END_VERSIONS
     """    
 }

@@ -17,6 +17,7 @@ process NEAT {
     tuple val(meta), path("*.vcf.gz")     , emit: vcf
     tuple val(meta), path("*.tbi")        , emit: tbi
     tuple val(meta), path("*.bam")        , emit: bam
+    val   random                          , emit: rng
     path "versions.yml"                   , emit: versions
     
 
@@ -27,7 +28,8 @@ process NEAT {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "neat"
     def version = '3.2' //VERSION IS HARDCODED
-    def random = "$RANDOM"
+    def random = Math.random()
+
     """
     python3 ${neat_path}/gen_reads.py \\
         $args \\
