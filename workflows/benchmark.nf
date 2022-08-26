@@ -82,13 +82,16 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     ch_versions = Channel.empty()
 
     ch_input = Channel
-    .fromPath(${params.input})
-    .map {
-        meta, info ->
-        fmeta = [:]
-        fmeta.samplename = meta
-        [fmeta, info]
+    .fromPath(params.input)
+    .splitCsv(header:true, quote:'\"', sep: "\t")
+    .map { row -> tuple([//patient: row.patient ? row.patient : "patient",
+                    //id: row.samplename,
+                    samplename: row.samplename,
+                    info: row.info,
+                    //type: row.type ? row.type : "tissue"],
+                    //file(row.bamfile), file(row.bamfile + ".bai"))
     }
+
 
 
     ch_rng = Channel

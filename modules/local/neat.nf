@@ -3,7 +3,7 @@ process NEAT {
     label 'process_high'
 
     input:
-    tuple val(meta), val(info)
+    tuple val(samplename), val(info)
     val rng
     val readlen
     val coverage
@@ -45,7 +45,8 @@ process NEAT {
         Coverage: $coverage
         Read length: $readlen
         RNG: $rng
-        META: $meta
+        META: $samplename
+        INFO: $info
         TEST: $RANDOM
     END_VERSIONS
     python3 ${neat_path}/gen_reads.py \\
