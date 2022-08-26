@@ -335,5 +335,23 @@
         {
             "$ref": "#/definitions/workflow_options"
         }
-    ]
+    ],
+    "properties": {
+        "input": {
+            "type": "string",
+            "default": null
+        },
+        "multiqc_config": {
+            "type": "string",
+            "default": null
+        },
+        "multiqc_title": {
+            "type": "string",
+            "default": null
+        },
+        "max_multiqc_email_size": {
+            "type": "string",
+            "default": "25.MB"
+        }
+    }
 }
