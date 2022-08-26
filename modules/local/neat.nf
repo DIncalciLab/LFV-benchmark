@@ -27,16 +27,7 @@ process NEAT {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "neat"
     def version = '3.2' //VERSION IS HARDCODED
-
-
-    def avail_mem = 3
-    if (!task.memory) {
-        log.info '[ncsa/NEAT] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
-    } else {
-        avail_mem = task.memory.giga
-    }
-
-
+    def random = "$RANDOM"
     """
     python3 ${neat_path}/gen_reads.py \\
         $args \\
@@ -47,7 +38,7 @@ process NEAT {
         -e $seqerrormodel \\
         --gc-model $gcbiasmodel \\
         -tr $bed \\
-        --rng $RANDOM \\
+        --rng $random \\
         -m $mutmodel \\
         -o $prefix
 
@@ -63,6 +54,7 @@ process NEAT {
         Frag length model: $fraglenmodel
         Coverage: $coverage
         Read length: $readlen
+        RNG: $random
     END_VERSIONS
      """
 
