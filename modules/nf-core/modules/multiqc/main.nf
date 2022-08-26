@@ -21,6 +21,7 @@ process MULTIQC {
 
     script:
     def args = task.ext.args ?: ''
+    /*
     """
     multiqc -f $args .
 
@@ -28,5 +29,5 @@ process MULTIQC {
     "${task.process}":
         multiqc: \$( multiqc --version | sed -e "s/multiqc, version //g" )
     END_VERSIONS
-    """
+    """*/
 }
