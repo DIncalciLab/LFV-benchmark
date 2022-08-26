@@ -83,7 +83,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     ch_input = Channel
     .fromPath(params.input)
-    .splitCsv(header:true, quote:'\"', sep: "\t")
+    .splitCsv(header:true, quote:'\"', sep: ";")
     .map { row -> tuple([//patient: row.patient ? row.patient : "patient",
                     //id: row.samplename,
                     samplename: row.samplename,
