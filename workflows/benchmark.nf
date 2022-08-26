@@ -81,12 +81,24 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     ch_versions = Channel.empty()
 
+    ch_input = Channel
+    .fromPath("${params.input}")
+    .map {
+        meta, info ->
+        fmeta = [:]
+        fmeta.samplename = meta
+        [fmeta, info]
+    }
+
+
     ch_rng = Channel
       .from( 1..32767 )
       .randomSample( 1 )
       .view()
 
+
     NEAT(
+        ch_input,
         ch_rng,
         params.readlen,
         params.coverage,

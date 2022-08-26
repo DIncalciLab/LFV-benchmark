@@ -1,8 +1,9 @@
 process NEAT {
-    //tag "$meta.id"
+    tag "Create artificial normal datasets"
     label 'process_high'
 
     input:
+    tuple val(meta), val(info)
     val rng
     val readlen
     val coverage
@@ -57,6 +58,8 @@ process NEAT {
         Coverage: $coverage
         Read length: $readlen
         RNG: $rng
+        META: $meta
+        TEST: $RANDOM
     END_VERSIONS
      """
 
