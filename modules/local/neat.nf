@@ -3,6 +3,7 @@ process NEAT {
     label 'process_high'
 
     input:
+    val rng
     val readlen
     val coverage
     path bed
@@ -17,7 +18,7 @@ process NEAT {
     tuple val(meta), path("*.vcf.gz")     , emit: vcf
     tuple val(meta), path("*.tbi")        , emit: tbi
     tuple val(meta), path("*.bam")        , emit: bam
-    val   random                          , emit: rng
+    val   rng                             , emit: rng
     path "versions.yml"                   , emit: versions
     
 
@@ -28,8 +29,6 @@ process NEAT {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "neat"
     def version = '3.2' //VERSION IS HARDCODED
-    def random = $RANDOM
-
 
     """
     python3 ${neat_path}/gen_reads.py \\
@@ -41,7 +40,7 @@ process NEAT {
         -e $seqerrormodel \\
         --gc-model $gcbiasmodel \\
         -tr $bed \\
-        --rng $random \\
+        --rng $rng \\
         -m $mutmodel \\
         -o $prefix
 
@@ -57,7 +56,7 @@ process NEAT {
         Frag length model: $fraglenmodel
         Coverage: $coverage
         Read length: $readlen
-        RNG: $random
+        RNG: $rng
     END_VERSIONS
      """
 

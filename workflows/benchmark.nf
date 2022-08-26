@@ -81,7 +81,13 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     ch_versions = Channel.empty()
 
+    ch_rng = Channel
+      .from( 1..32767 )
+      .randomSample( 1 )
+      .view()
+
     NEAT(
+        ch_rng,
         params.readlen,
         params.coverage,
         params.bed, 
