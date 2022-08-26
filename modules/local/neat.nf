@@ -28,10 +28,23 @@ process NEAT {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "neat"
+    def prefix = task.ext.prefix ?: "neat_${samplename}"
     def version = '3.2' //VERSION IS HARDCODED
 
     """
+    python3 ${neat_path}/gen_reads.py \\
+        $args \\
+        -r $fasta \\
+        -R $readlen \\
+        --pe-model $fraglenmodel \\
+        -c $coverage \\
+        -e $seqerrormodel \\
+        --gc-model $gcbiasmodel \\
+        -tr $bed \\
+        --rng $rng \\
+        -m $mutmodel \\
+        -o $prefix
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         ncsa/NEAT: 'Version $version'
@@ -46,23 +59,7 @@ process NEAT {
         Read length: $readlen
         RNG: $rng
         META: $samplename
-        INFO: $info
-        TEST: $RANDOM
     END_VERSIONS
-    python3 ${neat_path}/gen_reads.py \\
-        $args \\
-        -r $fasta \\
-        -R $readlen \\
-        --pe-model $fraglenmodel \\
-        -c $coverage \\
-        -e $seqerrormodel \\
-        --gc-model $gcbiasmodel \\
-        -tr $bed \\
-        --rng $rng \\
-        -m $mutmodel \\
-        -o $prefix
-
-
      """
 
     stub:
