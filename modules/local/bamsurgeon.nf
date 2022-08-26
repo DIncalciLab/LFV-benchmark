@@ -20,6 +20,7 @@ process BAMSURGEON {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "bamsurgeon"
+    def random = "$RANDOM"
 
     def avail_mem = 3
     if (!task.memory) {
@@ -40,7 +41,7 @@ process BAMSURGEON {
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir "tmp" \
-        --seed ${RANDOM} \\  INSERT RANDOM FUNCTION FROM BASH
+        --seed $random
     """
     }
     
@@ -56,7 +57,7 @@ process BAMSURGEON {
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir "tmp" \
-        --seed ${RANDOM} \\  INSERT RANDOM FUNCTION FROM BASH
+        --seed $random
     """
     }
 
@@ -72,7 +73,7 @@ process BAMSURGEON {
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir "tmp" \
-        --seed ${RANDOM} \\  INSERT RANDOM FUNCTION FROM BASH
+        --seed $random
 
         python3 -O ${bamsurgeon_path}/bin/addindel.py \\
         $args \\
@@ -84,7 +85,7 @@ process BAMSURGEON {
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir "tmp" \
-        --seed ${RANDOM} \\  INSERT RANDOM FUNCTION FROM BASH
+        --seed $random
     """
     }
 
@@ -95,6 +96,7 @@ process BAMSURGEON {
         Script: 'BAMSurgeon'
         BED used: $bed
         FASTA used: $fasta
+        RNG: $random
     END_VERSIONS
     """    
 }

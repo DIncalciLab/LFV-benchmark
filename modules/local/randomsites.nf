@@ -23,6 +23,7 @@ process RANDOMSITES {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "randomsites"
+    def random = "$RANDOM"
 
     def avail_mem = 3
     if (!task.memory) {
@@ -37,7 +38,7 @@ process RANDOMSITES {
             $args \\
             -g $fasta \\
             -b $bed \\
-            -s $RANDOM \\ //SET RANDOM FUNCTION FROM BASH
+            -s $random \\
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
@@ -51,7 +52,7 @@ process RANDOMSITES {
             $args \\
             -g $fasta \\
             -b $bed \\
-            -s $RANDOM \\ //SET RANDOM FUNCTION FROM BASH
+            -s $random \\
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
@@ -65,7 +66,7 @@ process RANDOMSITES {
             $args \\
             -g $fasta \\
             -b $bed \\
-            -s $RANDOM \\ //SET RANDOM FUNCTION FROM BASH
+            -s $random \\ 
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
@@ -76,7 +77,7 @@ process RANDOMSITES {
             $args \\
             -g $fasta \\
             -b $bed \\
-            -s ${RANDOM} \\ //SET RANDOM FUNCTION FROM BASH
+            -s $random \\
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
@@ -95,6 +96,7 @@ process RANDOMSITES {
         Max VAF: $maxvaf
         BED used: $bed
         FASTA used: $fasta
+        RNG: $random
     END_VERSIONS
     """
 
