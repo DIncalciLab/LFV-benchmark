@@ -8,14 +8,12 @@ process RANDOMSITES {
     val maxvaf
     val type
     val maxlen
-    val rng
     path fasta
     path bed
     path bamsurgeon_path
 
     output:
     tuple val(meta), path("*.bed")        , emit: bed
-    val   rng                             , emit: rng
     path "versions.yml"                   , emit: versions
     
 

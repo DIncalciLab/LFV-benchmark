@@ -8,7 +8,6 @@ process BAMSURGEON {
     path fasta
     path bamsurgeon_path
     path picardjar
-    val  rng
 
     output:
     tuple val(meta), path("*.bam")        , emit: bam

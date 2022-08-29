@@ -87,8 +87,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     .map { row -> [samplename: row.sample, info: row.info]
                 }
 
-
-
     ch_rng = Channel
       .from( 1..32767 )
       .randomSample( 1 )
@@ -116,7 +114,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.max_fraction,
         params.type,
         params.maxlen,
-        NEAT.out.rng,
         params.fasta,
         params.bed,
         params.bamsurgeon_path
@@ -127,8 +124,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         RANDOMSITES.out.bed,
         params.fasta,
         params.bamsurgeon_path,
-        params.picardjar,
-        RANDOMSITES.out.rng
+        params.picardjar
         )
     
     ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
