@@ -15,10 +15,10 @@ process NEAT {
     path gcbiasmodel
 
     output:
-    tuple val(meta), path("*.vcf.gz")     , emit: vcf
+    tuple val(meta), path("*.vcf.gz")                    , emit: vcf
     //tuple val(meta), path("*.tbi")        , emit: tbi
-    tuple val(meta), path("*.bam")        , emit: bam
-    path "${meta.sample}_versions.yml"                   , emit: versions
+    tuple val(meta), path("*.bam")                       , emit: bam
+    path "versions.yml"                   , emit: versions
     
 
     when:
