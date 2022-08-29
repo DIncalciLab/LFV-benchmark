@@ -1,5 +1,5 @@
 process RANDOMSITES {
-    //tag "$meta.id"
+    tag "Create random mutation for $meta.sample sample"
     label 'process_low'
 
     input:
@@ -15,7 +15,7 @@ process RANDOMSITES {
 
     output:
     tuple val(meta), path("*.bed")        , emit: bed
-    path "versions.yml"                   , emit: versions
+    path "${meta.sample}_versions.yml"                   , emit: versions
     
 
     when:

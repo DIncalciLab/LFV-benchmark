@@ -18,7 +18,7 @@ process NEAT {
     tuple val(meta), path("*.vcf.gz")     , emit: vcf
     //tuple val(meta), path("*.tbi")        , emit: tbi
     tuple val(meta), path("*.bam")        , emit: bam
-    path "versions.yml"                   , emit: versions
+    path "${meta.sample}_versions.yml"                   , emit: versions
     
 
     when:
@@ -30,8 +30,6 @@ process NEAT {
     def version = '3.2' //VERSION IS HARDCODED
 
     """
-    echo "TEST ${meta}" > "${params.outdir}/test.txt"
-    
     python3 ${neat_path}/gen_reads.py \\
         $args \\
         -r $fasta \\

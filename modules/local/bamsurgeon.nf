@@ -1,5 +1,5 @@
 process BAMSURGEON {
-    //tag "$meta.id"
+    tag "Spike-in artificial mutation in $meta.sample sample"
     label 'process_high'
 
     input:
@@ -12,14 +12,14 @@ process BAMSURGEON {
     output:
     tuple val(meta), path("*.bam")        , emit: bam
     tuple val(meta), path("*.vcf")        , emit: vcf
-    path "versions.yml"                   , emit: versions
+    path "${meta.sample}_versions.yml"                   , emit: versions
     
     when:
     task.ext.when == null || task.ext.when
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "bamsurgeon"
+    def prefix = task.ext.prefix ?: "bamsurgeon_${meta.sample}"
     def version = '1.3' //VERSION IS HARDCODED
 
     def avail_mem = 3
