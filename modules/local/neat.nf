@@ -32,7 +32,7 @@ process NEAT {
     def version = '3.2' //VERSION IS HARDCODED
 
     """
-    echo "TEST ${meta.samplename}" > "${params.outdir}/test.txt"
+    echo "TEST ${meta}" > "${params.outdir}/test.txt"
     
 
 
