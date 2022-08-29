@@ -23,6 +23,7 @@ process RANDOMSITES {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "randomsites"
+    def version = '1.3' //VERSION IS HARDCODED
 
     def avail_mem = 3
     if (!task.memory) {
