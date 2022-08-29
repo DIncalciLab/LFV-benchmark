@@ -84,12 +84,11 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     ch_input = Channel
     .fromPath(params.input)
     .splitCsv(header:true, quote:'\"', sep: ";")
-    .map { row -> //[patient: row.patient ? row.patient : "patient",
-                    //id: row.samplename,
-                    [samplename: row.samplename]
-                    //type: row.type ? row.type : "tissue"],
-                    //file(row.bamfile), file(row.bamfile + ".bai"))
-    }
+ .map { row -> 
+                def data = [:]
+                data.samplename = row.samplename
+                //return(data)
+                }
 
 
 
