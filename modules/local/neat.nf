@@ -35,7 +35,18 @@ process NEAT {
     """
     echo "TEST ${meta.samplename}" > "${params.outdir}/test.txt"
     
-
+    python3 ${neat_path}/gen_reads.py \\
+        $args \\
+        -r $fasta \\
+        -R $readlen \\
+        --pe-model $fraglenmodel \\
+        -c $coverage \\
+        -e $seqerrormodel \\
+        --gc-model $gcbiasmodel \\
+        -tr $bed \\
+        --rng $rng \\
+        -m $mutmodel \\
+        -o $prefix
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
