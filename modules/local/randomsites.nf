@@ -3,6 +3,7 @@ process RANDOMSITES {
     label 'process_low'
 
     input:
+    val meta
     val mut_number
     val minvaf
     val maxvaf
@@ -92,6 +93,7 @@ process RANDOMSITES {
         Max VAF: $maxvaf
         BED used: $bed
         FASTA used: $fasta
+        Meta: $meta
     END_VERSIONS
     """
 

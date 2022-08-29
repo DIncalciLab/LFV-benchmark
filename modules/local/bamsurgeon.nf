@@ -3,8 +3,8 @@ process BAMSURGEON {
     label 'process_high'
 
     input:
-    path bam
-    path bed
+    tuple val(meta) file(bam)
+    tuple val(meta) file(bed)
     path fasta
     path bamsurgeon_path
     path picardjar
@@ -92,6 +92,7 @@ process BAMSURGEON {
         Script: 'BAMSurgeon'
         BED used: $bed
         FASTA used: $fasta
+        Meta: $meta
     END_VERSIONS
     """    
 }
