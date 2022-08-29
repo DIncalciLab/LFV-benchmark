@@ -87,7 +87,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     .map { row -> 
                 def data = [:]
                 data.samplename = row.samplename
-                //return(data)
+                return(data)
                 }
 
 
