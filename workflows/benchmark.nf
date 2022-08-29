@@ -87,7 +87,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     .map { row -> //[patient: row.patient ? row.patient : "patient",
                     //id: row.samplename,
                     samplename: row.samplename
-                    
                     //type: row.type ? row.type : "tissue"],
                     //file(row.bamfile), file(row.bamfile + ".bai"))
     }
