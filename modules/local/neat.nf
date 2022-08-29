@@ -1,5 +1,5 @@
 process NEAT {
-    tag "Create artificial normal datasets"
+    tag "Create artificial normal datasets ${meta.sample}"
     label 'process_high'
 
     input:
