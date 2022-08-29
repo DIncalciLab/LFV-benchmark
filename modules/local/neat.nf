@@ -20,8 +20,7 @@ process NEAT {
     tuple val(meta), path("*.tbi")        , emit: tbi
     tuple val(meta), path("*.bam")        , emit: bam
     val   rng                             , emit: rng
-    path "${params.outdir}/versions.yml"                   , emit: versions
-    path "${params.outdir}/test.txt"                   , emit: test
+    path "versions.yml"                   , emit: versions
     
 
     when:
