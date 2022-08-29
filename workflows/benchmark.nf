@@ -84,10 +84,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     ch_input = Channel
     .fromPath(params.input)
     .splitCsv(header:true, quote:'\"', sep: "\t")
-    .map { row -> 
-                def data = [:]
-                data.samplename = row.samplename
-                return(data)
+    .map { row -> [samplename: row.samplename, info: row.info]
                 }
 
 
