@@ -86,7 +86,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     .splitCsv(header:true, quote:'\"', sep: ";")
     .map { row -> //[patient: row.patient ? row.patient : "patient",
                     //id: row.samplename,
-                    samplename: row.samplename
+                    [samplename: row.samplename]
                     //type: row.type ? row.type : "tissue"],
                     //file(row.bamfile), file(row.bamfile + ".bai"))
     }
