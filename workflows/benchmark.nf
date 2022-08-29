@@ -86,11 +86,11 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     .splitCsv(header:true, quote:'\"', sep: ",")
     .map { row -> [samplename: row.sample, info: row.info]
                 }
-
+/*
     ch_rng = Channel
       .from( 1..32767 )
       .randomSample( 1 )
-      .view()
+      .view()*/
 
 
     NEAT(
