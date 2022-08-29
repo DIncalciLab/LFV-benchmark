@@ -20,7 +20,7 @@ process NEAT {
     tuple val(meta), path("*.tbi")        , emit: tbi
     tuple val(meta), path("*.bam")        , emit: bam
     val   rng                             , emit: rng
-    path {params.outdir}/"versions.yml"                   , emit: versions
+    path "${params.outdir}/versions.yml"                   , emit: versions
     
 
     when:
@@ -28,7 +28,7 @@ process NEAT {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "neat_${meta.samplename}"
+    def prefix = task.ext.prefix ?: "neat_"
     def version = '3.2' //VERSION IS HARDCODED
 
     """
