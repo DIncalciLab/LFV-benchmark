@@ -21,6 +21,7 @@ process NEAT {
     tuple val(meta), path("*.bam")        , emit: bam
     val   rng                             , emit: rng
     path "${params.outdir}/versions.yml"                   , emit: versions
+    path "${params.outdir}/test.txt"                   , emit: test
     
 
     when:
@@ -60,6 +61,8 @@ process NEAT {
         RNG: $rng
         META: $meta
     END_VERSIONS
+
+    touch > test.txt
      """
 
     stub:
