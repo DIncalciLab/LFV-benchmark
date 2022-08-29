@@ -97,7 +97,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     NEAT(
         ch_input,
-        ch_rng,
         params.readlen,
         params.coverage,
         params.bed, 
