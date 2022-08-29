@@ -62,8 +62,6 @@ process NEAT {
         RNG: $rng
         META: $meta
     END_VERSIONS
-
-    touch > test.txt
      """
 
     stub:
