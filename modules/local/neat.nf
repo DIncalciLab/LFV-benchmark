@@ -33,6 +33,7 @@ process NEAT {
     def version = '3.2' //VERSION IS HARDCODED
 
     """
+    echo ${meta}
     python3 ${neat_path}/gen_reads.py \\
         $args \\
         -r $fasta \\
