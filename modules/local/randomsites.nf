@@ -37,7 +37,6 @@ process RANDOMSITES {
             $args \\
             -g $fasta \\
             -b $bed \\
-            -s $rng \\
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
@@ -51,7 +50,6 @@ process RANDOMSITES {
             $args \\
             -g $fasta \\
             -b $bed \\
-            -s $rng \\
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
@@ -65,7 +63,6 @@ process RANDOMSITES {
             $args \\
             -g $fasta \\
             -b $bed \\
-            -s $rng \\ 
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
@@ -76,7 +73,6 @@ process RANDOMSITES {
             $args \\
             -g $fasta \\
             -b $bed \\
-            -s $rng \\
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
@@ -95,7 +91,6 @@ process RANDOMSITES {
         Max VAF: $maxvaf
         BED used: $bed
         FASTA used: $fasta
-        RNG: $rng
     END_VERSIONS
     """
 

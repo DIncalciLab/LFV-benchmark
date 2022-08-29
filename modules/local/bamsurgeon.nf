@@ -39,8 +39,7 @@ process BAMSURGEON {
         --picardjar $picardjar \\ 
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
-        --tmpdir "tmp" \
-        --seed $rng
+        --tmpdir "tmp" 
     """
     }
     
@@ -55,8 +54,7 @@ process BAMSURGEON {
         --picardjar $picardjar \\ 
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
-        --tmpdir "tmp" \
-        --seed $rng
+        --tmpdir "tmp" 
     """
     }
 
@@ -71,8 +69,7 @@ process BAMSURGEON {
         --picardjar $picardjar \\ 
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
-        --tmpdir "tmp" \
-        --seed $rng
+        --tmpdir "tmp"
 
         python3 -O ${bamsurgeon_path}/bin/addindel.py \\
         $args \\
@@ -83,8 +80,7 @@ process BAMSURGEON {
         --picardjar $picardjar \\ 
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
-        --tmpdir "tmp" \
-        --seed $rng
+        --tmpdir "tmp"
     """
     }
 
@@ -95,7 +91,6 @@ process BAMSURGEON {
         Script: 'BAMSurgeon'
         BED used: $bed
         FASTA used: $fasta
-        RNG: $rng
     END_VERSIONS
     """    
 }
