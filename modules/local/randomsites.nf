@@ -1,5 +1,5 @@
 process RANDOMSITES {
-    tag "Create random mutation for $meta.sample sample"
+    tag "Create artificial random mutations"
     label 'process_low'
 
     input:
@@ -23,7 +23,7 @@ process RANDOMSITES {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "randomsites"
+    def prefix = task.ext.prefix ?: "${meta.sample}_randomsites"
     def version = '1.3' //VERSION IS HARDCODED
 
     def avail_mem = 3
@@ -42,7 +42,7 @@ process RANDOMSITES {
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
-            snv > "random_snv_${prefix}.bed"
+            snv > "${prefix}_snv"
         """
     }
 
@@ -55,7 +55,7 @@ process RANDOMSITES {
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
-            indel --maxlen $maxlen > "random_indels_${prefix}.bed"
+            indel --maxlen $maxlen > "${prefix}_indels"
         """
     }
 
@@ -68,7 +68,7 @@ process RANDOMSITES {
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
-            snv > "random_snv${prefix}.bed"
+            snv > "${prefix}_snv"
 
         
         python3 ${bamsurgeon_path}/scripts/randomsites.py \\
@@ -78,7 +78,7 @@ process RANDOMSITES {
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
-            indel --maxlen $maxlen > "random_indels_${prefix}.bed"
+            indel --maxlen $maxlen > "${prefix}_indels"
         """
     }
 
@@ -98,7 +98,7 @@ process RANDOMSITES {
     """
 
     stub: //CHECK IF THIS SECTION IS MANDATORY
-    def prefix = task.ext.prefix ?: "neat"
+    def prefix = task.ext.prefix ?: "${meta.sample}_randomsites"
     """
     touch ${prefix}.vcf.gz
     touch ${prefix}.vcf.gz.tbi
