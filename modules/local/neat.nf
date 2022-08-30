@@ -26,7 +26,7 @@ process NEAT {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "neat_${meta.sample}"
+    def prefix = task.ext.prefix ?: "${task.process}.toLowerCase()_${meta.sample}"
     def version = '3.2' //VERSION IS HARDCODED
 
     """
@@ -43,13 +43,12 @@ process NEAT {
         -o $prefix
 
 
-    cat <<-END_VERSIONS > "${task.process}.toLowerCase()_${meta.sample}.versions.yml"
+    cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
         ncsa/NEAT: 'Version $version'
         GC bias model: $gcbiasmodel
         Bed used: $bed
-        Mutational model: $mutmodel
-        Mutational rate: none   
+        Mutational model: $mutmodel  
         FASTA: $fasta
         Sequencing error model: $seqerrormodel
         Frag length model: $fraglenmodel
@@ -60,13 +59,13 @@ process NEAT {
      """
 
     stub:
-    def prefix = task.ext.prefix ?: "neat"
+    def prefix = task.ext.prefix ?: "${task.process}.toLowerCase()_${meta.sample}"
     """
     touch ${prefix}.vcf.gz
     touch ${prefix}.vcf.gz.tbi
     touch ${prefix}.bam
 
-    cat <<-END_VERSIONS > versions.yml
+    cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
         ncsa/NEAT: 'Version $version'
         GC bias model: $gcbiasmodel
