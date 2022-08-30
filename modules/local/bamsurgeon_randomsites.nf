@@ -46,7 +46,10 @@ process BAMSURGEON_RANDOMSITES {
         Meta: $meta
         Prefix: $prefix
     END_VERSIONS
-    """}/*
+    """
+}
+
+/*
     if (type == 'snv') {
         """
         python3 ${bamsurgeon_path}/scripts/randomsites.py \\
