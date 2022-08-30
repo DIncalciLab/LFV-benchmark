@@ -49,7 +49,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 
 //include { NEAT        } from '../modules/local/neat.nf'
 include { RANDOMSITES } from '../modules/local/randomsites.nf'
-include { BAMSURGEON  } from '../modules/local/bamsurgeon.nf'
+include { BAMSURGEON_RANDOMSITES  } from '../modules/local/bamsurgeon.nf'
 include { BENCHMARK  }  from '../modules/local/benchmark.nf'
 //include { INPUT_CHECK } from '../subworkflows/local/input_check'
 
