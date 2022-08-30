@@ -33,7 +33,7 @@ process BAMSURGEON_RANDOMSITES {
         avail_mem = task.memory.giga
     }
 
-    if (${type} == 'snv') {
+    if (type == 'snv') {
         """
         python3 ${bamsurgeon_path}/scripts/randomsites.py \\
             $args \\
@@ -44,7 +44,7 @@ process BAMSURGEON_RANDOMSITES {
             --maxvaf $maxvaf \\
             snv > "${prefix}_snv"
         """
-    } else if (${type} == 'indel'){
+    } else if (type == 'indel'){
         """
         python3 ${bamsurgeon_path}/scripts/randomsites.py \\
             $args \\
