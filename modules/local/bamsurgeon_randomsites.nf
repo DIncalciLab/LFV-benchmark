@@ -32,6 +32,52 @@ process BAMSURGEON_RANDOMSITES {
     } else {
         avail_mem = task.memory.giga
     }
+
+    if (type == 'snv') {
+        """
+        python3 ${bamsurgeon_path}/scripts/randomsites.py \\
+            $args \\
+            -g $fasta \\
+            -b $bed \\
+            -n $mut_number \\
+            --minvaf $minvaf \\
+            --maxvaf $maxvaf \\
+            snv > "${prefix}_snv.txt"
+        """
+    } else if (type == 'indel'){
+        """
+        python3 ${bamsurgeon_path}/scripts/randomsites.py \\
+            $args \\
+            -g $fasta \\
+            -b $bed \\
+            -n $mut_number \\
+            --minvaf $minvaf \\
+            --maxvaf $maxvaf \\
+            indel --maxlen $maxlen > "${prefix}_indels.txt"
+        """
+    } else {
+        """
+        python3 ${bamsurgeon_path}/scripts/randomsites.py \\
+            $args \\
+            -g $fasta \\
+            -b $bed \\
+            -n $mut_number \\
+            --minvaf $minvaf \\
+            --maxvaf $maxvaf \\
+            snv > "${prefix}_snv.txt"
+
+        
+        python3 ${bamsurgeon_path}/scripts/randomsites.py \\
+            $args \\
+            -g $fasta \\
+            -b $bed \\
+            -n $mut_number \\
+            --minvaf $minvaf \\
+            --maxvaf $maxvaf \\
+            indel --maxlen $maxlen > "${prefix}_indels.txt"
+        """
+    }
+
     """
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
@@ -44,11 +90,8 @@ process BAMSURGEON_RANDOMSITES {
         BED used: $bed
         FASTA used: $fasta
         Meta: $meta
-        Prefix: $prefix
     END_VERSIONS
     """
-
-
 
     stub:
     def prefix = task.ext.prefix ?: ""
