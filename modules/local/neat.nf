@@ -30,8 +30,8 @@ process NEAT {
     def version = '3.2' //VERSION IS HARDCODED
 
     """
-    touch ${prefix}
-    touch ${prefix}
+    touch ${prefix}.vcf.gz
+    touch ${prefix}.bam
 
 
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
