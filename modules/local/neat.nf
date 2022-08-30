@@ -43,7 +43,7 @@ process NEAT {
         -o $prefix
 
 
-    cat <<-END_VERSIONS > ${}versions.yml
+    cat <<-END_VERSIONS > "${task.process}.toLowerCase()_${meta.sample}.versions.yml"
     "${task.process}":
         ncsa/NEAT: 'Version $version'
         GC bias model: $gcbiasmodel
