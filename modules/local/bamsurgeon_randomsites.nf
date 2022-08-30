@@ -98,7 +98,7 @@ process BAMSURGEON_RANDOMSITES {
     """
 
     stub:
-    def prefix = task.ext.prefix ?: "${prefix}.versions.yml"
+    def prefix = task.ext.prefix ?: ""
     """
     touch ${prefix}.bed
 
