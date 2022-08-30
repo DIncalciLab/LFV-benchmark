@@ -55,7 +55,7 @@ process BAMSURGEON_RANDOMSITES {
             --maxvaf $maxvaf \\
             indel --maxlen $maxlen > "${prefix}_indels"
         """
-    } else if (${type} == 'both'){
+    } else {
         """
         python3 ${bamsurgeon_path}/scripts/randomsites.py \\
             $args \\
