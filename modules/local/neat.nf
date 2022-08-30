@@ -26,7 +26,7 @@ process NEAT {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${task.process.tokenize(':')[-1].tokenize('_')[0].toLowerCase()}_${meta.sample}"
+    def prefix = task.ext.prefix ?: "${task.process.tokenize(':')[-1].tokenize('_')[0].toLowerCase()}_${meta.sample}}"
     def version = '3.2' //VERSION IS HARDCODED
 
     """
@@ -34,7 +34,7 @@ process NEAT {
     touch ${prefix}.bam
 
 
-    cat <<-END_VERSIONS > "${prefix}.versions.yml"
+    cat <<-END_VERSIONS > "versions.yml"
     "${task.process}":
         ncsa/NEAT: 'Version $version'
         GC bias model: $gcbiasmodel
