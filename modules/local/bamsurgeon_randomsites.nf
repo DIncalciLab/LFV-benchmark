@@ -44,9 +44,7 @@ process BAMSURGEON_RANDOMSITES {
             --maxvaf $maxvaf \\
             snv > "${prefix}_snv"
         """
-    }
-
-    else if (${type} == 'indel'){
+    } else if (${type} == 'indel'){
         """
         python3 ${bamsurgeon_path}/scripts/randomsites.py \\
             $args \\
@@ -57,9 +55,7 @@ process BAMSURGEON_RANDOMSITES {
             --maxvaf $maxvaf \\
             indel --maxlen $maxlen > "${prefix}_indels"
         """
-    }
-
-    else if (${type} == 'both'){
+    } else if (${type} == 'both'){
         """
         python3 ${bamsurgeon_path}/scripts/randomsites.py \\
             $args \\
