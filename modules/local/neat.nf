@@ -34,7 +34,7 @@ process NEAT {
     touch ${prefix}.bam
 
 
-    cat <<-END_VERSIONS > "${prefix}.versions.yml"
+    cat <<-END_VERSIONS > "versions.yml"
     "${task.process}":
         ncsa/NEAT: 'Version $version'
         GC bias model: $gcbiasmodel
@@ -50,7 +50,7 @@ process NEAT {
      """
 
     stub:
-    def prefix = task.ext.prefix ?: "${prefix}.versions.yml"
+    def prefix = task.ext.prefix ?: "versions.yml"
     """
     touch ${prefix}.vcf.gz
     touch ${prefix}.vcf.gz.tbi
@@ -66,7 +66,7 @@ process NEAT {
         -tr $bed \\
         -m $mutmodel \\
         -o $prefix
-    cat <<-END_VERSIONS > "${prefix}.versions.yml"
+    cat <<-END_VERSIONS > "versions.yml"
     "${task.process}":
         ncsa/NEAT: 'Version $version'
         GC bias model: $gcbiasmodel
