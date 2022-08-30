@@ -30,17 +30,8 @@ process NEAT {
     def version = '3.2' //VERSION IS HARDCODED
 
     """
-    python3 ${neat_path}/gen_reads.py \\
-        $args \\
-        -r $fasta \\
-        -R $readlen \\
-        --pe-model $fraglenmodel \\
-        -c $coverage \\
-        -e $seqerrormodel \\
-        --gc-model $gcbiasmodel \\
-        -tr $bed \\
-        -m $mutmodel \\
-        -o $prefix
+    touch ${prefix}
+    touch ${prefix}
 
 
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
@@ -64,7 +55,17 @@ process NEAT {
     touch ${prefix}.vcf.gz
     touch ${prefix}.vcf.gz.tbi
     touch ${prefix}.bam
-
+    python3 ${neat_path}/gen_reads.py \\
+        $args \\
+        -r $fasta \\
+        -R $readlen \\
+        --pe-model $fraglenmodel \\
+        -c $coverage \\
+        -e $seqerrormodel \\
+        --gc-model $gcbiasmodel \\
+        -tr $bed \\
+        -m $mutmodel \\
+        -o $prefix
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
         ncsa/NEAT: 'Version $version'
