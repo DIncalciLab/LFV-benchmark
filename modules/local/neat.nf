@@ -26,7 +26,7 @@ process NEAT {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "test"
+    def prefix = task.ext.prefix ?: ''
     def version = '3.2' //VERSION IS HARDCODED
 
     """
