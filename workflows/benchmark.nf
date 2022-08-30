@@ -47,7 +47,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 */
 
 
-include { NEAT        } from '../modules/local/neat.nf'
+//include { NEAT        } from '../modules/local/neat.nf'
 include { RANDOMSITES } from '../modules/local/randomsites.nf'
 include { BAMSURGEON  } from '../modules/local/bamsurgeon.nf'
 include { BENCHMARK  }  from '../modules/local/benchmark.nf'
@@ -92,7 +92,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
       .randomSample( 1 )
       .view()*/
 
-
+/*
     NEAT(
         ch_input,
         params.readlen,
@@ -106,9 +106,9 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.gc_model
         )
     
-    ch_versions = ch_versions.mix(NEAT.out.versions)
-    /*
-    RANDOMSITES(
+    ch_versions = ch_versions.mix(NEAT.out.versions)*/
+    
+    BAMSURGEON_RANDOMSITES(
         ch_input,
         params.mut_number,
         params.min_fraction,

@@ -1,5 +1,5 @@
 process RANDOMSITES {
-    tag "Create artificial random mutations"
+    tag "Create artificial random mutations for ${meta.sample}"
     label 'process_low'
 
     input:
@@ -15,7 +15,7 @@ process RANDOMSITES {
 
     output:
     tuple val(meta), path("*.bed")        , emit: bed
-    path "${meta.sample}_versions.yml"                   , emit: versions
+    tuple val(meta), path("*.yml")        , emit: versions
     
 
     when:
@@ -23,7 +23,7 @@ process RANDOMSITES {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.sample}_randomsites"
+    def prefix = task.ext.prefix ?: ''
     def version = '1.3' //VERSION IS HARDCODED
 
     def avail_mem = 3
@@ -33,7 +33,7 @@ process RANDOMSITES {
         avail_mem = task.memory.giga
     }
 
-    if (type == 'snv') {
+    if (${type} == 'snv') {
         """
         python3 ${bamsurgeon_path}/scripts/randomsites.py \\
             $args \\
@@ -46,7 +46,7 @@ process RANDOMSITES {
         """
     }
 
-    else if (type == 'indel'){
+    else if (${type} == 'indel'){
         """
         python3 ${bamsurgeon_path}/scripts/randomsites.py \\
             $args \\
@@ -59,7 +59,7 @@ process RANDOMSITES {
         """
     }
 
-    else if (type == 'both'){
+    else if (${type} == 'both'){
         """
         python3 ${bamsurgeon_path}/scripts/randomsites.py \\
             $args \\
@@ -83,10 +83,10 @@ process RANDOMSITES {
     }
 
     """
-    cat <<-END_VERSIONS > versions.yml
+    cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
         BAMSurgeon: 'Version $version'
-        Script: 'random_sites.py'
+        Script: 'BAMSurgeon/random_sites.py'
         Type of variants generated: $type
         Number of variants generated: $mut_number
         Min VAF: $minvaf
@@ -97,14 +97,12 @@ process RANDOMSITES {
     END_VERSIONS
     """
 
-    stub: //CHECK IF THIS SECTION IS MANDATORY
-    def prefix = task.ext.prefix ?: "${meta.sample}_randomsites"
+    stub:
+    def prefix = task.ext.prefix ?: "${prefix}.versions.yml"
     """
-    touch ${prefix}.vcf.gz
-    touch ${prefix}.vcf.gz.tbi
-    touch ${prefix}.bam
+    touch ${prefix}.bed
 
-    cat <<-END_VERSIONS > versions.yml
+    cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
     END_VERSIONS
     """

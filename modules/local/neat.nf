@@ -29,6 +29,13 @@ process NEAT {
     def prefix = task.ext.prefix ?: ''
     def version = '3.2' //VERSION IS HARDCODED
 
+    def avail_mem = 3
+    if (!task.memory) {
+        log.info '[NEAT] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
+    } else {
+        avail_mem = task.memory.giga
+    }
+
     """
     python3 ${neat_path}/gen_reads.py \\
         $args \\
@@ -64,7 +71,7 @@ process NEAT {
     touch ${prefix}.vcf.gz.tbi
     touch ${prefix}.bam
 
-    cat <<-END_VERSIONS > "versions.yml"
+    cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
         ncsa/NEAT: 'Version $version'
         GC bias model: $gcbiasmodel
