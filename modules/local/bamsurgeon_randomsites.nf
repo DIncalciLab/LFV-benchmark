@@ -14,7 +14,7 @@ process BAMSURGEON_RANDOMSITES {
     path bamsurgeon_path
 
     output:
-    tuple val(meta), path("*.txt")        , emit: mut
+    tuple val(meta), path("*")        , emit: mut
     tuple val(meta), path("*.yml")        , emit: versions
     
 
