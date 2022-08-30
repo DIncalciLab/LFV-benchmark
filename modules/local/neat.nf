@@ -1,5 +1,5 @@
 process NEAT {
-    tag "Create artificial normal datasets ${meta.sample}"
+    tag "Create artificial normal datasets for sample: ${meta.sample}"
     label 'process_high'
 
     input:
@@ -18,7 +18,7 @@ process NEAT {
     tuple val(meta), path("*.vcf.gz")                    , emit: vcf
     //tuple val(meta), path("*.tbi")        , emit: tbi
     tuple val(meta), path("*.bam")                       , emit: bam
-    path "versions.yml"                   , emit: versions
+    tuple val(meta), path("*.yml")                       , emit: versions
     
 
     when:

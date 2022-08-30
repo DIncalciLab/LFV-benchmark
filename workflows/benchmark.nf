@@ -159,7 +159,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
     
     // ch_versions = ch_versions.mix(FASTQC.out.versions.first())
-
+    /*
     CUSTOM_DUMPSOFTWAREVERSIONS (
         ch_versions.unique().collectFile(name: 'collated_versions.yml')
     )
