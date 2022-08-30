@@ -44,8 +44,9 @@ process BAMSURGEON_RANDOMSITES {
         BED used: $bed
         FASTA used: $fasta
         Meta: $meta
+        Prefix: $prefix
     END_VERSIONS
-    """
+    """}/*
     if (type == 'snv') {
         """
         python3 ${bamsurgeon_path}/scripts/randomsites.py \\
