@@ -1,4 +1,4 @@
-process RANDOMSITES {
+process BAMSURGEON_RANDOMSITES {
     tag "Create artificial random mutations for ${meta.sample}"
     label 'process_low'
 
