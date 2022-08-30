@@ -92,7 +92,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
       .randomSample( 1 )
       .view()*/
 
-/*
+
     NEAT(
         ch_input,
         params.readlen,
@@ -105,9 +105,9 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.mutation_model,
         params.gc_model
         )
-    
+    /*
     ch_versions = ch_versions.mix(NEAT.out.versions)*/
-    
+    /*
     BAMSURGEON_RANDOMSITES(
         ch_input,
         params.mut_number,
