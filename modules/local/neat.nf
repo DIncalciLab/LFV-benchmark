@@ -30,9 +30,17 @@ process NEAT {
     def version = '3.2' //VERSION IS HARDCODED
 
     """
-    touch ${prefix}.vcf.gz
-    touch ${prefix}.bam
-
+    python3 ${neat_path}/gen_reads.py \\
+        $args \\
+        -r $fasta \\
+        -R $readlen \\
+        --pe-model $fraglenmodel \\
+        -c $coverage \\
+        -e $seqerrormodel \\
+        --gc-model $gcbiasmodel \\
+        -tr $bed \\
+        -m $mutmodel \\
+        -o $prefix
 
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
@@ -50,29 +58,18 @@ process NEAT {
      """
 
     stub:
-    def prefix = task.ext.prefix ?: "versions.yml"
+    def prefix = task.ext.prefix ?: ""
     """
     touch ${prefix}.vcf.gz
     touch ${prefix}.vcf.gz.tbi
     touch ${prefix}.bam
-    python3 ${neat_path}/gen_reads.py \\
-        $args \\
-        -r $fasta \\
-        -R $readlen \\
-        --pe-model $fraglenmodel \\
-        -c $coverage \\
-        -e $seqerrormodel \\
-        --gc-model $gcbiasmodel \\
-        -tr $bed \\
-        -m $mutmodel \\
-        -o $prefix
+
     cat <<-END_VERSIONS > "versions.yml"
     "${task.process}":
         ncsa/NEAT: 'Version $version'
         GC bias model: $gcbiasmodel
         Bed used: $bed
         Mutational model: $mutmodel
-        Mutational rate: none   
         FASTA: $fasta
         Sequencing error model: $seqerrormodel
         Frag length model: $fraglenmodel
