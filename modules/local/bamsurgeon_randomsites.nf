@@ -14,7 +14,7 @@ process BAMSURGEON_RANDOMSITES {
     path bamsurgeon_path
 
     output:
-    tuple val(meta), path("*.bed")        , emit: bed
+    tuple val(meta), path("*.txt")        , emit: mut
     tuple val(meta), path("*.yml")        , emit: versions
     
 
@@ -42,7 +42,7 @@ process BAMSURGEON_RANDOMSITES {
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
-            snv > "${prefix}_snv"
+            snv > "${prefix}_snv.txt"
         """
     } else if (type == 'indel'){
         """
@@ -53,7 +53,7 @@ process BAMSURGEON_RANDOMSITES {
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
-            indel --maxlen $maxlen > "${prefix}_indels"
+            indel --maxlen $maxlen > "${prefix}_indels.txt"
         """
     } else {
         """
@@ -64,7 +64,7 @@ process BAMSURGEON_RANDOMSITES {
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
-            snv > "${prefix}_snv"
+            snv > "${prefix}_snv.txt"
 
         
         python3 ${bamsurgeon_path}/scripts/randomsites.py \\
@@ -74,7 +74,7 @@ process BAMSURGEON_RANDOMSITES {
             -n $mut_number \\
             --minvaf $minvaf \\
             --maxvaf $maxvaf \\
-            indel --maxlen $maxlen > "${prefix}_indels"
+            indel --maxlen $maxlen > "${prefix}_indels.txt"
         """
     }
 
@@ -96,7 +96,7 @@ process BAMSURGEON_RANDOMSITES {
     stub:
     def prefix = task.ext.prefix ?: ""
     """
-    touch ${prefix}.bed
+    touch ${prefix}.txt
 
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
