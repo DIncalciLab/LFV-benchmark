@@ -32,7 +32,20 @@ process BAMSURGEON_RANDOMSITES {
     } else {
         avail_mem = task.memory.giga
     }
-
+    """
+    cat <<-END_VERSIONS > "${prefix}.versions.yml"
+    "${task.process}":
+        BAMSurgeon: 'Version $version'
+        Script: 'BAMSurgeon/random_sites.py'
+        Type of variants generated: $type
+        Number of variants generated: $mut_number
+        Min VAF: $minvaf
+        Max VAF: $maxvaf
+        BED used: $bed
+        FASTA used: $fasta
+        Meta: $meta
+    END_VERSIONS
+    """
     if (type == 'snv') {
         """
         python3 ${bamsurgeon_path}/scripts/randomsites.py \\
