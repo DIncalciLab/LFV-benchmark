@@ -35,45 +35,45 @@ process BAMSURGEON_RANDOMSITES {
 
     if (type == 'snv') {
         """
-        python3 ${bamsurgeon_path}/scripts/randomsites.py \\
-            $args \\
-            -g $fasta \\
-            -b $bed \\
-            -n $mut_number \\
-            --minvaf $minvaf \\
-            --maxvaf $maxvaf \\
+        python3 ${bamsurgeon_path}/scripts/randomsites.py \
+            $args \
+            -g $fasta \
+            -b $bed \
+            -n $mut_number \
+            --minvaf $minvaf \
+            --maxvaf $maxvaf \
             snv > ${prefix}_snv.txt
         """
     } else if (type == 'indel'){
         """
-        python3 ${bamsurgeon_path}/scripts/randomsites.py \\
-            $args \\
-            -g $fasta \\
-            -b $bed \\
-            -n $mut_number \\
-            --minvaf $minvaf \\
-            --maxvaf $maxvaf \\
+        python3 ${bamsurgeon_path}/scripts/randomsites.py \
+            $args \
+            -g $fasta \
+            -b $bed \
+            -n $mut_number \
+            --minvaf $minvaf \
+            --maxvaf $maxvaf \
             indel --maxlen $maxlen > "${prefix}_indels.txt"
         """
     } else {
         """
-        python3 ${bamsurgeon_path}/scripts/randomsites.py \\
-            $args \\
-            -g $fasta \\
-            -b $bed \\
-            -n $mut_number \\
-            --minvaf $minvaf \\
-            --maxvaf $maxvaf \\
+        python3 ${bamsurgeon_path}/scripts/randomsites.py \
+            $args \
+            -g $fasta \
+            -b $bed \
+            -n $mut_number \
+            --minvaf $minvaf \
+            --maxvaf $maxvaf \
             snv > "${prefix}_snv.txt"
 
         
-        python3 ${bamsurgeon_path}/scripts/randomsites.py \\
-            $args \\
-            -g $fasta \\
-            -b $bed \\
-            -n $mut_number \\
-            --minvaf $minvaf \\
-            --maxvaf $maxvaf \\
+        python3 ${bamsurgeon_path}/scripts/randomsites.py \
+            $args \
+            -g $fasta \
+            -b $bed \
+            -n $mut_number \
+            --minvaf $minvaf \
+            --maxvaf $maxvaf \
             indel --maxlen $maxlen > "${prefix}_indels.txt"
         """
     }
