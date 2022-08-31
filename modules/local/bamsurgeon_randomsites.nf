@@ -35,6 +35,7 @@ process BAMSURGEON_RANDOMSITES {
 
     if (type == 'snv') {
         """
+        echo "TEST DI PROVA"
         python3 ${bamsurgeon_path}/scripts/randomsites.py \
             $args \
             -g $fasta \
