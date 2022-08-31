@@ -7,7 +7,6 @@ process BAMSURGEON_RANDOMSITES {
     val mut_number
     val minvaf
     val maxvaf
-    val type
     val maxlen
     path fasta
     path bed
