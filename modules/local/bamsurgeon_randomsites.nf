@@ -50,9 +50,8 @@ process BAMSURGEON_RANDOMSITES {
         -n $mut_number \
         --minvaf $minvaf \
         --maxvaf $maxvaf \
-        indel --maxlen $maxlen > "${prefix}_indels.txt"
+        indel --maxlen $maxlen > "${prefix}_indel.txt"
     """
-    }
 
     """
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
