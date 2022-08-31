@@ -26,7 +26,7 @@ process BAMSURGEON_RANDOMSITES {
     def version = '1.3' //VERSION IS HARDCODED
 
 
-    if (params.type) {
+    if (params.type == 'snv') {
         """
         python3 ${bamsurgeon_path}/scripts/randomsites.py \
             $args \
