@@ -82,7 +82,7 @@ process BAMSURGEON_RANDOMSITES {
     "${task.process}":
         BAMSurgeon: 'Version $version'
         Script: 'BAMSurgeon/random_sites.py'
-        Type of variants generated: $type
+        Type of variants generated: $params.type
         Number of variants generated: $mut_number
         Min VAF: $minvaf
         Max VAF: $maxvaf
