@@ -33,7 +33,7 @@ process BAMSURGEON_RANDOMSITES {
         avail_mem = task.memory.giga
     }
 
-    if (type) {
+    if (params.type) {
         """
         python3 ${bamsurgeon_path}/scripts/randomsites.py \
             $args \

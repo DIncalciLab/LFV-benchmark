@@ -113,7 +113,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.mut_number,
         params.min_fraction,
         params.max_fraction,
-        params.type,
         params.maxlen,
         params.fasta,
         params.bed,
