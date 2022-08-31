@@ -13,7 +13,7 @@ process BAMSURGEON_RANDOMSITES {
     path bamsurgeon_path
 
     output:
-    tuple val(meta), path("*.txt")        , emit: mut
+    tuple val(meta), path("*")        , emit: mut
     tuple val(meta), path("*.yml")        , emit: versions
     
 
@@ -41,7 +41,7 @@ process BAMSURGEON_RANDOMSITES {
             -n $mut_number \
             --minvaf $minvaf \
             --maxvaf $maxvaf \
-            snv
+            snv > ${prefix}_snv.txt
         """
     } else if (type == 'indel'){
         """
