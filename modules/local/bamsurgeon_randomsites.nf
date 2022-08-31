@@ -32,49 +32,26 @@ process BAMSURGEON_RANDOMSITES {
         avail_mem = task.memory.giga
     }
 
-    if (params.type == 'snv') {
-        """
-        python3 ${bamsurgeon_path}/scripts/randomsites.py \
-            $args \
-            -g $fasta \
-            -b $bed \
-            -n $mut_number \
-            --minvaf $minvaf \
-            --maxvaf $maxvaf \
-            snv test.txt
-        """
-    } else if (type == 'indel'){
-        """
-        python3 ${bamsurgeon_path}/scripts/randomsites.py \
-            $args \
-            -g $fasta \
-            -b $bed \
-            -n $mut_number \
-            --minvaf $minvaf \
-            --maxvaf $maxvaf \
-            indel --maxlen $maxlen > "${prefix}_indels.txt"
-        """
-    } else {
-        """
-        python3 ${bamsurgeon_path}/scripts/randomsites.py \
-            $args \
-            -g $fasta \
-            -b $bed \
-            -n $mut_number \
-            --minvaf $minvaf \
-            --maxvaf $maxvaf \
-            snv > "${prefix}_snv.txt"
+    """
+    python3 ${bamsurgeon_path}/scripts/randomsites.py \
+        $args \
+        -g $fasta \
+        -b $bed \
+        -n $mut_number \
+        --minvaf $minvaf \
+        --maxvaf $maxvaf \
+        snv > "${prefix}_snv.txt"
 
-        
-        python3 ${bamsurgeon_path}/scripts/randomsites.py \
-            $args \
-            -g $fasta \
-            -b $bed \
-            -n $mut_number \
-            --minvaf $minvaf \
-            --maxvaf $maxvaf \
-            indel --maxlen $maxlen > "${prefix}_indels.txt"
-        """
+    
+    python3 ${bamsurgeon_path}/scripts/randomsites.py \
+        $args \
+        -g $fasta \
+        -b $bed \
+        -n $mut_number \
+        --minvaf $minvaf \
+        --maxvaf $maxvaf \
+        indel --maxlen $maxlen > "${prefix}_indels.txt"
+    """
     }
 
     """
@@ -82,7 +59,6 @@ process BAMSURGEON_RANDOMSITES {
     "${task.process}":
         BAMSurgeon: 'Version $version'
         Script: 'BAMSurgeon/random_sites.py'
-        Type of variants generated: $params.type
         Number of variants generated: $mut_number
         Min VAF: $minvaf
         Max VAF: $maxvaf
