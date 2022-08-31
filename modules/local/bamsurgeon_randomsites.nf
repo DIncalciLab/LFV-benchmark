@@ -41,7 +41,7 @@ process BAMSURGEON_RANDOMSITES {
             -n $mut_number \
             --minvaf $minvaf \
             --maxvaf $maxvaf \
-            snv
+            snv test.txt
         """
     } else if (type == 'indel'){
         """
