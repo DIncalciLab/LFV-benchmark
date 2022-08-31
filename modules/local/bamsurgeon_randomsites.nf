@@ -33,7 +33,7 @@ process BAMSURGEON_RANDOMSITES {
         avail_mem = task.memory.giga
     }
 
-    if ($type == 'snv') {
+    if (${type} == 'snv') {
         """
         python3 ${bamsurgeon_path}/scripts/randomsites.py \
             $args \
