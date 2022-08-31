@@ -26,7 +26,7 @@ process BAMSURGEON_RANDOMSITES {
     def version = '1.3' //VERSION IS HARDCODED
 
     def avail_mem = 3
-    if (params.type == 'snv') {
+    if (!task.memory) {
         log.info '[BAMSurgeon/random_sites.py] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
     } else {
         avail_mem = task.memory.giga
@@ -34,7 +34,14 @@ process BAMSURGEON_RANDOMSITES {
 
     if (params.type == 'snv') {
         """
-        python3 ${bamsurgeon_path}/scripts/randomsites.py 
+        python3 ${bamsurgeon_path}/scripts/randomsites.py \
+            $args \
+            -g $fasta \
+            -b $bed \
+            -n $mut_number \
+            --minvaf $minvaf \
+            --maxvaf $maxvaf \
+            snv
         """
     } else if (type == 'indel'){
         """
