@@ -40,7 +40,7 @@ process BAMSURGEON_RANDOMSITES {
 
 
     """
-    echo pwd > test.txt
+    pwd > test.txt
 
 
 
