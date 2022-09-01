@@ -38,7 +38,7 @@ process BAMSURGEON_RANDOMSITES {
     }
 
     """
-    echo pwd
+    echo "test" > test.txt
     python3 bamsurgeon/scripts/randomsites.py \
         $args \
         -g $fasta \
