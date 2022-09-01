@@ -5,8 +5,7 @@ process BAMSURGEON_SPIKEIN {
     container 'aldosr/bamsurgeon:1.3'
 
     input:
-    //tuple val(meta) file(bam) UNCOMMENT WHEN USING NEAT
-    file
+    tuple val(meta) file(bam)
     tuple val(meta) file(snv)
     tuple val(meta) file(snv)
     val type
