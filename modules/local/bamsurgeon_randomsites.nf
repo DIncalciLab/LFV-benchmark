@@ -38,9 +38,6 @@ process BAMSURGEON_RANDOMSITES {
         avail_mem = task.memory.giga
     }
 
-    """
-    touch ${meta.sample}.vcf.gz
-    """
 /*
     """
     echo "test" > test.txt
@@ -65,6 +62,7 @@ process BAMSURGEON_RANDOMSITES {
     """
 */
     """
+    touch ${meta.sample}.vcf.gz
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
         BAMSurgeon: 'Version $version'
