@@ -19,7 +19,7 @@ process BAMSURGEON_RANDOMSITES {
     path bamsurgeon_path
 
     output:
-    tuple val(meta), path("${prefix}.txt")        , emit: mut
+    tuple val(meta), path("${meta.sample}.txt")        , emit: mut
     tuple val(meta), path("*.yml")        , emit: versions
     
 
@@ -39,7 +39,7 @@ process BAMSURGEON_RANDOMSITES {
     }
 
     """
-    touch ${prefix}.txt
+    touch ${meta.sample}.txt
     """
 /*
     """
