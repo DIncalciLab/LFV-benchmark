@@ -39,7 +39,7 @@ process BAMSURGEON_RANDOMSITES {
     }*/
 
     """
-    touch test.txt
+    touch ${meta.sample}_test.txt
     """
 /*
     """
