@@ -74,7 +74,7 @@ process BAMSURGEON_RANDOMSITES {
         Max VAF: $maxvaf
         BED used: $bed
         FASTA used: $fasta
-        Meta: $meta
+        Meta: $prefix
     END_VERSIONS
     """
 
