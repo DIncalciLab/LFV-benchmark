@@ -2,6 +2,11 @@ process BAMSURGEON_RANDOMSITES {
     tag "Create artificial random mutations for ${meta.sample}"
     label 'process_low'
 
+   //conda (params.enable_conda ? "bioconda::gatk4=4.2.6.1" : null)
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        '':
+        'aldosr/bamsurgeon:1.3' }"
+    
     input:
     val meta
     val mut_number
@@ -13,7 +18,7 @@ process BAMSURGEON_RANDOMSITES {
     path bamsurgeon_path
 
     output:
-    tuple val(meta), path("*")        , emit: mut
+    tuple val(meta), path("*.txt")        , emit: mut
     tuple val(meta), path("*.yml")        , emit: versions
     
 
@@ -33,7 +38,7 @@ process BAMSURGEON_RANDOMSITES {
     }
 
     """
-    python3 ${bamsurgeon_path}/scripts/randomsites.py \
+    python3 bamsurgeon/scripts/randomsites.py \
         $args \
         -g $fasta \
         -b $bed \
@@ -43,7 +48,7 @@ process BAMSURGEON_RANDOMSITES {
         snv > "${prefix}_snv.txt"
 
     
-    python3 ${bamsurgeon_path}/scripts/randomsites.py \
+    python3 bamsurgeon/scripts/randomsites.py \
         $args \
         -g $fasta \
         -b $bed \
