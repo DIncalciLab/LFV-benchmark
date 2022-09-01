@@ -48,8 +48,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 
 
 //include { NEAT        } from '../modules/local/neat.nf'
-include { BAMSURGEON_RANDOMSITES } from '../modules/local/bamsurgeon_randomsites.nf'
-include { BAMSURGEON_SPIKEIN  } from '../modules/local/bamsurgeon_spikein.nf'
+include { BAMSURGEON } from '../modules/local/bamsurgeon.nf'
 //include { BENCHMARK  }  from '../modules/local/benchmark.nf'
 //include { INPUT_CHECK } from '../subworkflows/local/input_check'
 
@@ -108,26 +107,20 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     
     ch_versions = ch_versions.mix(NEAT.out.versions)*/
     
-    BAMSURGEON_RANDOMSITES(
+    BAMSURGEON(
         ch_input,
         params.mut_number,
         params.min_fraction,
         params.max_fraction,
         params.maxlen,
         params.fasta,
-        params.bed,
-    )
-    
-    BAMSURGEON_SPIKEIN(
-        ch_input, 
-        BAMSURGEON_RANDOMSITES.out.snv,
-        BAMSURGEON_RANDOMSITES.out.indel,
         params.type,
+        params.bed
         params.fasta,
         params.picardjar
     )
     
-    ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
+    //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
 
     /*
     VARDICTJAVA(
