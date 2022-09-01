@@ -1,8 +1,6 @@
 process BAMSURGEON_RANDOMSITES {
     tag "Create artificial random mutations for ${meta.sample}"
     label 'process_low'
-
-   //conda (params.enable_conda ? "bioconda::gatk4=4.2.6.1" : null)
    
     container 'aldosr/bamsurgeon:1.3'
     
@@ -14,11 +12,11 @@ process BAMSURGEON_RANDOMSITES {
     val maxlen
     val fasta
     path bed
-    path bamsurgeon_path
 
     output:
-    tuple val(meta), path("*.txt")        , emit: mut
-    tuple val(meta), path("*.yml")        , emit: versions
+    tuple val(meta), path("*.txt")        , optional:true, emit: snv
+    tuple val(meta), path("*.txt")        , optional:true, emit: indel
+    tuple val(meta), path("*.yml")                       , emit: versions
     
 
     when:

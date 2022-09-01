@@ -49,7 +49,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 
 //include { NEAT        } from '../modules/local/neat.nf'
 include { BAMSURGEON_RANDOMSITES } from '../modules/local/bamsurgeon_randomsites.nf'
-//include { BAMSURGEON  } from '../modules/local/bamsurgeon.nf'
+include { BAMSURGEON_SPIKEIN  } from '../modules/local/bamsurgeon_spikein.nf'
 //include { BENCHMARK  }  from '../modules/local/benchmark.nf'
 //include { INPUT_CHECK } from '../subworkflows/local/input_check'
 
@@ -116,14 +116,14 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.maxlen,
         params.fasta,
         params.bed,
-        params.bamsurgeon_path
     )
-    /*
+    
     BAMSURGEON(
-        NEAT.out.bam, 
-        RANDOMSITES.out.bed,
+        ch_input, 
+        BAMSURGEON_RANDOMSITES.out.snv,
+        BAMSURGEON_RANDOMSITES.out.indel,
+        params.type,
         params.fasta,
-        params.bamsurgeon_path,
         params.picardjar
         )
     

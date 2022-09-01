@@ -1,12 +1,16 @@
-process BAMSURGEON {
-    tag "Spike-in artificial mutation in $meta.sample sample"
+process BAMSURGEON_SPIKEIN {
+    tag "Spike-in artificial mutation in ${meta.sample} sample"
     label 'process_high'
 
+    container 'aldosr/bamsurgeon:1.3'
+
     input:
-    tuple val(meta) file(bam)
-    tuple val(meta) file(bed)
+    //tuple val(meta) file(bam) UNCOMMENT WHEN USING NEAT
+    file
+    tuple val(meta) file(snv)
+    tuple val(meta) file(snv)
+    val type
     path fasta
-    path bamsurgeon_path
     path picardjar
 
     output:
@@ -19,7 +23,7 @@ process BAMSURGEON {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "bamsurgeon_${meta.sample}"
+    def prefix = task.ext.prefix ?: ''
     def version = '1.3' //VERSION IS HARDCODED
 
     def avail_mem = 3
@@ -29,11 +33,11 @@ process BAMSURGEON {
         avail_mem = task.memory.giga
     }
 
-    if (spike_type == 'snv') {
+    if (type == 'snv') {
     """
-    python3 -O ${bamsurgeon_path}/bin/addsnv.py \\
-        $args \\
-        -v $bed \
+    python3 -O bamsurgeon/bin/addsnv.py \
+        $args \
+        -v $snv \
         -f $bam \
         -r $fasta \
         -o "add_snv/snv_${prefix}.bam" \
@@ -41,29 +45,47 @@ process BAMSURGEON {
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir "tmp" 
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        BAMSurgeon: 'Version $version'
+        Script: 'BAMSurgeon/add_snv.py'
+        BED used: $bed
+        FASTA used: $fasta
+        Meta: $meta
+    END_VERSIONS
     """
     }
     
-    else if (spike_type == 'indel') {
+    else if (type == 'indel') {
     """
-    python 3 -O ${bamsurgeon_path}/bin/addindel.py \\
-        $args \\
-        -v $bed \
+    python 3 -O bamsurgeon/bin/addindel.py \\
+        $args2 \\
+        -v $indel \
         -f $bam \
         -r $fasta \
         -o "add_snv/snv_${prefix}.bam" \
         --picardjar $picardjar \\ 
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
-        --tmpdir "tmp" 
+        --tmpdir "tmp"
+    
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        BAMSurgeon: 'Version $version'
+        Script: 'BAMSurgeon/add_indel.py'
+        BED used: $bed
+        FASTA used: $fasta
+        Meta: $meta
+    END_VERSIONS 
     """
     }
 
-    else if (spike_type == 'both') {
+    else if (type == 'both') {
     """
-    python3 -O ${bamsurgeon_path}/bin/addsnv.py \\
+    python3 -O bamsurgeon/bin/addsnv.py \\
         $args \\
-        -v $bed \
+        -v $snv \
         -f $bam \
         -r $fasta \
         -o "add_snv/snv_${prefix}.bam" \
@@ -72,9 +94,9 @@ process BAMSURGEON {
         -p $task.cpus \
         --tmpdir "tmp"
 
-        python3 -O ${bamsurgeon_path}/bin/addindel.py \\
+        python3 -O bamsurgeon/bin/addindel.py \\
         $args \\
-        -v $bed \
+        -v $indel \
         -f $bam \
         -r $fasta \
         -o "add_indel/snv_${prefix}.bam" \
@@ -82,17 +104,15 @@ process BAMSURGEON {
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir "tmp"
-    """
-    }
 
-    """
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         BAMSurgeon: 'Version $version'
-        Script: 'BAMSurgeon'
+        Script: 'BAMSurgeon/add_snv.py' + 'BAMSurgeon/add_indel.py'
         BED used: $bed
         FASTA used: $fasta
         Meta: $meta
     END_VERSIONS
-    """    
+    """
+    }
 }
