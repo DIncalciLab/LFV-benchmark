@@ -3,9 +3,10 @@ process BAMSURGEON_RANDOMSITES {
     label 'process_low'
 
    //conda (params.enable_conda ? "bioconda::gatk4=4.2.6.1" : null)
+   /*
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         '':
-        'aldosr/bamsurgeon:1.3' }"
+        'aldosr/bamsurgeon:1.3' }"*/
     
     input:
     val meta
@@ -36,7 +37,10 @@ process BAMSURGEON_RANDOMSITES {
     } else {
         avail_mem = task.memory.giga
     }
-
+    """
+    echo "test" > test.txt
+    """
+/*
     """
     echo "test" > test.txt
     python3 bamsurgeon/scripts/randomsites.py \
@@ -58,7 +62,7 @@ process BAMSURGEON_RANDOMSITES {
         --maxvaf $maxvaf \
         indel --maxlen $maxlen > "${prefix}_indel.txt"
     """
-
+*/
     """
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
