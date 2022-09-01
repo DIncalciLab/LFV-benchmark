@@ -37,14 +37,15 @@ process BAMSURGEON_RANDOMSITES {
     }
 
     """
+    pwd > test.txt
     python3 bamsurgeon/scripts/randomsites.py \
-    $args \
-    -g $fasta \
-    -b $bed \
-    -n $mut_number \
-    --minvaf $minvaf \
-    --maxvaf $maxvaf \
-    snv > "${prefix}_snv.txt"
+        $args \
+        -g $fasta \
+        -b $bed \
+        -n $mut_number \
+        --minvaf $minvaf \
+        --maxvaf $maxvaf \
+        snv > "${prefix}_snv.txt"
 
     
     python3 bamsurgeon/scripts/randomsites.py \
