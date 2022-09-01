@@ -12,7 +12,7 @@ process BAMSURGEON_RANDOMSITES {
     val minvaf
     val maxvaf
     val maxlen
-    path fasta
+    val fasta
     path bed
     path bamsurgeon_path
 
