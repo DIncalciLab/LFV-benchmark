@@ -19,7 +19,7 @@ process BAMSURGEON_RANDOMSITES {
     path bamsurgeon_path
 
     output:
-    //tuple val(meta), path("*.txt")        , emit: mut
+    tuple val(meta), path("*.txt")        , emit: mut
     tuple val(meta), path("*.yml")        , emit: versions
     
 
@@ -39,7 +39,7 @@ process BAMSURGEON_RANDOMSITES {
     }
 
     """
-    echo "test" > test.txt
+    touch test.txt
     """
 /*
     """
