@@ -118,7 +118,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.bed,
     )
     
-    BAMSURGEBAMSURGEON_SPIKEINON(
+    BAMSURGEBAMSURGEON_SPIKEIN(
         ch_input, 
         BAMSURGEON_RANDOMSITES.out.snv,
         BAMSURGEON_RANDOMSITES.out.indel,
