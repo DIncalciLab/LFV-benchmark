@@ -118,14 +118,14 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.bed,
     )
     
-    BAMSURGEBAMSURGEON_SPIKEIN(
+    BAMSURGEON_SPIKEIN(
         ch_input, 
         BAMSURGEON_RANDOMSITES.out.snv,
         BAMSURGEON_RANDOMSITES.out.indel,
         params.type,
         params.fasta,
         params.picardjar
-        )
+    )
     
     ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
 
