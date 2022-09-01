@@ -39,7 +39,7 @@ process BAMSURGEON_RANDOMSITES {
     """
     python3 bamsurgeon/scripts/randomsites.py \
         $args \
-        -g "{$fasta}" \
+        -g "${fasta}" \
         -b $bed \
         -n $mut_number \
         --minvaf $minvaf \
@@ -49,7 +49,7 @@ process BAMSURGEON_RANDOMSITES {
     
     python3 bamsurgeon/scripts/randomsites.py \
         $args \
-        -g "{$fasta}" \
+        -g "${fasta}" \
         -b $bed \
         -n $mut_number \
         --minvaf $minvaf \
