@@ -3,10 +3,10 @@ process BAMSURGEON_RANDOMSITES {
     label 'process_low'
 
    //conda (params.enable_conda ? "bioconda::gatk4=4.2.6.1" : null)
-   /*
+   
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
         '':
-        'aldosr/bamsurgeon:1.3' }"*/
+        'aldosr/bamsurgeon:1.3' }"
     
     input:
     val meta
@@ -38,31 +38,12 @@ process BAMSURGEON_RANDOMSITES {
         avail_mem = task.memory.giga
     }
 
-/*
-    """
-    echo "test" > test.txt
-    python3 bamsurgeon/scripts/randomsites.py \
-        $args \
-        -g $fasta \
-        -b $bed \
-        -n $mut_number \
-        --minvaf $minvaf \
-        --maxvaf $maxvaf \
-        snv > "${prefix}_snv.txt"
 
-    
-    python3 bamsurgeon/scripts/randomsites.py \
-        $args \
-        -g $fasta \
-        -b $bed \
-        -n $mut_number \
-        --minvaf $minvaf \
-        --maxvaf $maxvaf \
-        indel --maxlen $maxlen > "${prefix}_indel.txt"
     """
-*/
-    """
-    touch ${meta.sample}.vcf.gz
+    echo pwd > test.txt
+
+
+
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
         BAMSurgeon: 'Version $version'
@@ -72,7 +53,7 @@ process BAMSURGEON_RANDOMSITES {
         Max VAF: $maxvaf
         BED used: $bed
         FASTA used: $fasta
-        Meta: $prefix
+        Meta: $meta
     END_VERSIONS
     """
 
