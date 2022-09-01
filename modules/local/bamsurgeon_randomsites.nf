@@ -38,7 +38,6 @@ process BAMSURGEON_RANDOMSITES {
         avail_mem = task.memory.giga
     }
 
-
     """
     python3 bamsurgeon/scripts/randomsites.py \
     $args \
