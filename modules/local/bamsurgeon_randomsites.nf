@@ -38,7 +38,6 @@ process BAMSURGEON_RANDOMSITES {
     }
 
     """
-    echo "${pwd}"
     python3 bamsurgeon/scripts/randomsites.py \
         $args \
         -g $fasta \
