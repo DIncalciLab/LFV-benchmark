@@ -30,16 +30,16 @@ process BAMSURGEON_RANDOMSITES {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: ''
     def version = '1.3' //VERSION IS HARDCODED
-    /*
+    
     def avail_mem = 3
     if (!task.memory) {
         log.info '[BAMSurgeon/random_sites.py] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
     } else {
         avail_mem = task.memory.giga
-    }*/
+    }
 
     """
-    touch ${meta.sample}_test
+    touch ${prefix}.txt
     """
 /*
     """
