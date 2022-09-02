@@ -1,11 +1,10 @@
 process BAMSURGEON {
-
+    
     tag "Spike-in artificial random mutain in sample: ${meta.sample}"
     label 'process_high'
    
-    //container 'aldosr/bamsurgeon:1.3'
-    container 'quay.io/biocontainers/fastp:0.23.2--h79da9fb_0'
-
+    container 'aldosr/bamsurgeon:1.3'
+    
     input:
     val meta
     val mut_number
@@ -40,18 +39,11 @@ process BAMSURGEON {
     } else {
         avail_mem = task.memory.giga
     }
-
-    """
-    fastp --in test
-    touch.txt
-    touch.yml
-    """
-    /*
     
     if (type == 'snv') {
 
     """
-    python3 bamsurgeon/scripts/randomsites.py \
+    python3 bamsurgeon/scripts/randomsites.py --help \
         $args \
         -g "${fasta}" \
         -b $bed \
@@ -197,5 +189,5 @@ process BAMSURGEON {
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
     END_VERSIONS
-    """*/
+    """
 }
