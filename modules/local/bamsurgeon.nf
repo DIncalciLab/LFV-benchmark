@@ -31,12 +31,11 @@ process BAMSURGEON {
     def version = '1.3' //VERSION IS HARDCODED
     
     def avail_mem = 3
-    /*
     if (!task.memory) {
         log.info '[BAMSurgeon/random_sites.py] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
     } else {
         avail_mem = task.memory.giga
-    }*/
+    }
 
     if (type == 'snv') {
 
@@ -154,7 +153,7 @@ process BAMSURGEON {
         -v $meta.info \ //CHANGE THIS WHEN NEAT IS UP
         -f "spiked_snv/${prefix}_spiked_snv.bam" \
         -r "${fasta}" \
-        -o "spiked_snv_indel/${prefix}_spiked_snv_indel.bam \
+        -o "spiked_snv_indel/${prefix}_spiked_snv_indel.bam" \
         --picardjar $picardjar \\ 
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
@@ -174,7 +173,7 @@ process BAMSURGEON {
         Meta: $meta
     END_VERSIONS
     """
-
+    
     } else {
         log.info 'ERROR: YOU MUST SPECIFY A MUTATION TYPE TO SPIKEIN'
     }
