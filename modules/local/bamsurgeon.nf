@@ -43,8 +43,7 @@ process BAMSURGEON {
     if (type == 'snv') {
 
     """
-    echo "${HOME}”
-    python3 bamsurgeon/scripts/randomsites.py \
+    python3 scripts/randomsites.py \
         $args \
         -g "${fasta}" \
         -b $bed \
