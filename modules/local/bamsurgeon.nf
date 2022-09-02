@@ -43,6 +43,8 @@ process BAMSURGEON {
 
     """
     fastp --in test
+    touch.txt
+    touch.yml
     """
     /*
     
