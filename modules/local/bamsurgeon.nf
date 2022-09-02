@@ -38,12 +38,15 @@ process BAMSURGEON {
     } else {
         avail_mem = task.memory.giga
     }
-    
-    """
-    pwd
 
     """
+    touch test.txt
+    touch test.yml
+    realpath test.txt
+    pwd
+    """
     /*
+    
     if (type == 'snv') {
 
     """
@@ -193,6 +196,5 @@ process BAMSURGEON {
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
     END_VERSIONS
-    """
-    */
+    """*/
 }
