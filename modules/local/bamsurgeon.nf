@@ -53,7 +53,7 @@ process BAMSURGEON {
     python3 -O bamsurgeon/bin/addsnv.py \
         $args2 \
         -v "random_mut/${prefix}_random_snv.txt" \
-        -f $meta.info \ //CHANGE THIS WHEN NEAT IS UP
+        -f $meta.info \
         -r "${fasta}" \
         -o "spiked_snv/${prefix}_spiked_snv.bam" \
         --picardjar $picardjar \\ 
@@ -91,7 +91,7 @@ process BAMSURGEON {
 
     python 3 -O bamsurgeon/bin/addindel.py \
         $args3 \
-        -v $meta.info \ //CHANGE THIS WHEN NEAT IS UP
+        -v $meta.info \
         -f $bam \
         -r "${fasta}" \
         -o "spiked_indel/${prefix}_spiked_indel.bam" \
@@ -140,7 +140,7 @@ process BAMSURGEON {
     python3 -O bamsurgeon/bin/addsnv.py \
         $args2 \
         -v "random_mut/${prefix}_random_snv.txt" \
-        -f $meta.info \ //CHANGE THIS WHEN NEAT IS UP
+        -f $meta.info \ 
         -r "${fasta}" \
         -o "spiked_snv/${prefix}_spiked_snv.bam" \
         --picardjar $picardjar \\ 
@@ -150,7 +150,7 @@ process BAMSURGEON {
     
     python 3 -O bamsurgeon/bin/addindel.py \
         $args3 \
-        -v $meta.info \ //CHANGE THIS WHEN NEAT IS UP
+        -v $meta.info \ 
         -f "spiked_snv/${prefix}_spiked_snv.bam" \
         -r "${fasta}" \
         -o "spiked_snv_indel/${prefix}_spiked_snv_indel.bam" \
