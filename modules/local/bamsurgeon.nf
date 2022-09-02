@@ -27,6 +27,8 @@ process BAMSURGEON {
 
     script:
     def args = task.ext.args ?: ''
+    def args2 = task.ext.args2 ?: ''
+    def args3 = task.ext.args3 ?: ''
     def prefix = task.ext.prefix ?: ''
     def version = '1.3' //VERSION IS HARDCODED
     
