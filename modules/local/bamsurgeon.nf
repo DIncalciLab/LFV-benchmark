@@ -39,14 +39,13 @@ process BAMSURGEON {
         avail_mem = task.memory.giga
     }
     
-    if (type == 'snv') {
-    
-
     """
     pwd
 
     """
-/*
+    /*
+    if (type == 'snv') {
+
     """
     python3 bamsurgeon/scripts/randomsites.py \
         $args \
