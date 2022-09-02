@@ -42,10 +42,7 @@ process BAMSURGEON {
     }
 
     """
-    touch test.txt
-    touch test.yml
-    realpath test.txt
-    pwd
+    fastp --in test
     """
     /*
     
