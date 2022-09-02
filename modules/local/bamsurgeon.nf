@@ -54,7 +54,7 @@ process BAMSURGEON {
     python3 -O bamsurgeon/bin/addsnv.py \
         $args2 \
         -v "random_mut/${prefix}_random_snv.txt" \
-        -f $meta.info \
+        -f ${meta.info} \
         -r "${fasta}" \
         -o "spiked_snv/${prefix}_spiked_snv.bam" \
         --picardjar $picardjar \
