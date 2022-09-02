@@ -106,7 +106,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         )
     
     ch_versions = ch_versions.mix(NEAT.out.versions)*/
-    
+    /*
     BAMSURGEON(
         ch_input,
         params.mut_number,
