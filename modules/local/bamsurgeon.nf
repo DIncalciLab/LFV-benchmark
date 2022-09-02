@@ -151,7 +151,7 @@ process BAMSURGEON {
     
     python 3 -O bamsurgeon/bin/addindel.py \
         $args3 \
-        -v "random_mut/${prefix}_random_indel.txt" \ 
+        -v "random_mut/${prefix}_random_indel.txt" \
         -f "${meta.info}" \
         -r "${fasta}" \
         -o "spiked_snv_indel/${prefix}_spiked_snv_indel.bam" \
