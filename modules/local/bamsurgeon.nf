@@ -50,7 +50,7 @@ process BAMSURGEON {
         -n $mut_number \
         --minvaf $minvaf \
         --maxvaf $maxvaf \
-        snv > "random_mut/${prefix}_random_snv.txt"
+        snv > random_mut/${prefix}_random_snv.txt
 
     
     python3 -O bamsurgeon/bin/addsnv.py \
