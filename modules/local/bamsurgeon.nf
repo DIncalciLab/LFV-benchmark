@@ -76,7 +76,7 @@ process BAMSURGEON {
     END_VERSIONS
     """
 
-    } else if (type == 'indel'){
+    } /*else if (type == 'indel'){
 
     """
     python3 bamsurgeon/scripts/randomsites.py \
@@ -174,7 +174,7 @@ process BAMSURGEON {
     END_VERSIONS
     """
     
-    } else {
+    } */else {
         log.info 'ERROR: YOU MUST SPECIFY A MUTATION TYPE TO SPIKEIN'
     }
 
