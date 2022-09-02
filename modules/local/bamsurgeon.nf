@@ -54,7 +54,7 @@ process BAMSURGEON {
     python3 -O bamsurgeon/bin/addsnv.py \
         $args2 \
         -v "random_mut/${prefix}_random_snv.txt" \
-        -f ${meta.info} \
+        -f "${meta.info}" \
         -r "${fasta}" \
         -o "spiked_snv/${prefix}_spiked_snv.bam" \
         --picardjar $picardjar \
@@ -92,8 +92,8 @@ process BAMSURGEON {
 
     python 3 -O bamsurgeon/bin/addindel.py \
         $args3 \
-        -v $meta.info \
-        -f $bam \
+        -v "random_mut/${prefix}_random_indel.txt" \
+        -f "${meta.info}" \
         -r "${fasta}" \
         -o "spiked_indel/${prefix}_spiked_indel.bam" \
         --picardjar $picardjar \
@@ -141,7 +141,7 @@ process BAMSURGEON {
     python3 -O bamsurgeon/bin/addsnv.py \
         $args2 \
         -v "random_mut/${prefix}_random_snv.txt" \
-        -f $meta.info \ 
+        -f ${meta.info} \ 
         -r "${fasta}" \
         -o "spiked_snv/${prefix}_spiked_snv.bam" \
         --picardjar $picardjar \
@@ -151,8 +151,8 @@ process BAMSURGEON {
     
     python 3 -O bamsurgeon/bin/addindel.py \
         $args3 \
-        -v $meta.info \ 
-        -f "spiked_snv/${prefix}_spiked_snv.bam" \
+        -v "random_mut/${prefix}_random_indel.txt" \ 
+        -f "${meta.info}" \
         -r "${fasta}" \
         -o "spiked_snv_indel/${prefix}_spiked_snv_indel.bam" \
         --picardjar $picardjar \
