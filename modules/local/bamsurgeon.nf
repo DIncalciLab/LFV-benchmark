@@ -38,10 +38,15 @@ process BAMSURGEON {
     } else {
         avail_mem = task.memory.giga
     }
-    log.info '#############TEST##############'
     
     if (type == 'snv') {
+    
 
+    """
+    pwd
+
+    """
+/*
     """
     python3 bamsurgeon/scripts/randomsites.py \
         $args \
@@ -190,4 +195,5 @@ process BAMSURGEON {
     "${task.process}":
     END_VERSIONS
     """
+    */
 }
