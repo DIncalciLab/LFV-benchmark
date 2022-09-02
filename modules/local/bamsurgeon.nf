@@ -56,7 +56,7 @@ process BAMSURGEON {
         -f $meta.info \
         -r "${fasta}" \
         -o "spiked_snv/${prefix}_spiked_snv.bam" \
-        --picardjar $picardjar \\ 
+        --picardjar $picardjar \
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir "tmp_addsnv" 
@@ -67,7 +67,7 @@ process BAMSURGEON {
         BAMSurgeon: 'Version $version'
         Script: 'BAMSurgeon/random_sites.py + BAMSurgeon/add_snv.py'
         Number of variants generated: $mut_number
-        Type of mutations spiked-in: 'Only SNVs were inserted"
+        Type of mutations spiked-in: 'Only SNVs were inserted'
         Min VAF: $minvaf
         Max VAF: $maxvaf
         BED used: "${bed}"
@@ -95,7 +95,7 @@ process BAMSURGEON {
         -f $bam \
         -r "${fasta}" \
         -o "spiked_indel/${prefix}_spiked_indel.bam" \
-        --picardjar $picardjar \\ 
+        --picardjar $picardjar \
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir "tmp_addindel"
@@ -105,7 +105,7 @@ process BAMSURGEON {
         BAMSurgeon: 'Version $version'
         Script: 'BAMSurgeon/random_sites.py + BAMSurgeon/add_indel.py'
         Number of variants generated: $mut_number
-        Type of mutations spiked-in: 'Only INDELs were inserted"
+        Type of mutations spiked-in: 'Only INDELs were inserted'
         Min VAF: $minvaf
         Max VAF: $maxvaf
         Max INDELs length: $maxlen
@@ -143,7 +143,7 @@ process BAMSURGEON {
         -f $meta.info \ 
         -r "${fasta}" \
         -o "spiked_snv/${prefix}_spiked_snv.bam" \
-        --picardjar $picardjar \\ 
+        --picardjar $picardjar \
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir "tmp_addsnv"
@@ -154,7 +154,7 @@ process BAMSURGEON {
         -f "spiked_snv/${prefix}_spiked_snv.bam" \
         -r "${fasta}" \
         -o "spiked_snv_indel/${prefix}_spiked_snv_indel.bam" \
-        --picardjar $picardjar \\ 
+        --picardjar $picardjar \
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir "tmp_addindel"
@@ -165,7 +165,7 @@ process BAMSURGEON {
         BAMSurgeon: 'Version $version'
         Script: 'BAMSurgeon/random_sites.py + BAMSurgeon/add_snv.py'
         Number of variants generated: $mut_number
-        Type of mutations spiked-in: 'Both SNVs and INDELs (Max Length = $maxlen) were inserted"
+        Type of mutations spiked-in: 'Both SNVs and INDELs (Max Length = $maxlen) were inserted'
         Min VAF: $minvaf
         Max VAF: $maxvaf
         BED used: "${bed}"
