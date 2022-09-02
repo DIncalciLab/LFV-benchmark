@@ -1,7 +1,7 @@
 process BAMSURGEON {
     
     tag "Spike-in artificial random mutain in sample: ${meta.sample}"
-    label 'process_low'
+    label 'process_high'
    
     container "aldosr/bamsurgeon:1.3"
     
