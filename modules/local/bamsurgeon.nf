@@ -1,6 +1,6 @@
 process BAMSURGEON {
-    tag "Create artificial random mutations for ${meta.sample}"
-    label 'process_low'
+    tag "Spike-in artificial random mutain in sample: ${meta.sample}"
+    label 'process_high'
    
     container 'aldosr/bamsurgeon:1.3'
     
@@ -37,7 +37,7 @@ process BAMSURGEON {
         avail_mem = task.memory.giga
     }
     log.info '#############TEST##############'
-    /*
+    
     if (type == 'snv') {
 
     """
@@ -77,7 +77,7 @@ process BAMSURGEON {
     END_VERSIONS
     """
 
-    } /*else if (type == 'indel'){
+    } else if (type == 'indel'){
 
     """
     python3 bamsurgeon/scripts/randomsites.py \
@@ -177,7 +177,7 @@ process BAMSURGEON {
     
     } else {
         log.info 'ERROR: YOU MUST SPECIFY A MUTATION TYPE TO SPIKEIN'
-    }*/
+    }
 
     stub:
     def prefix = task.ext.prefix ?: ""
