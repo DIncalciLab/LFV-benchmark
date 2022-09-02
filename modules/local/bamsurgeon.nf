@@ -43,7 +43,7 @@ process BAMSURGEON {
     if (type == 'snv') {
 
     """
-    python3 bamsurgeon/scripts/randomsites.py \
+    randomsites.py \
         $args \
         -g "${fasta}" \
         -b $bed \
@@ -53,7 +53,7 @@ process BAMSURGEON {
         snv > ${prefix}_random_snv.txt
 
     
-    python3 -O bamsurgeon/bin/addsnv.py \
+    addsnv.py \
         $args2 \
         -v "random_mut/${prefix}_random_snv.txt" \
         -f "${meta.info}" \
