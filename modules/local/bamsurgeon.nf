@@ -36,7 +36,8 @@ process BAMSURGEON {
     } else {
         avail_mem = task.memory.giga
     }
-
+    log.info '#############TEST##############'
+    /*
     if (type == 'snv') {
 
     """
@@ -174,9 +175,9 @@ process BAMSURGEON {
     END_VERSIONS
     """
     
-    } */else {
+    } else {
         log.info 'ERROR: YOU MUST SPECIFY A MUTATION TYPE TO SPIKEIN'
-    }
+    }*/
 
     stub:
     def prefix = task.ext.prefix ?: ""
