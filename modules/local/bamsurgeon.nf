@@ -4,8 +4,8 @@ process BAMSURGEON {
     label 'process_high'
    
     //container 'aldosr/bamsurgeon:1.3'
-    container 'hello-world'
-    
+    container 'quay.io/biocontainers/fastp:0.23.2--h79da9fb_0'
+
     input:
     val meta
     val mut_number
