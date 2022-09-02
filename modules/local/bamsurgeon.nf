@@ -15,7 +15,6 @@ process BAMSURGEON {
     val type
 
     path bed
-    path fasta
     path picardjar
 
     output:

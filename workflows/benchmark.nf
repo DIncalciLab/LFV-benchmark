@@ -116,7 +116,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.fasta,
         params.type,
         params.bed,
-        params.fasta,
         params.picardjar
     )
     
