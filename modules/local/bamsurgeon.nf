@@ -20,6 +20,7 @@ process BAMSURGEON {
     output:
     tuple val(meta), path("*.txt")        , emit: random_mut
     tuple val(meta), path("*.bam")        , emit: bam
+    tuple val(meta), path("*.vcf")        , emit: vcf_bamsurgeon
     tuple val(meta), path("*.yml")        , emit: versions
     
 
@@ -82,26 +83,26 @@ process BAMSURGEON {
     } else if (type == 'indel'){
 
     """
-    python3 bamsurgeon/scripts/randomsites.py \
+    randomsites.py \
         $args \
         -g "${fasta}" \
         -b $bed \
         -n $mut_number \
         --minvaf $minvaf \
         --maxvaf $maxvaf \
-        indel --maxlen $maxlen > "random_mut/${prefix}_random_indel.txt"
+        indel --maxlen $maxlen > ${prefix}_random_indel.txt
 
 
-    python 3 -O bamsurgeon/bin/addindel.py \
+    addindel.py \
         $args3 \
-        -v "random_mut/${prefix}_random_indel.txt" \
+        -v ${prefix}_random_indel.txt \
         -f "${meta.info}" \
         -r "${fasta}" \
-        -o "spiked_indel/${prefix}_spiked_indel.bam" \
+        -o ${prefix}_spiked_indel.bam \
         --picardjar $picardjar \
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
-        --tmpdir "tmp_addindel"
+        --tmpdir tmp_addindel
 
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
@@ -121,46 +122,46 @@ process BAMSURGEON {
     } else if (type == 'both') {
 
     """
-    python3 bamsurgeon/scripts/randomsites.py \
+    randomsites.py \
         $args \
         -g "${fasta}" \
         -b $bed \
         -n $mut_number \
         --minvaf $minvaf \
         --maxvaf $maxvaf \
-        snv > "random_mut/${prefix}_random_snv.txt"
+        snv > ${prefix}_random_snv.txt
 
-    python3 bamsurgeon/scripts/randomsites.py \
+    randomsites.py \
         $args \
         -g "${fasta}" \
         -b $bed \
         -n $mut_number \
         --minvaf $minvaf \
         --maxvaf $maxvaf \
-        indel --maxlen $maxlen > "random_mut/${prefix}_random_indel.txt"
+        indel --maxlen $maxlen > ${prefix}_random_indel.txt
 
     
-    python3 -O bamsurgeon/bin/addsnv.py \
+   addsnv.py \
         $args2 \
-        -v "random_mut/${prefix}_random_snv.txt" \
-        -f ${meta.info} \ 
+        -v ${prefix}_random_snv.txt \
+        -f "${meta.info}" \ 
         -r "${fasta}" \
-        -o "spiked_snv/${prefix}_spiked_snv.bam" \
+        -o ${prefix}_spiked_snv.bam \
         --picardjar $picardjar \
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
-        --tmpdir "tmp_addsnv"
+        --tmpdir tmp_addsnv
     
-    python 3 -O bamsurgeon/bin/addindel.py \
+    addindel.py \
         $args3 \
-        -v "random_mut/${prefix}_random_indel.txt" \
+        -v random_mut/${prefix}_random_indel.txt \
         -f "${meta.info}" \
         -r "${fasta}" \
-        -o "spiked_snv_indel/${prefix}_spiked_snv_indel.bam" \
+        -o ${prefix}_spiked_snv_indel.bam \
         --picardjar $picardjar \
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
-        --tmpdir "tmp_addindel"
+        --tmpdir tmp_addindel
 
 
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
