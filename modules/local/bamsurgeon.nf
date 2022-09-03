@@ -19,8 +19,7 @@ process BAMSURGEON {
 
     output:
     tuple val(meta), path("*.txt")        , emit: random_mut
-    tuple val(meta), path("*.bam")        , emit: bam
-    tuple val(meta), path("*.bai")        , emit: bai
+    tuple val(meta), path("*")        , emit: bam
     tuple val(meta), path("*.yml")        , emit: versions
     
 
