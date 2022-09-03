@@ -19,7 +19,7 @@ process BAMSURGEON {
 
     output:
     tuple val(meta), path("*.txt")        , emit: random_mut
-    tuple val(meta), path("*")        , emit: bam
+    tuple val(meta), path("*.bam")        , emit: bam
     tuple val(meta), path("*.yml")        , emit: versions
     
 
@@ -58,7 +58,7 @@ process BAMSURGEON {
         -v ${prefix}_random_snv.txt \
         -f "${meta.info}" \
         -r "${fasta}" \
-        -o ${prefix}_spiked_snv \
+        -o ${prefix}_spiked_snv.bam \
         --picardjar $picardjar \
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
