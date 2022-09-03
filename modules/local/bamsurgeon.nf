@@ -49,7 +49,7 @@ process BAMSURGEON {
         -n $mut_number \
         --minvaf $minvaf \
         --maxvaf $maxvaf \
-        snv > /random_mut/${prefix}_random_snv.txt
+        snv > ${prefix}_random_snv.txt
 
     
     addsnv.py \
@@ -57,7 +57,7 @@ process BAMSURGEON {
         -v "random_mut/${prefix}_random_snv.txt" \
         -f "${meta.info}" \
         -r "${fasta}" \
-        -o "spiked_snv/${prefix}_spiked_snv.bam" \
+        -o ${prefix}_spiked_snv.bam \
         --picardjar $picardjar \
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
