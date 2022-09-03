@@ -52,7 +52,16 @@ process BAMSURGEON {
         snv > ${prefix}_random_snv.txt
 
     
-
+    addsnv.py \
+        $args2 \
+        -v ${prefix}_random_snv.txt \
+        -f "${meta.info}" \
+        -r "${fasta}" \
+        -o ${prefix}_spiked_snv.bam \
+        --picardjar $picardjar \
+        --alignopts c:250,M:,t:$task.cpus,v:1 \
+        -p $task.cpus \
+        --tmpdir tmp_addsnv
 
 
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
