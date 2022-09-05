@@ -12,7 +12,7 @@ process VARDICTJAVA {
     tuple val(meta), path(bam)
     tuple val(meta), path(bai)
     
-    path   fasta
+    val   fasta
     path   bed
 
     output:
@@ -31,7 +31,7 @@ process VARDICTJAVA {
 
     """
     vardict-java \
-        -G $fasta \
+        -G ${fasta} \
         -N ${prefix} \
         -b $bam \
         $args \
