@@ -156,26 +156,26 @@ process BAMSURGEON {
         indel --maxlen $maxlen > ${prefix}_random_indel.txt
 
     
-   addsnv.py \
-        $args2 \
-        -v ${prefix}_random_snv.txt \
-        -f "${meta.info}" \
-        -r "${fasta}" \
-        -o ${prefix}_spiked_snv.bam.file \
-        --picardjar $picardjar \
-        --alignopts c:250,M:,t:$task.cpus,v:1 \
-        -p $task.cpus \
+   addsnv.py \\
+        $args2 \\
+        -v ${prefix}_random_snv.txt \\
+        -f "${meta.info}" \\
+        -r "${fasta}" \\
+        -o ${prefix}_spiked_snv.file \\
+        --picardjar $picardjar \\
+        --alignopts c:250,M:,t:$task.cpus,v:1 \\
+        -p $task.cpus \\
         --tmpdir tmp_addsnv
     
-    addindel.py \
-        $args3 \
-        -v ${prefix}_random_indel.txt \
-        -f ${prefix}_spiked_snv.bam.file \
-        -r "${fasta}" \
-        -o ${prefix}_spiked_snv_indel.bam \
-        --picardjar $picardjar \
-        --alignopts c:250,M:,t:$task.cpus,v:1 \
-        -p $task.cpus \
+    addindel.py \\
+        $args3 \\
+        -v ${prefix}_random_indel.txt \\
+        -f ${prefix}_spiked_snv.file \\
+        -r "${fasta}" \\
+        -o ${prefix}_spiked_snv_indel.bam \\
+        --picardjar $picardjar \\
+        --alignopts c:250,M:,t:$task.cpus,v:1 \\
+        -p $task.cpus \\
         --tmpdir tmp_addindel
 
     samtools index ${prefix}_spiked_snv_indel.bam
