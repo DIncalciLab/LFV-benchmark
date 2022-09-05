@@ -22,9 +22,6 @@ process BAMSURGEON {
     tuple val(meta), path("bamsurgeon*.bam")                        , emit: bam
     tuple val(meta), path("*.bai")                                  , emit: bai
 
-    tuple val(meta), path("bamsurgeon*_spiked_snv_indel.bam")       , optional:true , emit: both_bam
-    tuple val(meta), path("bamsurgeon*_spiked_snv_indel.bam.bai")   , optional:true , emit: both_bai
-
     tuple val(meta), path("*.vcf.gz")                               , emit: vcf
     tuple val(meta), path("*.tbi")                                  , emit: tbi
 
@@ -164,22 +161,16 @@ process BAMSURGEON {
         -v ${prefix}_random_snv.txt \
         -f "${meta.info}" \
         -r "${fasta}" \
-        -o ${prefix}_spiked_snv.bam \
+        -o ${prefix}_spiked_snv.bam.file \
         --picardjar $picardjar \
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir tmp_addsnv
     
-    samtools index ${prefix}_spiked_snv.bam
-
-    bcftools reheader --fai "${fasta}.fai" ${prefix}_spiked_snv.addsnv.${prefix}_random_snv.vcf \
-        | bcftools sort | bgzip -c > ${prefix}_spiked_snv.vcf.gz
-    tabix -p vcf ${prefix}_spiked_snv.vcf.gz
-    
     addindel.py \
         $args3 \
         -v ${prefix}_random_indel.txt \
-        -f "${meta.info}" \
+        -f ${prefix}_spiked_snv.bam.file \
         -r "${fasta}" \
         -o ${prefix}_spiked_snv_indel.bam \
         --picardjar $picardjar \
