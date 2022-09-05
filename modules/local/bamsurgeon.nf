@@ -129,7 +129,7 @@ process BAMSURGEON {
         -n $mut_number \
         --minvaf $minvaf \
         --maxvaf $maxvaf \
-        snv > ${prefix}_random_snv.txt
+        snv > "${prefix}_random_snv.txt"
 
     randomsites.py \
         $args \
@@ -138,7 +138,7 @@ process BAMSURGEON {
         -n $mut_number \
         --minvaf $minvaf \
         --maxvaf $maxvaf \
-        indel --maxlen $maxlen > ${prefix}_random_indel.txt
+        indel --maxlen $maxlen > "${prefix}_random_indel.txt"
 
     
    addsnv.py \
