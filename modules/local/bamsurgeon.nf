@@ -108,7 +108,7 @@ process BAMSURGEON {
         -p $task.cpus \
         --tmpdir tmp_addindel
 
-    bcftools reheader --fai "${fasta}.fai" ${prefix}_spiked_snv.addindel.${prefix}_random_indel.vcf \
+    bcftools reheader --fai "${fasta}.fai" ${prefix}_spiked_indel.addindel.${prefix}_random_indel.vcf \
         | bcftools sort | bgzip -c > ${prefix}_spiked_indel.vcf.gz
     tabix -p vcf ${prefix}_spiked_indel.vcf.gz
 
