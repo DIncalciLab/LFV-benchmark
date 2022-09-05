@@ -17,12 +17,18 @@ process BAMSURGEON {
     path picardjar
 
     output:
-    tuple val(meta), path("*.txt")                            , emit: random_mut
-    tuple val(meta), path("bamsurgeon*.bam")                  , emit: bam
-    tuple val(meta), path("*.bai")                            , emit: bai
-    tuple val(meta), path("*.vcf.gz")                         , emit: vcf
-    tuple val(meta), path("*.tbi")                            , emit: tbi
-    tuple val(meta), path("*.yml")                            , emit: versions
+    tuple val(meta), path("*.txt")                                  , emit: random_mut
+
+    tuple val(meta), path("bamsurgeon*.bam")                        , emit: bam
+    tuple val(meta), path("*.bai")                                  , emit: bai
+
+    tuple val(meta), path("bamsurgeon*_spiked_snv_indel.bam")       , optional:true , emit: both_bam
+    tuple val(meta), path("bamsurgeon*_spiked_snv_indel.bam.bai")   , optional:true , emit: both_bai
+
+    tuple val(meta), path("*.vcf.gz")                               , emit: vcf
+    tuple val(meta), path("*.tbi")                                  , emit: tbi
+
+    tuple val(meta), path("*.yml")                                  , emit: versions
     
 
     when:
