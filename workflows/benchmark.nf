@@ -114,7 +114,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.max_fraction,
         params.maxlen,
         params.fasta,
-        params.type,
         params.bed,
         params.picardjar
     )
