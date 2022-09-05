@@ -30,17 +30,17 @@ process VARDICTJAVA {
 
 
     """
-    vardict-java \\
-        $args \\
-        -b $bam \\
-        -th $task.cpus \\
-        -N $prefix \\
-        -G $fasta \\
-        $bed \\
-        | teststrandbias.R \\
-        | var2vcf_valid.pl \\
-            $args2 \\
-            -N $prefix \\
+    vardict-java \
+        $args \
+        -b $bam \
+        -th $task.cpus \
+        -N $prefix \
+        -G $fasta \
+        $bed \
+        | teststrandbias.R \
+        | var2vcf_valid.pl \
+            $args2 \
+            -N $prefix \
         | gzip -c > ${prefix}_vardict.vcf.gz
 
     cat <<-END_VERSIONS > versions.yml
