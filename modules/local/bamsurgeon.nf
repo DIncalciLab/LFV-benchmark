@@ -161,7 +161,7 @@ process BAMSURGEON {
         -v ${prefix}_random_snv.txt \\
         -f "${meta.info}" \\
         -r "${fasta}" \\
-        -o ${prefix}_spiked_snv.file \\
+        -o ${prefix}_spiked_snv.snv \\
         --picardjar $picardjar \\
         --alignopts c:250,M:,t:$task.cpus,v:1 \\
         -p $task.cpus \\
