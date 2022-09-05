@@ -172,7 +172,7 @@ process BAMSURGEON {
     addindel.py \\
         $args3 \\
         -v ${prefix}_random_indel.txt \\
-        -f ${meta.info} \\
+        -f "${meta.info}" \\
         -r "${fasta}" \\
         -o ${prefix}_spiked_snv_indel.bam \\
         --picardjar $picardjar \\
@@ -181,8 +181,6 @@ process BAMSURGEON {
         --tmpdir tmp_addindel
 
     samtools index ${prefix}_spiked_snv_indel.bam
-
-    bamsurgeon_test_sample_1_spiked_snv_indel.addindel.bamsurgeon_test_sample_1_random_indel.vcf
 
     bcftools reheader --fai "${fasta}.fai" ${prefix}_spiked_snv_indel.addsnv.addindel.${prefix}_random_indel.vcf \
         | bcftools sort | bgzip -c > ${prefix}_spiked_snv_indel.vcf.gz
