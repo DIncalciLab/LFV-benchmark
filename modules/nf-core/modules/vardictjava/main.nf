@@ -17,7 +17,6 @@ process VARDICTJAVA {
 
     output:
     tuple val(meta), path("*.vcf")   , emit: vcf_vardict
-    tuple val(meta), path("*.tbi")   , emit: tbi_vardict
     path "versions.yml"              , emit: versions
 
     when:
@@ -41,8 +40,6 @@ process VARDICTJAVA {
             | teststrandbias.R \
                 | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
     
-    tabix -p vcf ${prefix}.vcf
-
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         vardict-java: $VERSION
@@ -61,8 +58,6 @@ process VARDICTJAVA {
             | teststrandbias.R \
                 | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
     
-    tabix -p vcf ${prefix}.vcf
-
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         vardict-java: $VERSION
