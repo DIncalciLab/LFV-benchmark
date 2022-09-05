@@ -45,7 +45,7 @@ process GATK4_MUTECT2 {
         -I $bam \\
         --reference $fasta \\
         -L $bed \\
-        -O ${prefix}.vcf \\
+        -O ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -59,7 +59,7 @@ process GATK4_MUTECT2 {
         --reference $fasta \\
         -L $bed \\
         $args \\
-        -O ${prefix}.vcf \\
+        -O ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
