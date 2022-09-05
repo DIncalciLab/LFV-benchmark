@@ -20,7 +20,8 @@ process BAMSURGEON {
     output:
     tuple val(meta), path("*.txt")        , emit: random_mut
     tuple val(meta), path("*.bam")        , emit: bam
-    tuple val(meta), path("*.vcf")        , emit: vcf_bamsurgeon
+    tuple val(meta), path("*.vcf.gz")     , emit: vcf
+    tuple val(meta), path("*.tbi")        , emit: vcf_tbi
     tuple val(meta), path("*.yml")        , emit: versions
     
 
@@ -64,7 +65,10 @@ process BAMSURGEON {
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir tmp_addsnv
-
+    
+    bcftools reheader --fai "${fasta}.fai" ${prefix}_spiked_snv.addsnv.${prefix}_random_snv.vcf \
+        | bcftools sort | bgzip -c > ${prefix}_spiked_snv.vcf.gz
+    tabix -p vcf ${prefix}_spiked_snv.vcf.gz
 
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
@@ -103,6 +107,10 @@ process BAMSURGEON {
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir tmp_addindel
+
+    bcftools reheader --fai "${fasta}.fai" ${prefix}_spiked_snv.addindel.${prefix}_random_indel.vcf \
+        | bcftools sort | bgzip -c > ${prefix}_spiked_indel.vcf.gz
+    tabix -p vcf ${prefix}_spiked_indel.vcf.gz
 
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
@@ -163,6 +171,9 @@ process BAMSURGEON {
         -p $task.cpus \
         --tmpdir tmp_addindel
 
+    bcftools reheader --fai "${fasta}.fai" ${prefix}_spiked_snv_indel.addindel.${prefix}_random_indel.vcf \
+        | bcftools sort | bgzip -c > ${prefix}_spiked_snv_indel.vcf.gz
+    tabix -p vcf ${prefix}_spiked_snv_indel.vcf.gz
 
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
