@@ -15,8 +15,8 @@ process GATK4_MUTECT2 {
     path bed
 
     output:
-    tuple val(meta), path("*.vcf")     , emit: vcf_mutect
-    tuple val(meta), path("*.tbi")        , emit: tbi_mutect
+    tuple val(meta), path("*.vcf")        , emit: vcf_mutect
+    tuple val(meta), path("*.idx")        , emit: idc_mutect
     tuple val(meta), path("*.stats")      , emit: stats_mutect
     tuple val(meta), path("*.f1r2.tar.gz"), optional:true, emit: f1r2
     path "versions.yml"                   , emit: versions
