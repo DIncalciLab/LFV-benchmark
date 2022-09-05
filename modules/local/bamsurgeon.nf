@@ -129,7 +129,7 @@ process BAMSURGEON {
         -n $mut_number \
         --minvaf $minvaf \
         --maxvaf $maxvaf \
-        snv > "${prefix}_random_snv.txt"
+        snv > ${prefix}_random_snv.txt
 
     randomsites.py \
         $args \
@@ -138,13 +138,13 @@ process BAMSURGEON {
         -n $mut_number \
         --minvaf $minvaf \
         --maxvaf $maxvaf \
-        indel --maxlen $maxlen > "${prefix}_random_indel.txt"
+        indel --maxlen $maxlen > ${prefix}_random_indel.txt
 
     
    addsnv.py \
         $args2 \
         -v ${prefix}_random_snv.txt \
-        -f "${meta.info}" \ 
+        -f "${meta.info}" \
         -r "${fasta}" \
         -o ${prefix}_spiked_snv.bam \
         --picardjar $picardjar \
