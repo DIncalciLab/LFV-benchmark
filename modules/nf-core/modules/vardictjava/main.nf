@@ -32,7 +32,7 @@ process VARDICTJAVA {
 
     """
     vardict-java \
-        -G ${fasta} \
+        -G "${fasta}" \
         -N ${prefix} \
         -b $bam \
         $bed \
