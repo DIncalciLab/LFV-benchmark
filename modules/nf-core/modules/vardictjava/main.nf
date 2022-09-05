@@ -34,7 +34,7 @@ process VARDICTJAVA {
         -G "${fasta}" \
         -N ${prefix} \
         -b $bam \
-        $bed \
+        "${bed}" \
             | teststrandbias.R \
                 | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
 
