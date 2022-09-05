@@ -167,7 +167,7 @@ process BAMSURGEON {
         -p $task.cpus \\
         --tmpdir tmp_addsnv
 
-    samtools index ${prefix}_spiked_snv.bam
+    samtools index ${prefix}_spiked_snv.snv
     
     addindel.py \\
         $args3 \\
