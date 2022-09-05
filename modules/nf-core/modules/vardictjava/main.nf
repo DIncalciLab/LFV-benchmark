@@ -29,7 +29,7 @@ process VARDICTJAVA {
     def prefix = task.ext.prefix ?: "vardict"
     def VERSION = '1.8.2' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
 
-    if (mode == 'high-sensitivity') {
+    if (params.mode == 'high-sensitivity') {
     """
     vardict-java \
         -G ${fasta} \

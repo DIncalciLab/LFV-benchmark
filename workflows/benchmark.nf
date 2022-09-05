@@ -128,13 +128,14 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.fasta,
         params.bed
     )
-/*
+
     GATK4_MUTECT2(
         BAMSURGEON.out.bam,
-        params.bed,
-        params.fasta
+        BAMSURGEON.out.bai,
+        params.fasta,
+        params.bed
     )
-
+/*
     VARSCAN2(
         BAMSURGEON.out.bam,
         //BAMSURGEON.out.bai,

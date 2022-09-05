@@ -39,7 +39,7 @@ process GATK4_MUTECT2 {
         avail_mem = task.memory.giga
     }
 
-    if (mode == 'high-sensitivity'){
+    if (params.mode == 'high-sensitivity'){
     """
     gatk --java-options "-Xmx${avail_mem}g" Mutect2 \\
         -I $bam \\

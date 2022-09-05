@@ -12,7 +12,6 @@ process BAMSURGEON {
     val maxvaf
     val maxlen
     val fasta
-    val type
 
     path bed
     path picardjar
@@ -43,7 +42,7 @@ process BAMSURGEON {
         avail_mem = task.memory.giga
     }
     
-    if (type == 'snv') {
+    if (params.type == 'snv') {
 
     """
     randomsites.py \
@@ -87,7 +86,7 @@ process BAMSURGEON {
     END_VERSIONS
     """
 
-    } else if (type == 'indel'){
+    } else if (params.type == 'indel'){
 
     """
     randomsites.py \
@@ -132,7 +131,7 @@ process BAMSURGEON {
     END_VERSIONS
     """
 
-    } else if (type == 'both') {
+    } else if (params.type == 'both') {
 
     """
     randomsites.py \
