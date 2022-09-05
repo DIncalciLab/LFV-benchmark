@@ -184,7 +184,7 @@ process BAMSURGEON {
 
     samtools index ${prefix}_spiked_snv_indel.bam
 
-    bcftools reheader --fai "${fasta}.fai" ${prefix}_spiked_snv_indel.addindel.${prefix}_random_indel.vcf \
+    bcftools reheader --fai "${fasta}.fai" ${prefix}_spiked_snv_indel.addsnv.addindel.${prefix}_random_indel.vcf \
         | bcftools sort | bgzip -c > ${prefix}_spiked_snv_indel.vcf.gz
     tabix -p vcf ${prefix}_spiked_snv_indel.vcf.gz
 
