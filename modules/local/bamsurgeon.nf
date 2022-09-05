@@ -167,12 +167,12 @@ process BAMSURGEON {
         -p $task.cpus \\
         --tmpdir tmp_addsnv
 
-    samtools index ${prefix}_spiked_snv.file
+    samtools index ${prefix}_spiked_snv.snv
     
     addindel.py \\
         $args3 \\
         -v ${prefix}_random_indel.txt \\
-        -f ${prefix}_spiked_snv.file \\
+        -f ${prefix}_spiked_snv.snv \\
         -r "${fasta}" \\
         -o ${prefix}_spiked_snv_indel.bam \\
         --picardjar $picardjar \\
