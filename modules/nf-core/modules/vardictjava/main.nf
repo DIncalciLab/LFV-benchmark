@@ -34,7 +34,7 @@ process VARDICTJAVA {
     vardict-java \
         -G ${fasta} \
         -N ${prefix} \
-        -f 0.0001
+        -f 0.0001 \
         -b $bam \
         $args \
         $bed \
@@ -54,7 +54,7 @@ process VARDICTJAVA {
     vardict-java \
         -G ${fasta} \
         -N ${prefix} \
-        -f 0.01
+        -f 0.01 \
         -b $bam \
         $args \
         $bed \
