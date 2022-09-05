@@ -13,7 +13,8 @@ process VARDICTJAVA {
     tuple val(meta), path(bai)
     
     path   bed
-    path   fasta
+    
+    val   fasta
 
     output:
     tuple val(meta), path("*.vcf"), emit: vcf_vardict
@@ -31,7 +32,7 @@ process VARDICTJAVA {
 
     """
     vardict-java \
-        -G $fasta \
+        -G ${fasta} \
         -N ${prefix} \
         -b $bam \
         $bed \
