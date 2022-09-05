@@ -121,14 +121,14 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
 
-    /*
+    
     VARDICTJAVA(
         BAMSURGEON.out.bam,
-        //BAMSURGEON.out.bai,
+        BAMSURGEON.out.bai,
         params.fasta,
         params.bed
     )
-
+/*
     GATK4_MUTECT2(
         BAMSURGEON.out.bam,
         params.bed,

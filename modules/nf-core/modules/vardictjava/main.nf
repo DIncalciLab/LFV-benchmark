@@ -1,19 +1,19 @@
 process VARDICTJAVA {
-    //tag "$meta.id"
+    tag "Variant calling using VarDict on BAMSurgeon spiked-in sample: ${meta.sample}"
     label 'process_medium'
 
     // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
-    conda (params.enable_conda ? "bioconda::vardict-java=1.8.3" : null)
+    conda (params.enable_conda ? "bioconda::vardict-java=1.8.2" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/vardict-java:1.8.3--hdfd78af_0':
-        'quay.io/biocontainers/vardict-java:1.8.3--hdfd78af_0' }"
+        'https://depot.galaxyproject.org/singularity/vardict-java:1.8.2--hdfd78af_3':
+        'quay.io/biocontainers/vardict-java:1.8.2--hdfd78af_3' }"
 
     input:
-    //tuple val(meta), path(bam), path(bai)
-    //tuple path(fasta), path(fasta_fai)
-    path   bam
+    tuple val(meta), path(bam)
+    tuple val(meta), path(bai)
+    
+    path   bed
     path   fasta
-    path   bed 
 
     output:
     tuple val(meta), path("*.vcf.gz"), emit: vcf_vardict
@@ -26,7 +26,7 @@ process VARDICTJAVA {
     def args = task.ext.args ?: ''
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "vardict"
-    def VERSION = '1.8.3' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
+    def VERSION = '1.8.2' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
 
 
     """
@@ -41,7 +41,7 @@ process VARDICTJAVA {
         | var2vcf_valid.pl \\
             $args2 \\
             -N $prefix \\
-        | gzip -c > ${prefix}.vcf.gz
+        | gzip -c > ${prefix}_vardict.vcf.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -1,15 +1,14 @@
 process GATK4_MUTECT2 {
-    //tag "$meta.id"
+    tag "Variant calling using VarDict on BAMSurgeon spiked-in sample: ${meta.sample}"
     label 'process_medium'
 
-    conda (params.enable_conda ? "bioconda::gatk4=4.2.6.1" : null)
+    conda (params.enable_conda ? "bioconda::gatk4-4.2.3.0-1" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/gatk4:4.2.6.1--hdfd78af_0':
-        'quay.io/biocontainers/gatk4:4.2.6.1--hdfd78af_0' }"
+        'https://depot.galaxyproject.org/singularity/gatk4:4.2.3.0--hdfd78af_1':
+        'quay.io/biocontainers/gatk4:4.2.3.0--hdfd78af_1' }"
 
     input:
-    //FIXME: Change inputs to match benchmark
-    //tuple val(meta), path(bam), path(bai)
+    tuple val(meta), path(bam)
     path bam
     path bed
     path fasta

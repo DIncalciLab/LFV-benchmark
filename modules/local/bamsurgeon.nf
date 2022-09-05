@@ -18,11 +18,12 @@ process BAMSURGEON {
     path picardjar
 
     output:
-    tuple val(meta), path("*.txt")        , emit: random_mut
-    tuple val(meta), path("*.bam")        , emit: bam
-    tuple val(meta), path("*.vcf.gz")     , emit: vcf
-    tuple val(meta), path("*.tbi")        , emit: vcf_tbi
-    tuple val(meta), path("*.yml")        , emit: versions
+    tuple val(meta), path("*.txt")                            , emit: random_mut
+    tuple val(meta), path("*.bam")                            , emit: bam
+    tuple val(meta), path("*.bai")                            , emit: bai
+    tuple val(meta), path("*.vcf.gz")                         , emit: vcf
+    tuple val(meta), path("*.tbi")                            , emit: tbi
+    tuple val(meta), path("*.yml")                            , emit: versions
     
 
     when:
@@ -65,6 +66,8 @@ process BAMSURGEON {
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir tmp_addsnv
+
+    samtools index ${prefix}_spiked_snv.bam
     
     bcftools reheader --fai "${fasta}.fai" ${prefix}_spiked_snv.addsnv.${prefix}_random_snv.vcf \
         | bcftools sort | bgzip -c > ${prefix}_spiked_snv.vcf.gz
@@ -107,6 +110,8 @@ process BAMSURGEON {
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir tmp_addindel
+
+    samtools index ${prefix}_spiked_indel.bam
 
     bcftools reheader --fai "${fasta}.fai" ${prefix}_spiked_indel.addindel.${prefix}_random_indel.vcf \
         | bcftools sort | bgzip -c > ${prefix}_spiked_indel.vcf.gz
@@ -160,6 +165,12 @@ process BAMSURGEON {
         -p $task.cpus \
         --tmpdir tmp_addsnv
     
+    samtools index ${prefix}_spiked_snv.bam
+
+    bcftools reheader --fai "${fasta}.fai" ${prefix}_spiked_snv.addsnv.${prefix}_random_snv.vcf \
+        | bcftools sort | bgzip -c > ${prefix}_spiked_snv.vcf.gz
+    tabix -p vcf ${prefix}_spiked_snv.vcf.gz
+    
     addindel.py \
         $args3 \
         -v ${prefix}_random_indel.txt \
@@ -170,6 +181,8 @@ process BAMSURGEON {
         --alignopts c:250,M:,t:$task.cpus,v:1 \
         -p $task.cpus \
         --tmpdir tmp_addindel
+
+    samtools index ${prefix}_spiked_snv_indel.bam
 
     bcftools reheader --fai "${fasta}.fai" ${prefix}_spiked_snv_indel.addindel.${prefix}_random_indel.vcf \
         | bcftools sort | bgzip -c > ${prefix}_spiked_snv_indel.vcf.gz
