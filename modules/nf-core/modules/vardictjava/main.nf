@@ -12,8 +12,8 @@ process VARDICTJAVA {
     tuple val(meta), path(bam)
     tuple val(meta), path(bai)
     
-    val fasta
-    val   bed
+    path   fasta
+    path   bed
 
     output:
     tuple val(meta), path("*.vcf"), emit: vcf_vardict
@@ -31,10 +31,11 @@ process VARDICTJAVA {
 
     """
     vardict-java \
-        -G ${fasta} \
+        -G $fasta \
         -N ${prefix} \
         -b $bam \
-        ${bed} \
+        $args \
+        $bed \
             | teststrandbias.R \
                 | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
 
