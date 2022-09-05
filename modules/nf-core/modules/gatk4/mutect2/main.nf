@@ -9,9 +9,10 @@ process GATK4_MUTECT2 {
 
     input:
     tuple val(meta), path(bam)
-    path bam
+    tuple val(meta), path(bai)
+    
+    val fasta
     path bed
-    path fasta
 
     output:
     tuple val(meta), path("*.vcf.gz")     , emit: vcf_mutect
@@ -37,19 +38,36 @@ process GATK4_MUTECT2 {
     } else {
         avail_mem = task.memory.giga
     }
+
+    if (mode == 'high-sensitivity'){
     """
     gatk --java-options "-Xmx${avail_mem}g" Mutect2 \\
         -I $bam \\
-        --output ${prefix}.vcf.gz \\
         --reference $fasta \\
-        --tmp-dir . \\
-        $args
+        -L $bed \\
+        -O ${prefix}.vcf \\
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         gatk4: \$(echo \$(gatk --version 2>&1) | sed 's/^.*(GATK) v//; s/ .*\$//')
     END_VERSIONS
     """
+    } else{
+    """
+        gatk --java-options "-Xmx${avail_mem}g" Mutect2 \\
+        -I $bam \\
+        --reference $fasta \\
+        -L $bed \\
+        $args \\
+        -O ${prefix}.vcf \\
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        gatk4: \$(echo \$(gatk --version 2>&1) | sed 's/^.*(GATK) v//; s/ .*\$//')
+    END_VERSIONS
+
+    """
+    }
 
     stub:
     def prefix = task.ext.prefix ?: "${meta.id}"

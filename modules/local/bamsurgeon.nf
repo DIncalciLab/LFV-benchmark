@@ -19,7 +19,7 @@ process BAMSURGEON {
 
     output:
     tuple val(meta), path("*.txt")                            , emit: random_mut
-    tuple val(meta), path("bamsurgeon*.bam")                            , emit: bam
+    tuple val(meta), path("bamsurgeon*.bam")                  , emit: bam
     tuple val(meta), path("*.bai")                            , emit: bai
     tuple val(meta), path("*.vcf.gz")                         , emit: vcf
     tuple val(meta), path("*.tbi")                            , emit: tbi
