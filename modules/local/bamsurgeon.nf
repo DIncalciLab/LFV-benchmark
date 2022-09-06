@@ -186,7 +186,7 @@ process BAMSURGEON {
         | bcftools sort | bgzip -c > ${prefix}_spiked_snv_indel.vcf.gz
     tabix -p vcf ${prefix}_spiked_snv_indel.vcf.gz
 
-    mv ${prefix}_spiked_snv.bam > ${prefix}_spiked_snv.bam.snv
+    mv ${prefix}_spiked_snv.bam  ${prefix}_spiked_snv.bam.snv
 
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
