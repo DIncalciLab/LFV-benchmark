@@ -35,7 +35,7 @@ process VARSCAN2 {
         avail_mem = task.memory.giga
     }
 
-    if (mode == 'high-sensitivity') {
+    if (params.mode == 'high-sensitivity') {
     """
     samtools mpileup \\
         -f $fasta \\
