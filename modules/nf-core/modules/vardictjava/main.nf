@@ -1,6 +1,6 @@
 process VARDICTJAVA {
     tag "Variant calling using VarDict on BAMSurgeon spiked-in sample: ${meta.sample}"
-    label 'process_medium'
+    label 'process_low'
 
     // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
     conda (params.enable_conda ? "bioconda::vardict-java=1.8.2" : null)
@@ -34,7 +34,7 @@ process VARDICTJAVA {
     } else {
         avail_mem = task.memory.giga
     }
-    
+
     if (params.mode == 'high-sensitivity') {
     """
     vardict-java \

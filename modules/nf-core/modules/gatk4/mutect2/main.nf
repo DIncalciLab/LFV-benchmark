@@ -1,6 +1,6 @@
 process GATK4_MUTECT2 {
     tag "Variant calling using Mutect2 on BAMSurgeon spiked-in sample: ${meta.sample}"
-    label 'process_medium'
+    label 'process_low'
 
     conda (params.enable_conda ? "bioconda::gatk4-4.2.3.0-1" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?

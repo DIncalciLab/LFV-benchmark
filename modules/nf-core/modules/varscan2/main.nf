@@ -1,6 +1,6 @@
 process VARSCAN2 {
     tag "Variant calling using VarScan2 on BAMSurgeon spiked-in sample: ${meta.sample}"
-    label 'process_medium'
+    label 'process_low'
 
     // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
     conda (params.enable_conda ? "bioconda::varscan=2.4.4" : null)
