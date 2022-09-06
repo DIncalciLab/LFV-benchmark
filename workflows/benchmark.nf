@@ -134,12 +134,12 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.fasta,
         params.bed
     )
-/*
+
     VARSCAN2(
         BAMSURGEON.out.bam,
-        //BAMSURGEON.out.bai,
-        params.bed,
-        params.fasta
+        BAMSURGEON.out.bai,
+        params.fasta,
+        params.bed
     )
 
     /*BENCHMARK(
