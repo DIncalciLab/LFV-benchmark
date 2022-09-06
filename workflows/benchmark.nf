@@ -64,6 +64,7 @@ include { BAMSURGEON } from '../modules/local/bamsurgeon.nf'
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
 include { GATK4_MUTECT2 }               from '../modules/nf-core/modules/gatk4/mutect2/main'
 include { VARDICTJAVA }                 from '../modules/nf-core/modules/vardictjava/main'
+include { SAMTOOLS_MPILEUP }            from '../modules/nf-core/modules/samtools/mpileup/main'
 include { VARSCAN2 }                    from '../modules/nf-core/modules/varscan2/main'
 include { MULTIQC }                     from '../modules/nf-core/modules/multiqc/main'
 
@@ -135,9 +136,12 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.bed
     )
 
+    SAMTOOLS_MPILEUP(
+        BAMSURGEON.out.bam
+    )
+
     VARSCAN2(
-        BAMSURGEON.out.bam,
-        BAMSURGEON.out.bai,
+        SAMTOOLS_MPILEUP.mpileup,
         params.fasta,
         params.bed
     )
