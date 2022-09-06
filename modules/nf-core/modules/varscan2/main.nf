@@ -9,8 +9,8 @@ process VARSCAN2 {
         'quay.io/biocontainers/varscan:2.4.4--0' }"
 
     input:
-    tuple val(meta), path(bam)
-    tuple val(meta), path(bai)
+    tuple val(meta), path(mpileup)
+    //tuple val(meta), path(bai)
 
     val   fasta
     path  bed
@@ -37,7 +37,9 @@ process VARSCAN2 {
 
     if (params.mode == 'high-sensitivity') {
     """
-    samtools mpileup -f "${fasta}" -d 0 $bam > test.pileup
+    varscan mpileup2cns $mpileup  \\
+        $args \\
+        --variants > ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -46,10 +48,9 @@ process VARSCAN2 {
     """
     } else {
     """
-    samtools mpileup $bam -f "${fasta}" \\
-        | varscan mpileup2cns  \\
-                    $args2 \\
-                    --variants > ${prefix}.vcf
+    varscan mpileup2cns $mpileup  \\
+        $args \\
+        --variants > ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
