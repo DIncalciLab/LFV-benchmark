@@ -49,7 +49,7 @@ process VARSCAN2 {
     } else {
     """
     varscan mpileup2cns $mpileup  \\
-        $args \\
+        --output-vcf \\
         --variants > ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
