@@ -37,11 +37,8 @@ process VARSCAN2 {
 
     if (params.mode == 'high-sensitivity') {
     """
-    samtools mpileup -f "${fasta}" \\
-        $args \\
-        $bam | varscan mpileup2cns  \\
-                    --output-vcf \\
-                    --variants > ${prefix}.vcf
+    samtools mpileup -f "${fasta}" -d 0 \
+        $bam | varscan mpileup2cns --output-vcf --variants > ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
