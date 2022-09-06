@@ -9,6 +9,7 @@ process SAMTOOLS_MPILEUP {
     
     input:
     tuple val(meta), path(bam)
+
     path  fasta
 
     output:
@@ -23,10 +24,9 @@ process SAMTOOLS_MPILEUP {
     def prefix = task.ext.prefix ?: "mpileup"
 
     """
-    samtools mpileup \\
+    samtools mpileup $bam \\
         --f $fasta \\
-        --output ${prefix}.mpileup \\
-        $bam
+        --output ${prefix}.mpileup
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

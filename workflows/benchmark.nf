@@ -104,7 +104,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.error_model,
         params.mutation_model,
         params.gc_model
-        )
+    )
     
     ch_versions = ch_versions.mix(NEAT.out.versions)*/
     
