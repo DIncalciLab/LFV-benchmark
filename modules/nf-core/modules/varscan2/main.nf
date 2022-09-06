@@ -37,8 +37,7 @@ process VARSCAN2 {
 
     if (params.mode == 'high-sensitivity') {
     """
-    samtools mpileup \\
-        -f "${fasta}" \\
+    samtools mpileup -f "${fasta}" \\
         $args \\
         $bam | varscan mpileup2cns  \\
                     --output-vcf \\
@@ -51,8 +50,7 @@ process VARSCAN2 {
     """
     } else {
     """
-    samtools mpileup \\
-        -f "${fasta}" \\
+    samtools mpileup -f "${fasta}" \\
         $bam | varscan mpileup2cns  \\
                     $args2 \\
                     --variants > ${prefix}.vcf
