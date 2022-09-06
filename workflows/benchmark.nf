@@ -137,7 +137,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     )
 
     SAMTOOLS_MPILEUP(
-        BAMSURGEON.out.bam
+        BAMSURGEON.out.bam,
+        params.fasta
     )
 
     VARSCAN2(
