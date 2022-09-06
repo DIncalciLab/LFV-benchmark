@@ -137,22 +137,22 @@ process BAMSURGEON {
     } else if (params.type == 'both') {
 
     """
-    randomsites.py \
-        $args \
-        -g "${fasta}" \
-        -b $bed \
-        -n $mut_number \
-        --minvaf $minvaf \
-        --maxvaf $maxvaf \
+    randomsites.py \\
+        $args \\
+        -g "${fasta}" \\
+        -b $bed \\
+        -n $mut_number \\
+        --minvaf $minvaf \\
+        --maxvaf $maxvaf \\
         snv > ${prefix}_random_snv.txt
 
-    randomsites.py \
-        $args \
-        -g "${fasta}" \
-        -b $bed \
-        -n $mut_number \
-        --minvaf $minvaf \
-        --maxvaf $maxvaf \
+    randomsites.py \\
+        $args \\
+        -g "${fasta}" \\
+        -b $bed \\
+        -n $mut_number \\
+        --minvaf $minvaf \\
+        --maxvaf $maxvaf \\
         indel --maxlen $maxlen > ${prefix}_random_indel.txt
 
     
