@@ -46,8 +46,8 @@ process VARSCAN2 {
     """
     } else {
     """
-    samtools mpileup -f "${fasta}" \\
-        $bam | varscan mpileup2cns  \\
+    samtools mpileup $bam -f "${fasta}" \\
+        | varscan mpileup2cns  \\
                     $args2 \\
                     --variants > ${prefix}.vcf
 
