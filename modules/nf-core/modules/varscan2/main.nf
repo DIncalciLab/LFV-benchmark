@@ -42,7 +42,7 @@ process VARSCAN2 {
         $args \\
         $bam | varscan mpileup2cns  \\
                     --output-vcf \\
-                    --variants > "${prefix}.vcf"
+                    --variants > ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -55,7 +55,7 @@ process VARSCAN2 {
         -f $fasta \\
         $bam | varscan mpileup2cns  \\
                     $args2 \\
-                    --variants > "${prefix}.vcf"
+                    --variants > ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
