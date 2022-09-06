@@ -1,5 +1,5 @@
 process GATK4_MUTECT2 {
-    tag "Variant calling using VarDict on BAMSurgeon spiked-in sample: ${meta.sample}"
+    tag "Variant calling using Mutect2 on BAMSurgeon spiked-in sample: ${meta.sample}"
     label 'process_medium'
 
     conda (params.enable_conda ? "bioconda::gatk4-4.2.3.0-1" : null)

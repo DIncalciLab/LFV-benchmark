@@ -13,7 +13,7 @@ process VARDICTJAVA {
     tuple val(meta), path(bai)
     
     val   fasta
-    path   bed
+    path  bed
 
     output:
     tuple val(meta), path("*.vcf")   , emit: vcf_vardict
@@ -28,6 +28,13 @@ process VARDICTJAVA {
     def prefix = task.ext.prefix ?: "vardict"
     def VERSION = '1.8.2' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
 
+    def avail_mem = 3
+    if (!task.memory) {
+        log.info '[VarDict Java] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
+    } else {
+        avail_mem = task.memory.giga
+    }
+    
     if (params.mode == 'high-sensitivity') {
     """
     vardict-java \
