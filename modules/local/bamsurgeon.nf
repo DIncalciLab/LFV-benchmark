@@ -172,7 +172,7 @@ process BAMSURGEON {
     addindel.py \\
         $args3 \\
         -v ${prefix}_random_indel.txt \\
-        -f ${prefix}_spiked_snv.snv \\
+        -f ${prefix}_spiked_snv.bam \\
         -r "${fasta}" \\
         -o ${prefix}_spiked_snv_indel.bam \\
         --picardjar $picardjar \\
