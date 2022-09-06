@@ -174,11 +174,20 @@ process BAMSURGEON {
         -v ${prefix}_random_indel.txt \\
         -f ${prefix}_spiked_snv.bam \\
         -r "${fasta}" \\
-        -o ${prefix}_spiked_snv_indel.bam \\
+        -o ${prefix}_spiked_snv_indel.prereplace \\
         --picardjar $picardjar \\
         --alignopts c:250,M:,t:$task.cpus,v:1 \\
         -p $task.cpus \\
         --tmpdir tmp_addindel
+
+    java -jar $picardjar AddOrReplaceReadGroups I=${prefix}_spiked_snv_indel.prereplace \
+        O=${prefix}_spiked_snv_indel.bam \\
+        VALIDATION_STRINGENCY=LENIENT \\
+        RGID=NEAT \\
+        RGLB=NEAT \\
+        RGPL=NEAT \\
+        RGPU=NEAT \\
+        RGSM=NEAT
 
     samtools index ${prefix}_spiked_snv_indel.bam
 
