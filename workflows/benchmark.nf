@@ -49,7 +49,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 
 //include { NEAT        } from '../modules/local/neat.nf'
 include { BAMSURGEON } from '../modules/local/bamsurgeon.nf'
-//include { BENCHMARK  }  from '../modules/local/benchmark.nf'
+include { BENCHMARK  }  from '../modules/local/benchmark.nf'
 //include { INPUT_CHECK } from '../subworkflows/local/input_check'
 
 /*
@@ -147,10 +147,12 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.bed
     )
 
-    /*BENCHMARK(
+    BENCHMARK(
+        ch_input,
+        BAMSURGEON.out.vcf,
         VARDICTJAVA.out.vcf, 
         GATK4_MUTECT2.out.vcf,
-        VARSCAN2.out.vcf)*/
+        VARSCAN2.out.vcf)
     
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
     
