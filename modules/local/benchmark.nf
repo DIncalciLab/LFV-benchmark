@@ -4,10 +4,10 @@ process BENCHMARK {
 
     input:
     val meta
-    path(bamsurgeon)
-    path(vcf_vardict)
-    path(vcf_mutect),
-    path(vcf_varscan)
+    tuple val(meta_bamsurgeon), path(bamsurgeon)
+    tuple val(meta_vardict), path(vcf_vardict)
+    tuple val(meta_mutect), path(vcf_mutect),
+    tuple val(meta_varscan), path(vcf_varscan)
 
     output:
     tuple val(meta), path("*.png")   , emit: benchmark
