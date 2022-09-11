@@ -1,8 +1,7 @@
 process BENCHMARK {
-    //tag "$meta.id"
+    tag "Benchmark of the spiked-in somatic variants on sample: ${meta.sample}"
     label 'process_low'
 
-    // ADJUST THIS SECTION
     // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
     conda (params.enable_conda ? "bioconda::varscan=2.4.4" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
@@ -10,10 +9,7 @@ process BENCHMARK {
         'quay.io/biocontainers/vardict-java:1.8.3--hdfd78af_0' }"
 
     input:
-    //tuple val(meta), path(vcf_vardict), path(vcf_mutect), path(vcf_varscan)
-    path      vcf_vardict
-    path      vcf_mutect
-    path      vcf_varscan
+    tuple val(meta), path(vcf_vardict), path(vcf_mutect), path(vcf_varscan)
 
     output:
     tuple val(meta), path("*.txt")   , emit: benchmark

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-#CHANGE LOCATION FOR THIS FILE IF NEEDED
 import pandas as pd
+import argparse
 from pathlib import Path
 import matplotlib as mpl
 import matplotlib.pyplot as plt
@@ -221,7 +221,7 @@ def calculate_performance(df, df_spiked, df_spiked_germinal, df_truth):
     performance.to_csv(output)
     return performance
 
-def plot_performance(performance):
+def plot_performance(vardict, mutect, varscan):
     """
     Plot performance for the input variant caller
     """
@@ -229,8 +229,9 @@ def plot_performance(performance):
     #Set Black and white cmap
     from matplotlib import lines, markers
 
-    d = {'VarDict': vardict_performance_tot, 
-         'Mutect2': mutect_performance_tot, 'VarScan2': varscan_performance_tot}
+    d = {'VarDict': vardict, 
+         'Mutect2': mutect, 
+         'VarScan2': varscan}
 
     # line cyclers adapted to colourblind people
     from cycler import cycler
@@ -348,3 +349,19 @@ def plot_performance(performance):
 
         #Plot performance
         plot_performance(df_performance_vardict, df_performance_mutect, df_performance_varscan)
+
+    if __name__ == '__main__':
+        parser = argparse.ArgumentParser(description='Generate plots for artificial mutation benchmark')
+        
+        parser.add_argument('-n', '--neat',       required=True, help='Pseudo-germinal variants generated from NEAT')
+
+        parser.add_argument('-g', '--bamsurgeon', required=True, help='Mutations spiked-in from BamSurgeon')
+
+        parser.add_argument('-v', '--vardict',    required=True, help='VarDict VCF with spiked-in artificial mutations')
+        parser.add_argument('-s', '--varscan',    required=True, help='VarScan2 VCF with spiked-in artificial mutations')
+        parser.add_argument('-m', '--mutect',     required=True, help='Mutect2 VCF with spiked-in artificial mutations')
+
+        parser.add_argument('-o', '--output',     required=True, help='Mutect2 VCF with spiked-in artificial mutations')
+
+        args = parser.parse_args()
+        main(args)
