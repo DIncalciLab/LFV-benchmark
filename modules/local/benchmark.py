@@ -316,7 +316,7 @@ def plot_performance(vardict, mutect, varscan):
 
 
     # Save figure
-    plt.savefig(output_path, dpi=350, transparent=False, bbox_inches='tight')
+    plt.savefig('benchmark.png', dpi=350, transparent=False, bbox_inches='tight')
 
 
     def main():
@@ -352,7 +352,7 @@ def plot_performance(vardict, mutect, varscan):
 
     if __name__ == '__main__':
         parser = argparse.ArgumentParser(description='Generate plots for artificial mutation benchmark')
-        
+
         parser.add_argument('-n', '--neat',       required=True, help='Pseudo-germinal variants generated from NEAT')
 
         parser.add_argument('-g', '--bamsurgeon', required=True, help='Mutations spiked-in from BamSurgeon')
@@ -360,8 +360,6 @@ def plot_performance(vardict, mutect, varscan):
         parser.add_argument('-v', '--vardict',    required=True, help='VarDict VCF with spiked-in artificial mutations')
         parser.add_argument('-s', '--varscan',    required=True, help='VarScan2 VCF with spiked-in artificial mutations')
         parser.add_argument('-m', '--mutect',     required=True, help='Mutect2 VCF with spiked-in artificial mutations')
-
-        parser.add_argument('-o', '--output',     required=True, help='Mutect2 VCF with spiked-in artificial mutations')
 
         args = parser.parse_args()
         main(args)
