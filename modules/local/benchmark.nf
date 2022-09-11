@@ -13,7 +13,7 @@ process BENCHMARK {
     path(vcf_varscan)
 
     output:
-    tuple val(meta), path("*.png")   , emit: benchmark
+    path("*.png")   , emit: benchmark
     path "versions.yml"              , emit: versions
 
     when:
