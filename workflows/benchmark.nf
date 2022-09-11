@@ -148,7 +148,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     )
 
     BENCHMARK(
-        ch_input,
         BAMSURGEON.out.vcf,
         VARDICTJAVA.out.vcf_vardict, 
         GATK4_MUTECT2.out.vcf_mutect,
