@@ -1,5 +1,5 @@
 process BENCHMARK {
-    tag "Benchmark of the spiked-in somatic variants on sample: ${meta.sample}"
+    tag "Benchmark of the spiked-in somatic variants on sample: ${meta.vcf}"
     label 'process_low'
 
     container "aldosr/neat:3.2"
@@ -25,7 +25,6 @@ process BENCHMARK {
     
     """
     benchmark.py \\
-        -n "${meta.vcf}" \\
         -g $bamsurgeon \\
         -v $vcf_vardict \\
         -m $vcf_mutect \\
