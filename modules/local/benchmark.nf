@@ -3,7 +3,11 @@ process BENCHMARK {
     label 'process_low'
 
     input:
-    tuple val(meta), path(bamsurgeon), path(vcf_vardict), path(vcf_mutect), path(vcf_varscan)
+    val meta
+    tuple val(meta), path(bamsurgeon)
+    tuple val(meta), path(vcf_vardict)
+    tuple val(meta), path(vcf_mutect),
+    tuple val(meta), path(vcf_varscan)
 
     output:
     tuple val(meta), path("*.png")   , emit: benchmark
