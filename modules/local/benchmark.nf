@@ -22,7 +22,7 @@ process BENCHMARK {
     def prefix = task.ext.prefix ?: ""
     
     """
-    python3 benchmark.py \\
+    benchmark.py \\
         -n $meta.vcf \\
         -g $bamsurgeon \\
         -v $vcf_vardict \\
