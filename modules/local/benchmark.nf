@@ -1,11 +1,12 @@
 process BENCHMARK {
-    tag "Benchmark of the spiked-in somatic variants on sample: ${meta.vcf}"
+
+    tag "Benchmark of the spiked-in somatic variants on sample: ${data.sample}"
     label 'process_low'
 
     container "aldosr/neat:3.2"
 
     input:
-    val meta
+    val data
     path(bamsurgeon)
     path(vcf_vardict)
     path(vcf_mutect)
