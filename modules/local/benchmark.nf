@@ -23,7 +23,7 @@ process BENCHMARK {
     
     """
     benchmark.py \\
-        -n $meta.vcf \\
+        -n "${meta.vcf}" \\
         -g $bamsurgeon \\
         -v $vcf_vardict \\
         -m $vcf_mutect \\
