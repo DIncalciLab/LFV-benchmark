@@ -2,6 +2,8 @@ process NEAT {
     tag "Create artificial normal datasets for sample: ${meta.sample}"
     label 'process_high'
 
+    container "aldosr/neat:3.2"
+
     input:
     val meta
     val readlen

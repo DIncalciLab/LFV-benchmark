@@ -2,6 +2,8 @@ process BENCHMARK {
     tag "Benchmark of the spiked-in somatic variants on sample: ${meta.sample}"
     label 'process_low'
 
+    container "aldosr/bamsurgeon:1.3-custom"
+
     input:
     val meta
     tuple val(meta), path(bamsurgeon)
