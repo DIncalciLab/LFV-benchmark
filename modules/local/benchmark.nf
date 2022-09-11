@@ -3,7 +3,7 @@ process BENCHMARK {
     label 'process_low'
 
     input:
-    tuple val(meta), path(vcf_vardict), path(vcf_mutect), path(vcf_varscan)
+    tuple val(meta), path(bamsurgeon), path(vcf_vardict), path(vcf_mutect), path(vcf_varscan)
 
     output:
     tuple val(meta), path("*.png")   , emit: benchmark
@@ -19,7 +19,7 @@ process BENCHMARK {
     
     """
     python3 benchmark.py \\
-        -n $neat \\
+        -n $meta.vcf \\
         -g $bamsurgeon \\
         -v $vcf_vardict \\
         -m $vcf_mutect \\
