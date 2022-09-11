@@ -26,6 +26,7 @@ process BENCHMARK {
     
     """
     benchmark.py \\
+        -n "${data.vcf}" \\
         -g $bamsurgeon \\
         -v $vcf_vardict \\
         -m $vcf_mutect \\
