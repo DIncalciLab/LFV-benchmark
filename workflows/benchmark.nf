@@ -148,11 +148,10 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     )
 
     vcf_ch = BAMSURGEON.out.vcf
-        .join(
-        VARDICTJAVA.out.vcf_vardict,
-        GATK4_MUTECT2.out.vcf_mutect,
-        VARSCAN2.out.vcf_varscan
-        ).view()
+        .join(VARDICTJAVA.out.vcf_vardict)
+        .join(GATK4_MUTECT2.out.vcf_mutect)
+        .join(VARSCAN2.out.vcf_varscan)
+        .view()
 
     /*BENCHMARK(
         BAMSURGEON.out.vcf,
