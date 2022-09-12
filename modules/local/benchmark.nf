@@ -1,12 +1,12 @@
 process BENCHMARK {
 
-    tag "Benchmark of the spiked-in somatic variants on sample: ${meta.sample}"
+    tag "Benchmark of the spiked-in somatic variants on sample: ${meta[1]}"
     label 'process_low'
 
     container "aldosr/neat:3.2"
 
     input:
-    tuple val(meta) path(bamsurgeon), path(vcf_vardict), path(vcf_mutect), path(vcf_varscan)
+    tuple val(meta) path(vcf)
 
     output:
     path("*.png")   , emit: benchmark
@@ -22,11 +22,11 @@ process BENCHMARK {
     
     """
     benchmark.py \\
-        -n "${data.vcf}" \\
-        -g $bamsurgeon \\
-        -v $vcf_vardict \\
-        -m $vcf_mutect \\
-        -s $vcf_varscan
+        -n "${meta[1]}" \\
+        -g  \\
+        -v  \\
+        -m  \\
+        -s 
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
