@@ -49,7 +49,8 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 
 //include { NEAT        } from '../modules/local/neat.nf'
 include { BAMSURGEON } from '../modules/local/bamsurgeon.nf'
-include { BENCHMARK  }  from '../modules/local/benchmark.nf'
+include { VARIANT_CALLING } from '../modules/local/bamsurgeon.nf'
+include { BENCHMARK  }  from '../subworkflows/local/variant_calling.nf'
 //include { INPUT_CHECK } from '../subworkflows/local/input_check'
 
 /*
@@ -62,10 +63,6 @@ include { BENCHMARK  }  from '../modules/local/benchmark.nf'
 // MODULE: Installed directly from nf-core/modules
 //
 include { CUSTOM_DUMPSOFTWAREVERSIONS } from '../modules/nf-core/modules/custom/dumpsoftwareversions/main'
-include { GATK4_MUTECT2 }               from '../modules/nf-core/modules/gatk4/mutect2/main'
-include { VARDICTJAVA }                 from '../modules/nf-core/modules/vardictjava/main'
-include { SAMTOOLS_MPILEUP }            from '../modules/nf-core/modules/samtools/mpileup/main'
-include { VARSCAN2 }                    from '../modules/nf-core/modules/varscan2/main'
 include { MULTIQC }                     from '../modules/nf-core/modules/multiqc/main'
 
 /*
@@ -121,37 +118,14 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
 
-    
-    VARDICTJAVA(
+    BAMSURGEON.out.bam.view()
+
+    VARIANT_CALLING(
         BAMSURGEON.out.bam,
-        BAMSURGEON.out.bai,
         params.fasta,
         params.bed
     )
-
-    GATK4_MUTECT2(
-        BAMSURGEON.out.bam,
-        BAMSURGEON.out.bai,
-        params.fasta,
-        params.bed
-    )
-
-    SAMTOOLS_MPILEUP(
-        BAMSURGEON.out.bam,
-        params.fasta
-    )
-
-    VARSCAN2(
-        SAMTOOLS_MPILEUP.out.mpileup,
-        params.fasta,
-        params.bed
-    )
-
-    vcf_ch = BAMSURGEON.out.vcf
-        .join(VARDICTJAVA.out.vcf_vardict)
-        .join(GATK4_MUTECT2.out.vcf_mutect)
-        .join(VARSCAN2.out.vcf_varscan)
-
+/*
     BENCHMARK(
         vcf_ch
     )
