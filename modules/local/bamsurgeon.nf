@@ -48,25 +48,25 @@ process BAMSURGEON {
     if (params.type == 'snv') {
 
     """
-    randomsites.py \
-        $args \
-        -g "${fasta}" \
-        -b $bed \
-        -n $mut_number \
-        --minvaf $minvaf \
-        --maxvaf $maxvaf \
+    randomsites.py \\
+        $args \\
+        -g "${fasta}" \\
+        -b $bed \\
+        -n $mut_number \\
+        --minvaf $minvaf \\
+        --maxvaf $maxvaf \\
         snv > ${prefix}_random_snv.txt
 
     
-    addsnv.py \
-        $args2 \
-        -v ${prefix}_random_snv.txt \
-        -f "${meta.info}" \
-        -r "${fasta}" \
-        -o ${prefix}_spiked_snv.bam \
-        --picardjar $picardjar \
-        --alignopts c:250,M:,t:$task.cpus,v:1 \
-        -p $task.cpus \
+    addsnv.py \\
+        $args2 \\
+        -v ${prefix}_random_snv.txt \\
+        -f "${meta.info}" \\
+        -r "${fasta}" \\
+        -o ${prefix}_spiked_snv.bam \\
+        --picardjar $picardjar \\
+        --alignopts c:250,M:,t:$task.cpus,v:1 \\
+        -p $task.cpus \\
         --tmpdir tmp_addsnv
 
     samtools index ${prefix}_spiked_snv.bam
@@ -92,25 +92,25 @@ process BAMSURGEON {
     } else if (params.type == 'indel'){
 
     """
-    randomsites.py \
-        $args \
-        -g "${fasta}" \
-        -b $bed \
-        -n $mut_number \
-        --minvaf $minvaf \
-        --maxvaf $maxvaf \
+    randomsites.py \\
+        $args \\
+        -g "${fasta}" \\
+        -b $bed \\
+        -n $mut_number \\
+        --minvaf $minvaf \\
+        --maxvaf $maxvaf \\
         indel --maxlen $maxlen > ${prefix}_random_indel.txt
 
 
-    addindel.py \
-        $args3 \
-        -v ${prefix}_random_indel.txt \
-        -f "${meta.info}" \
-        -r "${fasta}" \
-        -o ${prefix}_spiked_indel.bam \
-        --picardjar $picardjar \
-        --alignopts c:250,M:,t:$task.cpus,v:1 \
-        -p $task.cpus \
+    addindel.py \\
+        $args3 \\
+        -v ${prefix}_random_indel.txt \\
+        -f "${meta.info}" \\
+        -r "${fasta}" \\
+        -o ${prefix}_spiked_indel.bam \\
+        --picardjar $picardjar \\
+        --alignopts c:250,M:,t:$task.cpus,v:1 \\
+        -p $task.cpus \\
         --tmpdir tmp_addindel
 
     samtools index ${prefix}_spiked_indel.bam

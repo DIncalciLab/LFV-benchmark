@@ -9,7 +9,7 @@ process BENCHMARK {
     val(meta)
 
     output:
-    path("*.png")   , emit: benchmark
+    path("*.xlsx")   , emit: benchmark
     path "versions.yml"              , emit: versions
 
     when:
