@@ -2,10 +2,10 @@
 // Variant calling
 //
 
-include { GATK4_MUTECT2 }               from '../modules/nf-core/modules/gatk4/mutect2/main'
-include { VARDICTJAVA }                 from '../modules/nf-core/modules/vardictjava/main'
-include { SAMTOOLS_MPILEUP }            from '../modules/nf-core/modules/samtools/mpileup/main'
-include { VARSCAN2 }                    from '../modules/nf-core/modules/varscan2/main'
+include { GATK4_MUTECT2 }               from '../modules/nf-core/modules/gatk4/mutect2/main.nf'
+include { VARDICTJAVA }                 from '../modules/nf-core/modules/vardictjava/main.nf'
+include { SAMTOOLS_MPILEUP }            from '../modules/nf-core/modules/samtools/mpileup/main.nf'
+include { VARSCAN2 }                    from '../modules/nf-core/modules/varscan2/main.nf'
 
 workflow SPIKEIN_SOMATIC {
     take:
