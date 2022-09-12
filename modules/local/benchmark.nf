@@ -22,11 +22,7 @@ process BENCHMARK {
     
     """
     benchmark.py \\
-        -n ${meta[0].vcf} \\
-        -g  $meta[1] \\
-        -v  $meta[2] \\
-        -m  $meta[3] \\
-        -s  $meta[4]
+        -n ${meta[0].vcf}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
