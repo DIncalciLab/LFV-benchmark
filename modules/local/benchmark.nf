@@ -1,6 +1,6 @@
 process BENCHMARK {
 
-    tag "Benchmark of the spiked-in somatic variants on sample: ${meta[1]}"
+    tag "Benchmark of the spiked-in somatic variants on sample: ${meta[0]}"
     label 'process_low'
 
     container "aldosr/neat:3.2"
