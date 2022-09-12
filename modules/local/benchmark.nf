@@ -6,7 +6,7 @@ process BENCHMARK {
     container "aldosr/neat:3.2"
 
     input:
-    tuple val(meta) path(vcf)
+    val(meta)
 
     output:
     path("*.png")   , emit: benchmark
