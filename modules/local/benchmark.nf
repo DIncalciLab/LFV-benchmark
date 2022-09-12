@@ -1,6 +1,6 @@
 process BENCHMARK {
 
-    tag "Benchmark of the spiked-in somatic variants on sample: ${meta[0]}"
+    tag "Benchmark of the spiked-in somatic variants on sample: ${meta[0].sample}"
     label 'process_low'
 
     container "aldosr/neat:3.2"
@@ -22,11 +22,11 @@ process BENCHMARK {
     
     """
     benchmark.py \\
-        -n "${meta[1]}" \\
-        -g  \\
-        -v  \\
-        -m  \\
-        -s 
+        -n "${meta[0].vcf}" \\
+        -g  $meta[1] \\
+        -v  $meta[2] \\
+        -m  $meta[3] \\
+        -s  $meta[4]
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
