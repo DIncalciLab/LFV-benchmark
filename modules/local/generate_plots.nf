@@ -1,4 +1,4 @@
-process BENCHMARK {
+process GENERATE_PLOTS {
 
     tag "Benchmark of the spiked-in somatic variants on sample: ${meta[0].sample}"
     label 'process_low'
