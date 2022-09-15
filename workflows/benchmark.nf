@@ -125,7 +125,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     )
 
     neat_ch = ch_input
-        .vcf
+        .map{ it -> it.vcf}
         .collect()
 
     neat_ch.view()
