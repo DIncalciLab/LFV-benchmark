@@ -7,7 +7,7 @@ include { VARSCAN2 }                    from '../../modules/nf-core/modules/vars
 
 workflow VARIANT_CALLING {
     take:
-    bam          // channel: [ val(meta), bam ]
+    bam          // channel: [ val(meta), bam, bai ]
     fasta
     bed
 
