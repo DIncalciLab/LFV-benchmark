@@ -1,15 +1,15 @@
 process GENERATE_PLOTS {
 
-    tag "Benchmark of the spiked-in somatic variants on sample: ${meta[0].sample}"
+    tag "Generate plots and calculate benchmark of the spiked-in somatic variants"
     label 'process_low'
 
     container "aldosr/neat:3.2"
 
     input:
-    val(meta)
+    val(vardict)
 
     output:
-    path("*.xlsx")   , emit: benchmark
+    path("*.xlsx")                   , emit: benchmark
     path "versions.yml"              , emit: versions
 
     when:

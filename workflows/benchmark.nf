@@ -124,10 +124,25 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.bed
     )
 
-    VARIANT_CALLING.out.vcf_vardict.collate(1,1).view()
+    vardict_ch = VARIANT_CALLING
+        .out
+        .vcf_vardict
+        .collate(1,1)
+
+    mutect_ch  = VARIANT_CALLING
+        .out
+        .vcf_mutect
+        .collate(1,1).view()
+
+    varscan_ch = VARIANT_CALLING
+        .out
+        .vcf_varscan
+        .collate(1,1)
 /*
-    BENCHMARK(
-        vcf_ch
+    GENERATE_PLOTS(
+        vardict_ch,
+        mutect_ch,
+        varscan_ch
     )
     
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)

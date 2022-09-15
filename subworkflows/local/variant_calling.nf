@@ -46,9 +46,9 @@ workflow VARIANT_CALLING {
     ch_varscan = ch_varscan.mix(VARSCAN2.out.vcf_varscan)
 
     emit:
-    vcf_vardict   = ch_vardict       //   channel: [ val(meta), vcf.gz ]
-    vcf_mutect   = ch_mutect       //   channel: [ val(meta), vcf.gz ]
-    vcf_varscan   = ch_varscan      //   channel: [ val(meta), vcf.gz ]
+    vcf_vardict   = ch_vardict        //  channel: [ val(meta), vcf ]
+    vcf_mutect    = ch_mutect        //   channel: [ val(meta), vcf ]
+    vcf_varscan   = ch_varscan      //    channel: [ val(meta), vcf ]
 
     //versions  = ch_versions               //    path: versions.yml*/
 }
