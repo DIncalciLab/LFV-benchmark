@@ -6,10 +6,13 @@ process GENERATE_PLOTS {
     container "aldosr/neat:3.2"
 
     input:
+    val(neat)
     val(vardict)
+    val(mutect)
+    val(varscan)
 
     output:
-    path("*.xlsx")                   , emit: benchmark
+    path("*.xlsx")                   , optional: true, emit: benchmark
     path "versions.yml"              , emit: versions
 
     when:

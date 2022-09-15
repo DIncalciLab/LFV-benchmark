@@ -124,14 +124,15 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.bed
     )
 
+    neat_ch = ch_input
+        .vcf
+        .collect()
+
+    neat_ch.view()
+
     vardict_ch = VARIANT_CALLING
         .out
         .vcf_vardict
-        .collate(1,1)
-
-    mutect_ch  = VARIANT_CALLING
-        .out
-        .vcf_mutect
         .map{ it -> [
             sample: it[0].sample,
             vcf:    it[1]
@@ -142,13 +143,36 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             it.sample, 
             it.vcf
         ]}
-        .view()
+
+    mutect_ch  = VARIANT_CALLING
+        .out
+        .vcf_mutect
+        .map{ it -> [
+            sample: it[0].sample,
+            neat:   it[0].vcf,
+            vcf:    it[1]
+            ] 
+            }
+        .collect()
+        .map{ it -> [
+            it.sample, 
+            it.vcf
+        ]}
 
     varscan_ch = VARIANT_CALLING
         .out
         .vcf_varscan
-        .collate(1,1)
-/*
+        .map{ it -> [
+            sample: it[0].sample,
+            vcf:    it[1]
+            ] 
+            }
+        .collect()
+        .map{ it -> [
+            it.sample, 
+            it.vcf
+        ]}
+
     GENERATE_PLOTS(
         vardict_ch,
         mutect_ch,
