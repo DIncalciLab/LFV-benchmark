@@ -1,4 +1,4 @@
-tag "Variant calling on $bam"
+//tag "Variant calling on $bam"
 
 include { GATK4_MUTECT2 }               from '../../modules/nf-core/modules/gatk4/mutect2/main.nf'
 include { VARDICTJAVA }                 from '../../modules/nf-core/modules/vardictjava/main.nf'
