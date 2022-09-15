@@ -46,6 +46,8 @@ workflow VARIANT_CALLING {
     ch_varscan = ch_varscan.mix(VARSCAN2.out.vcf_varscan)
 
     ch_vardict.view()
+    ch_mutect.view()
+    ch_varscan.view()
 
     emit:
     vcf_vardict   = ch_vardict       //   channel: [ val(meta), vcf.gz, vcf.gz.tbi ]
