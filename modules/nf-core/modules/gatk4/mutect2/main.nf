@@ -8,15 +8,14 @@ process GATK4_MUTECT2 {
         'quay.io/biocontainers/gatk4:4.2.3.0--hdfd78af_1' }"
 
     input:
-    tuple val(meta), path(bam)
-    //tuple val(meta), path(bai)
+    tuple val(meta), path(bam), path(bai)
     
     val fasta
     path bed
 
     output:
     tuple val(meta), path("*.vcf")        , emit: vcf_mutect
-    tuple val(meta), path("*.idx")        , emit: idc_mutect
+    tuple val(meta), path("*.idx")        , emit: idx_mutect
     tuple val(meta), path("*.stats")      , emit: stats_mutect
     tuple val(meta), path("*.f1r2.tar.gz"), optional:true, emit: f1r2
     path "versions.yml"                   , emit: versions
@@ -45,6 +44,7 @@ process GATK4_MUTECT2 {
         -I $bam \\
         --reference $fasta \\
         -L $bed \\
+        $args \\
         -O ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
@@ -58,7 +58,6 @@ process GATK4_MUTECT2 {
         -I $bam \\
         --reference $fasta \\
         -L $bed \\
-        $args \\
         -O ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml

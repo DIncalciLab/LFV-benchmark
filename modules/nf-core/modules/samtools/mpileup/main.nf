@@ -1,5 +1,5 @@
 process SAMTOOLS_MPILEUP {
-    tag "$meta.sample"
+    tag "Creation of VarScan input mpileup for sample $meta.sample"
     label 'process_low'
 
     conda (params.enable_conda ? "bioconda::samtools=1.13" : null)
@@ -8,7 +8,7 @@ process SAMTOOLS_MPILEUP {
         'quay.io/biocontainers/samtools:1.13--h8c37831_0' }"
     
     input:
-    tuple val(meta), path(bam)
+    tuple val(meta), path(bam), path(bai)
     
     path  fasta
 
