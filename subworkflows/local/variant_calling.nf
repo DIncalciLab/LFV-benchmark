@@ -17,13 +17,13 @@ workflow VARIANT_CALLING {
     ch_varscan   = Channel.empty()
 
     ch_versions  = Channel.empty()
-/*
+
     VARDICTJAVA(
         bam,
         fasta,
         bed
     )
-
+/*
     GATK4_MUTECT2(
         bam,
         fasta,
