@@ -45,14 +45,10 @@ workflow VARIANT_CALLING {
     ch_mutect = ch_mutect.mix(GATK4_MUTECT2.out.vcf_mutect)
     ch_varscan = ch_varscan.mix(VARSCAN2.out.vcf_varscan)
 
-    ch_vardict.view()
-    ch_mutect.view()
-    ch_varscan.view()
-
     emit:
-    vcf_vardict   = ch_vardict       //   channel: [ val(meta), vcf.gz, vcf.gz.tbi ]
-    vcf_mutect   = ch_mutect       //   channel: [ val(meta), vcf.gz, vcf.gz.tbi ]
-    vcf_varscan   = ch_varscan      //   channel: [ val(meta), vcf.gz, vcf.gz.tbi ]
+    vcf_vardict   = ch_vardict       //   channel: [ val(meta), vcf.gz ]
+    vcf_mutect   = ch_mutect       //   channel: [ val(meta), vcf.gz ]
+    vcf_varscan   = ch_varscan      //   channel: [ val(meta), vcf.gz ]
 
     //versions  = ch_versions               //    path: versions.yml*/
 }
