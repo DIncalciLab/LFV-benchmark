@@ -47,6 +47,9 @@ process VARDICTJAVA {
             | teststrandbias.R \
                 | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
     
+    bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
+    tabix -p vcf ${prefix}.vcf.gz
+    
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         vardict-java: $VERSION
@@ -64,6 +67,9 @@ process VARDICTJAVA {
         $bed \
             | teststrandbias.R \
                 | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
+    
+    bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
+    tabix -p vcf ${prefix}.vcf.gz
     
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
