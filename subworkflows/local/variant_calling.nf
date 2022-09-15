@@ -41,9 +41,9 @@ workflow VARIANT_CALLING {
         bed
     )
 
-    ch_vardict = ch_vardict.mix(VARDICTJAVA.out.vcf)
-    ch_mutect = ch_mutect.mix(GATK4_MUTECT2.out.vcf)
-    ch_varscan = ch_varscan.mix(VARSCAN2.out.vcf)
+    ch_vardict = ch_vardict.mix(VARDICTJAVA.out.vcf_vardict)
+    ch_mutect = ch_mutect.mix(GATK4_MUTECT2.out.vcf_mutect)
+    ch_varscan = ch_varscan.mix(VARSCAN2.out.vcf_varscan)
 
     ch_vardict.view()
 
