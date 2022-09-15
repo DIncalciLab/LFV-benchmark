@@ -132,7 +132,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     mutect_ch  = VARIANT_CALLING
         .out
         .vcf_mutect
-        .collate(1,1).view()
+        .collect()
+        .view()
 
     varscan_ch = VARIANT_CALLING
         .out
