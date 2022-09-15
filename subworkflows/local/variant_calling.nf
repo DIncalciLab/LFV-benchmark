@@ -7,7 +7,7 @@ include { VARDICTJAVA }                 from '../../modules/nf-core/modules/vard
 include { SAMTOOLS_MPILEUP }            from '../../modules/nf-core/modules/samtools/mpileup/main.nf'
 include { VARSCAN2 }                    from '../../modules/nf-core/modules/varscan2/main.nf'
 
-workflow SPIKEIN_SOMATIC {
+workflow VARIANT_CALLING {
     take:
     bam          // channel: [ val(meta), bam ]
     bai
