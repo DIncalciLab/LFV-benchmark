@@ -139,7 +139,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             }
         .collect()
         .map{ it -> [
-            [it.sample, it.vcf]
+            it.sample, 
+            it.vcf
         ]}
         .view()
 
