@@ -118,8 +118,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
 
-    BAMSURGEON.out.bam.view()
-
     VARIANT_CALLING(
         BAMSURGEON.out.bam,
         params.fasta,
