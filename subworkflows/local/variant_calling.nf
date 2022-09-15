@@ -23,7 +23,7 @@ workflow VARIANT_CALLING {
         fasta,
         bed
     )
-
+/*
     GATK4_MUTECT2(
         bam,
         fasta,
