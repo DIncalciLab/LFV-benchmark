@@ -17,7 +17,7 @@ workflow VARIANT_CALLING {
     ch_varscan   = Channel.empty()
 
     ch_versions  = Channel.empty()
-
+/*
     VARDICTJAVA(
         bam,
         fasta,
@@ -52,5 +52,5 @@ workflow VARIANT_CALLING {
     vcf_mutect   = ch_mutect       //   channel: [ val(meta), vcf.gz, vcf.gz.tbi ]
     vcf_varscan   = ch_varscan      //   channel: [ val(meta), vcf.gz, vcf.gz.tbi ]
 
-    //versions  = ch_versions               //    path: versions.yml
+    //versions  = ch_versions               //    path: versions.yml*/
 }
