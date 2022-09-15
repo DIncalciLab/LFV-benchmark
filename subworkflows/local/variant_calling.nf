@@ -38,7 +38,7 @@ workflow VARIANT_CALLING {
     )
 
     VARSCAN2(
-        SAMTOOLS.MPILEUP.out.bam,
+        SAMTOOLS_MPILEUP.out.bam,
         fasta,
         bed
     )
