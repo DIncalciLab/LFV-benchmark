@@ -10,7 +10,6 @@ include { VARSCAN2 }                    from '../../modules/nf-core/modules/vars
 workflow VARIANT_CALLING {
     take:
     bam          // channel: [ val(meta), bam ]
-    bai
     fasta
     bed
 
@@ -23,14 +22,12 @@ workflow VARIANT_CALLING {
 
     VARDICTJAVA(
         bam,
-        bai,
         fasta,
         bed
     )
 
     GATK4_MUTECT2(
         bam,
-        bai,
         fasta,
         bed
     )
@@ -49,6 +46,8 @@ workflow VARIANT_CALLING {
     ch_vardict = ch_vardict.mix(VARDICTJAVA.out.vcf)
     ch_mutect = ch_mutect.mix(GATK4_MUTECT2.out.vcf)
     ch_varscan = ch_varscan.mix(VARSCAN2.out.vcf)
+
+    ch_vardict.view()
 
     emit:
     vcf_vardict   = ch_vardict       //   channel: [ val(meta), vcf.gz, vcf.gz.tbi ]
