@@ -132,7 +132,11 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     mutect_ch  = VARIANT_CALLING
         .out
         .vcf_mutect
-        .map{ it -> [[it[0].sample], [it[1]]] }
+        .map{ it -> [
+            sample: it[0].sample,
+            vcf:    it[1]
+            ] 
+            }
         .collect()
         .view()
 
