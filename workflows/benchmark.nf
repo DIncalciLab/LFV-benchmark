@@ -124,7 +124,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.bed
     )
 
-    VARIANT_CALLING.out.vcf_vardict[1].view()
+    VARIANT_CALLING.out.vcf_vardict.view()
 /*
     BENCHMARK(
         vcf_ch
