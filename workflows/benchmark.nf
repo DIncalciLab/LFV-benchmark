@@ -174,6 +174,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         ]}
 
     GENERATE_PLOTS(
+        neat_ch,
         vardict_ch,
         mutect_ch,
         varscan_ch
