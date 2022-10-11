@@ -25,7 +25,7 @@ process GENERATE_PLOTS {
     
     """
     benchmark.py \\
-        -n ${meta[0].vcf}
+        -n ${neat}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
