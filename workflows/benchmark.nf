@@ -128,7 +128,20 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         .map{ it -> it.vcf}
         .collect()
 
-    neat_ch.view()
+    bamsurgeon_ch = BAMSURGEON
+        .out
+        .vcf
+        .map{ it -> [
+            sample: it[0].sample,
+            vcf:    it[1]
+            ] 
+            }
+        .collect()
+        .map{ it -> [
+            it.sample, 
+            it.vcf
+        ]}
+    bamsurgeon_ch.view()
 
     vardict_ch = VARIANT_CALLING
         .out
@@ -175,6 +188,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     GENERATE_PLOTS(
         neat_ch,
+        bamsurgeon_ch,
         vardict_ch,
         mutect_ch,
         varscan_ch

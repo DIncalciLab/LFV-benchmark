@@ -7,6 +7,7 @@ process GENERATE_PLOTS {
 
     input:
     val(neat)
+    val(bamsurgeon)
     val(vardict)
     val(mutect)
     val(varscan)
@@ -25,7 +26,8 @@ process GENERATE_PLOTS {
     
     """
     benchmark.py \\
-        -n ${neat}
+        -n ${neat} \\
+        -b ${bamsurgeon}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
