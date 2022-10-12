@@ -3,7 +3,7 @@ process GENERATE_PLOTS {
     tag "Generate plots and calculate benchmark of the spiked-in somatic variants"
     label 'process_low'
 
-    container "aldosr/neat:3.2"
+    container "aldosr/cyvcf2:0.30.18"
 
     input:
     val(neat)
