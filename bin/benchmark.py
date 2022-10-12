@@ -319,50 +319,50 @@ def plot_performance(vardict, mutect, varscan):
     plt.savefig('benchmark.png', dpi=350, transparent=False, bbox_inches='tight')
 
 
-    def main():
+def main():
 
-        parser = argparse.ArgumentParser(description='Generate plots for artificial mutation benchmark')
+    parser = argparse.ArgumentParser(description='Generate plots for artificial mutation benchmark')
 
-        #parser.add_argument('-n', '--neat',       required=True, help='Pseudo-germinal variants generated from NEAT')
+    #parser.add_argument('-n', '--neat',       required=True, help='Pseudo-germinal variants generated from NEAT')
 
-        parser.add_argument('-g', '--bamsurgeon', required=True, help='Mutations spiked-in from BamSurgeon')
+    parser.add_argument('-g', '--bamsurgeon', required=True, help='Mutations spiked-in from BamSurgeon')
 
-        #parser.add_argument('-v', '--vardict',    required=True, help='VarDict VCF with spiked-in artificial mutations')
-        #parser.add_argument('-s', '--varscan',    required=True, help='VarScan2 VCF with spiked-in artificial mutations')
-        #parser.add_argument('-m', '--mutect',     required=True, help='Mutect2 VCF with spiked-in artificial mutations')
+    #parser.add_argument('-v', '--vardict',    required=True, help='VarDict VCF with spiked-in artificial mutations')
+    #parser.add_argument('-s', '--varscan',    required=True, help='VarScan2 VCF with spiked-in artificial mutations')
+    #parser.add_argument('-m', '--mutect',     required=True, help='Mutect2 VCF with spiked-in artificial mutations')
 
-        args = parser.parse_args()
+    args = parser.parse_args()
 
-        #Load pseudo-germinal variants (generated from NEAT)
-        #df_germinal = load_germinal(args.neat)
+    #Load pseudo-germinal variants (generated from NEAT)
+    #df_germinal = load_germinal(args.neat)
 
-        #df_germinal.read_excel("test.xlsx")
+    #df_germinal.read_excel("test.xlsx")
         
-        #Load ground-truth variants (spiked-in from BAMSurgeon)
-        #df_truth = load_ground_truth(args.bamsurgeon)
+    #Load ground-truth variants (spiked-in from BAMSurgeon)
+    #df_truth = load_ground_truth(args.bamsurgeon)
 
-        #Load VarDict variants
+    #Load VarDict variants
 
-        #df_vardict = load_vardict(vcf_vardict)
-        #Load Mutect2 variants
-        #df_mutect = load_mutect(vcf_mutect)
+    #df_vardict = load_vardict(vcf_vardict)
+    #Load Mutect2 variants
+    #df_mutect = load_mutect(vcf_mutect)
 
-        #Load VarScan2 variants
-        #df_varscan = load_varscan(vcf_varscan)
+    #Load VarScan2 variants
+    #df_varscan = load_varscan(vcf_varscan)
 
 
-        #Calculate spiked-in variants for each caller
-        #df_spikein_vardict, df_spikein_vardict_germinal = calculate_spikein(df_vardict, df_truth, df_germinal)
-        #df_spikein_mutect, df_spikein_mutect_germinal = calculate_spikein(df_mutect, df_truth, df_germinal)
-        #df_spikein_varscan, df_spikein_varscan_germinal = calculate_spikein(df_varscan, df_truth, df_germinal)
+    #Calculate spiked-in variants for each caller
+    #df_spikein_vardict, df_spikein_vardict_germinal = calculate_spikein(df_vardict, df_truth, df_germinal)
+    #df_spikein_mutect, df_spikein_mutect_germinal = calculate_spikein(df_mutect, df_truth, df_germinal)
+    #df_spikein_varscan, df_spikein_varscan_germinal = calculate_spikein(df_varscan, df_truth, df_germinal)
 
-        #Calculate performance for each caller
-        #df_performance_vardict = calculate_performance(df_vardict, df_spikein_vardict, df_spikein_vardict_germinal, df_truth)
-        #df_performance_mutect = calculate_performance(df_mutect, df_spikein_mutect, df_spikein_mutect_germinal, df_truth)
-        #df_performance_varscan = calculate_performance(df_varscan, df_spikein_varscan, df_spikein_varscan_germinal, df_truth)
+    #Calculate performance for each caller
+    #df_performance_vardict = calculate_performance(df_vardict, df_spikein_vardict, df_spikein_vardict_germinal, df_truth)
+    #df_performance_mutect = calculate_performance(df_mutect, df_spikein_mutect, df_spikein_mutect_germinal, df_truth)
+    #df_performance_varscan = calculate_performance(df_varscan, df_spikein_varscan, df_spikein_varscan_germinal, df_truth)
 
-        #Plot performance
-        #plot_performance(df_performance_vardict, df_performance_mutect, df_performance_varscan)
+    #Plot performance
+    #plot_performance(df_performance_vardict, df_performance_mutect, df_performance_varscan)
 
-    if __name__ == '__main__':
-        main()
+if __name__ == '__main__':
+    main()
