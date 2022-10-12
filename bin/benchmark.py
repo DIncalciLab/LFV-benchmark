@@ -336,7 +336,7 @@ def plot_performance(vardict, mutect, varscan):
         #Load pseudo-germinal variants (generated from NEAT)
         #df_germinal = load_germinal(args.neat)
 
-        df_germinal.read_excel("test.xlsx")
+        #df_germinal.read_excel("test.xlsx")
         
         #Load ground-truth variants (spiked-in from BAMSurgeon)
         df_truth = load_ground_truth(args.bamsurgeon)
