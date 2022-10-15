@@ -328,8 +328,8 @@ def main():
     parser.add_argument('-b', '--bamsurgeon', required=True, help='Mutations spiked-in from BamSurgeon')
 
     parser.add_argument('-v', '--vardict',    required=True, help='VarDict VCF with spiked-in artificial mutations')
-    parser.add_argument('-s', '--varscan',    required=True, help='VarScan2 VCF with spiked-in artificial mutations')
     parser.add_argument('-m', '--mutect',     required=True, help='Mutect2 VCF with spiked-in artificial mutations')
+    parser.add_argument('-s', '--varscan',    required=True, help='VarScan2 VCF with spiked-in artificial mutations')
 
     args = parser.parse_args()
 

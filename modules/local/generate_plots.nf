@@ -6,11 +6,11 @@ process GENERATE_PLOTS {
     container "aldosr/cyvcf2:0.30.18"
 
     input:
-    file(neat)
-    file(bamsurgeon)
-    file(vardict)
-    file(mutect)
-    file(varscan)
+    path(neat)
+    path(bamsurgeon)
+    path(vardict)
+    path(mutect)
+    path(varscan)
 
     output:
     path("*.xlsx")                   , optional: true, emit: benchmark
