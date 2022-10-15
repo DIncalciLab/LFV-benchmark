@@ -36,7 +36,7 @@ def load_germinal(vcf):
 
 
 
-def load_ground_truth(vcf_snv, vcf_indel):
+def load_ground_truth(vcf_snv = None, vcf_indel = None):
     """
     Create grount truth dataframes from BAMSurgeon VCF files (spike-in variants)
     """
@@ -45,32 +45,34 @@ def load_ground_truth(vcf_snv, vcf_indel):
     df_groundtruth_snv = pd.DataFrame()
     df_groundtruth_indel = pd.DataFrame()
 
-
-    for file in vcf_snv:
-        samplename = file.name.split('.')[0]
-        for variant in VCF(file):
-            df_groundtruth_snv = df_groundtruth_snv.append(
-                [
-                    [samplename, variant.CHROM,
-                    variant.POS, variant.REF,
-                    variant.ALT[0], variant.INFO['VAF']
+    if vcf_snv is not None:
+        for file in vcf_snv:
+            samplename = file.name.split('.')[0]
+            for variant in VCF(file):
+                df_groundtruth_snv = df_groundtruth_snv.append(
+                    [
+                        [samplename, variant.CHROM,
+                        variant.POS, variant.REF,
+                        variant.ALT[0], variant.INFO['VAF']
+                        ]
                     ]
-                ]
-            )
+                )
             
     df_groundtruth_snv.columns = ["sample", "chrom", "pos", "REF", "ALT", "VAF"]
 
-    for file in vcf_indel:
-        samplename = file.name.split('.')[0]
-        for variant in VCF(file):
-            df_groundtruth_indel = df_groundtruth_indel.append(
-                [
-                    [samplename, variant.CHROM,
-                    variant.POS, variant.REF,
-                    variant.ALT[0], variant.INFO['VAF']
+    if vcf_indel is not None:
+        for file in vcf_indel:
+            print(file)
+            samplename = file.name.split('.')[0]
+            for variant in VCF(file):
+                df_groundtruth_indel = df_groundtruth_indel.append(
+                    [
+                        [samplename, variant.CHROM,
+                        variant.POS, variant.REF,
+                        variant.ALT[0], variant.INFO['VAF']
+                        ]
                     ]
-                ]
-            )
+                )
             
     df_groundtruth_indel.columns = ["sample", "chrom", "pos", "REF", "ALT", "VAF"]
 
@@ -340,7 +342,7 @@ def main():
     #df_germinal.read_excel("test.xlsx")
         
     #Load ground-truth variants (spiked-in from BAMSurgeon)
-    df_truth = load_ground_truth(args.bamsurgeon)
+    df_truth = load_ground_truth(vcf_indel = args.bamsurgeon)
     df_truth.read_excel("test.xlsx")
 
     #Load VarDict variants
