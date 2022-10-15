@@ -19,8 +19,7 @@ def load_germinal(vcf):
     df_neat = pd.DataFrame()
 
     for file in vcf:
-        print(file)
-        samplename = file.name.split('.')[0]
+        samplename = file.replace('neat_', '').replace('.vcf.gz', '')
         for variant in VCF(file):
             df_neat = df_neat.append(
                 [
