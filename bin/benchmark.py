@@ -40,7 +40,7 @@ def load_ground_truth(vcf_snv = None, vcf_indel = None):
     """
     Create grount truth dataframes from BAMSurgeon VCF files (spike-in variants)
     """
-    df_cols = ["sample", "chrom", "pos", "REF", "ALT"]
+    df_cols = ["sample", "chrom", "pos", "REF", "ALT", "VAF"]
 
     df_groundtruth_snv = pd.DataFrame()
     df_groundtruth_indel = pd.DataFrame()
@@ -56,9 +56,8 @@ def load_ground_truth(vcf_snv = None, vcf_indel = None):
                         variant.ALT[0], variant.INFO['VAF']
                         ]
                     ]
-                )
-            
-    df_groundtruth_snv.columns = ["sample", "chrom", "pos", "REF", "ALT", "VAF"]
+                )         
+        df_groundtruth_snv.columns = df_cols
 
     if vcf_indel is not None:
         for file in vcf_indel:
@@ -73,8 +72,7 @@ def load_ground_truth(vcf_snv = None, vcf_indel = None):
                         ]
                     ]
                 )
-            
-    df_groundtruth_indel.columns = ["sample", "chrom", "pos", "REF", "ALT", "VAF"]
+        df_groundtruth_indel.columns = df_cols
 
     return df_groundtruth_snv, df_groundtruth_indel
 
