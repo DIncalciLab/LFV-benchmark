@@ -47,7 +47,7 @@ def load_ground_truth(vcf_snv = None, vcf_indel = None):
 
     if vcf_snv is not None:
         for file in vcf_snv:
-            samplename = file.name.split('.')[0]
+            samplename = file.replace('bamsurgeon_', '').replace('.vcf.gz', '')
             for variant in VCF(file):
                 df_groundtruth_snv = df_groundtruth_snv.append(
                     [
@@ -62,7 +62,7 @@ def load_ground_truth(vcf_snv = None, vcf_indel = None):
     if vcf_indel is not None:
         for file in vcf_indel:
             print(file)
-            #samplename = file.name.split('.')[0]
+            samplename = file.replace('bamsurgeon_', '').replace('.vcf.gz', '')
             for variant in VCF(file):
                 df_groundtruth_indel = df_groundtruth_indel.append(
                     [
