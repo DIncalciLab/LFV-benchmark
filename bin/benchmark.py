@@ -342,7 +342,7 @@ def main():
     #df_truth.to_csv("test.tsv", sep = "\t")
 
     #Load VarDict variants
-    df_vardict_snv, df_vardict_indel = load_vardict(args.vcf_vardict)
+    df_vardict_snv, df_vardict_indel = load_vardict(args.vardict)
     print(df_vardict_snv)
     df_vardict_snv.to_csv("test.tsv", sep = "\t")
     #Load Mutect2 variants
