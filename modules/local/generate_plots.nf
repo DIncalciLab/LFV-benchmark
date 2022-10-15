@@ -27,7 +27,10 @@ process GENERATE_PLOTS {
     """
     benchmark.py \\
         -n ${neat} \\
-        -b ${bamsurgeon}
+        -b ${bamsurgeon} \\
+        -v ${vardict} \\
+        -m ${mutect} \\
+        -s ${varscan}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
