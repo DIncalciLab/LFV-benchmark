@@ -138,8 +138,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             }
         .collect()
         .map{ it -> [
-            it.sample, 
-            it.vcf
+            sample: it.sample, 
+            vcf: it.vcf
         ]}
     bamsurgeon_ch.view()
 
@@ -153,8 +153,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             }
         .collect()
         .map{ it -> [
-            it.sample, 
-            it.vcf
+            sample: it.sample, 
+            vcf: it.vcf
         ]}
 
     mutect_ch  = VARIANT_CALLING
@@ -162,14 +162,13 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         .vcf_mutect
         .map{ it -> [
             sample: it[0].sample,
-            neat:   it[0].vcf,
-            vcf:    it[1]
+            vcf:   it[0].vcf
             ] 
             }
         .collect()
         .map{ it -> [
-            it.sample, 
-            it.vcf
+            sample: it.sample, 
+            vcf: it.vcf
         ]}
 
     varscan_ch = VARIANT_CALLING
@@ -182,8 +181,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             }
         .collect()
         .map{ it -> [
-            it.sample, 
-            it.vcf
+            sample: it.sample, 
+            vcf: it.vcf
         ]}
 
     GENERATE_PLOTS(
