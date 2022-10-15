@@ -27,7 +27,7 @@ process GENERATE_PLOTS {
     """
     benchmark.py \\
         -n ${neat} \\
-        -b ${bamsurgeon} \\
+        -b ${bamsurgeon[1]} \\
         -v ${vardict} \\
         -m ${mutect} \\
         -s ${varscan}
