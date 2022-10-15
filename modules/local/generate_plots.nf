@@ -7,7 +7,7 @@ process GENERATE_PLOTS {
 
     input:
     path(neat)
-    val(bamsurgeon)
+    path(bamsurgeon)
     val(vardict)
     val(mutect)
     val(varscan)
