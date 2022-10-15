@@ -85,8 +85,8 @@ def load_vardict(vcf):
     df_vardict_snv = pd.DataFrame()
     df_vardict_indel = pd.DataFrame()
 
-    for file in vardict_files:
-        samplename = file.name.split('.')[0]
+    for file in vcf:
+        samplename = file.replace('vardictjava_', '').replace('.vcf.gz', '')
         for variant in VCF(file):
             if variant.is_snp:
                 df_vardict_snv = df_vardict_snv.append(
@@ -336,17 +336,15 @@ def main():
 
     #Load pseudo-germinal variants (generated from NEAT)
     #df_germinal = load_germinal(args.neat)
-
-    #df_germinal.read_excel("test.xlsx")
         
     #Load ground-truth variants (spiked-in from BAMSurgeon)
     df_truth = load_ground_truth(vcf_indel = args.bamsurgeon)
-    print(df_truth)
-    df_truth.to_csv("test.tsv", sep = "\t")
+    #df_truth.to_csv("test.tsv", sep = "\t")
 
     #Load VarDict variants
-
-    #df_vardict = load_vardict(vcf_vardict)
+    df_vardict_snv, df_vardict_indel = load_vardict(args.vcf_vardict)
+    print(df_vardict_snv)
+    df_vardict_snv.to_csv("test.tsv", sep = "\t")
     #Load Mutect2 variants
     #df_mutect = load_mutect(vcf_mutect)
 
