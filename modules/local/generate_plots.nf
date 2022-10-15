@@ -6,7 +6,7 @@ process GENERATE_PLOTS {
     container "aldosr/cyvcf2:0.30.18"
 
     input:
-    val(neat)
+    path(neat)
     val(bamsurgeon)
     val(vardict)
     val(mutect)
