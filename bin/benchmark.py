@@ -58,6 +58,7 @@ def load_ground_truth(vcf_snv = None, vcf_indel = None):
                     ]
                 )         
         df_groundtruth_snv.columns = df_cols
+        return df_groundtruth_snv
 
     if vcf_indel is not None:
         for file in vcf_indel:
@@ -73,8 +74,7 @@ def load_ground_truth(vcf_snv = None, vcf_indel = None):
                     ]
                 )
         df_groundtruth_indel.columns = df_cols
-
-    return df_groundtruth_snv, df_groundtruth_indel
+        return df_groundtruth_indel
 
 def load_vardict(vcf):
     """
