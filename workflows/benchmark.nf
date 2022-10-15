@@ -187,10 +187,10 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     GENERATE_PLOTS(
         neat_ch,
-        bamsurgeon_ch,
-        vardict_ch,
-        mutect_ch,
-        varscan_ch
+        bamsurgeon_ch.vcf,
+        vardict_ch.vcf,
+        mutect_ch.vcf,
+        varscan_ch.vcf
     )
     
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
