@@ -8,9 +8,9 @@ process GENERATE_PLOTS {
     input:
     path(neat)
     path(bamsurgeon)
-    val(vardict)
-    val(mutect)
-    val(varscan)
+    path(vardict)
+    path(mutect)
+    path(varscan)
 
     output:
     path("*.xlsx")                   , optional: true, emit: benchmark
