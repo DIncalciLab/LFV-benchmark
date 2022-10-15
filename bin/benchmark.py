@@ -341,7 +341,7 @@ def main():
         
     #Load ground-truth variants (spiked-in from BAMSurgeon)
     df_truth = load_ground_truth(vcf_indel = args.bamsurgeon)
-    df_truth.read_excel("test.xlsx")
+    df_truth.to_csv("test.tsv", sep = "\t")
 
     #Load VarDict variants
 
