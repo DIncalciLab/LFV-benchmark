@@ -1,5 +1,4 @@
 process GENERATE_PLOTS {
-
     tag "Generate plots and calculate benchmark of the spiked-in somatic variants"
     label 'process_low'
 
@@ -42,7 +41,7 @@ process GENERATE_PLOTS {
     def prefix = task.ext.prefix ?: ""
     
     """
-    benchmark.py \\
+    python3 benchmark.py \\
         -n ${neat} \\
         -b ${bamsurgeon} \\
         -v ${vardict} \\
