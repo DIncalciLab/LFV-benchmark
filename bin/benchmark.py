@@ -87,6 +87,7 @@ def load_vardict(vcf):
 
     for file in vcf:
         samplename = file.replace('vardictjava_', '').replace('.vcf.gz', '')
+        print(file)
         for variant in VCF(file):
             if variant.is_snp:
                 df_vardict_snv = df_vardict_snv.append(
@@ -343,7 +344,7 @@ def main():
 
     #Load VarDict variants
     df_vardict_snv, df_vardict_indel = load_vardict(args.vardict)
-    df_vardict_snv.to_csv("test.tsv", sep = "\t")
+    df_vardict_snv.to_csv("test.txt", sep = "\t")
 
     #Load Mutect2 variants
     #df_mutect = load_mutect(vcf_mutect)
