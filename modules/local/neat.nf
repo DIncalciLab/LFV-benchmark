@@ -18,8 +18,11 @@ process NEAT {
 
     output:
     tuple val(meta), path("*.vcf.gz")                    , emit: vcf
-    //tuple val(meta), path("*.tbi")        , emit: tbi
+    //tuple val(meta), path("*.tbi")                       , emit: tbi
+
     tuple val(meta), path("*.bam")                       , emit: bam
+    tuple val(meta), path("*.bai")                       , emit: bai
+
     tuple val(meta), path("*.yml")                       , emit: versions
     
 
@@ -50,6 +53,8 @@ process NEAT {
         -tr $bed \
         -m $mutmodel \
         -o $prefix
+    
+    samtools index ${prefix}_golden.bam
 
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
