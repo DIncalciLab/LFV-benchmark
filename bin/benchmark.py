@@ -36,45 +36,27 @@ def load_germinal(vcf):
 
 
 
-def load_ground_truth(vcf_snv = None, vcf_indel = None):
+def load_ground_truth(vcf):
     """
     Create grount truth dataframes from BAMSurgeon VCF files (spike-in variants)
     """
     df_cols = ["sample", "chrom", "pos", "REF", "ALT", "VAF"]
 
-    df_groundtruth_snv = pd.DataFrame()
-    df_groundtruth_indel = pd.DataFrame()
+    df_groundtruth = pd.DataFrame()
 
-    if vcf_snv is not None:
-        for file in vcf_snv:
-            samplename = file.replace('bamsurgeon_', '').replace('.vcf.gz', '')
-            for variant in VCF(file):
-                df_groundtruth_snv = df_groundtruth_snv.append(
-                    [
-                        [samplename, variant.CHROM,
-                        variant.POS, variant.REF,
-                        variant.ALT[0], variant.INFO['VAF']
-                        ]
+    for file in vcf:
+        samplename = file.replace('bamsurgeon_', '').replace('.vcf.gz', '')
+        for variant in VCF(file):
+            df_groundtruth_snv = df_groundtruth_snv.append(
+                [
+                    [samplename, variant.CHROM,
+                    variant.POS, variant.REF,
+                    variant.ALT[0], variant.INFO['VAF']
                     ]
-                )         
-        df_groundtruth_snv.columns = df_cols
-        return df_groundtruth_snv
-
-    if vcf_indel is not None:
-        for file in vcf_indel:
-            print(file)
-            samplename = file.replace('bamsurgeon_', '').replace('.vcf.gz', '')
-            for variant in VCF(file):
-                df_groundtruth_indel = df_groundtruth_indel.append(
-                    [
-                        [samplename, variant.CHROM,
-                        variant.POS, variant.REF,
-                        variant.ALT[0], variant.INFO['VAF']
-                        ]
-                    ]
-                )
-        df_groundtruth_indel.columns = df_cols
-        return df_groundtruth_indel
+                ]
+            )         
+    df_groundtruth.columns = df_cols
+    return df_groundtruth
 
 def load_vardict(vcf):
     """
@@ -87,7 +69,6 @@ def load_vardict(vcf):
 
     for file in vcf:
         samplename = file.replace('vardictjava_', '').replace('.vcf.gz', '')
-        print(file)
         for variant in VCF(file):
             if variant.is_snp:
                 df_vardict_snv = df_vardict_snv.append(
@@ -110,7 +91,7 @@ def load_vardict(vcf):
         
     df_vardict_snv.columns = df_cols
     df_vardict_indel.columns = df_cols
-    print(df_vardict_indel)
+
     return df_vardict_snv, df_vardict_indel
 
 
@@ -126,7 +107,7 @@ def load_mutect(vcf):
     df_mutect_indel = pd.DataFrame()
 
     for file in vcf:
-        samplename = file.name.split('.')[0]
+        samplename = file.replace('mutect_', '').replace('.vcf.gz', '')
         for variant in VCF(file):
             if variant.is_snp:
                 df_mutect_snv = df_mutect_snv.append(
@@ -163,8 +144,8 @@ def load_varscan(vcf):
     df_varscan_snv = pd.DataFrame()
     df_varscan_indel = pd.DataFrame()
 
-    for file in varscan_files:
-        samplename = file.name.split('.')[0]
+    for file in vcf:
+        samplename = file.replace('varscan_', '').replace('.vcf.gz', '')
         for variant in VCF(file):
             if variant.is_snp:
                 df_varscan_snv = df_varscan_snv.append(
@@ -220,7 +201,6 @@ def calculate_performance(df, df_spiked, df_spiked_germinal, df_truth):
 
     performance.columns = ['TP', 'FP', 'FN', 'TPR', 'PPV', 'FDR']
 
-    performance.to_csv(output)
     return performance
 
 def plot_performance(vardict, mutect, varscan):
@@ -336,21 +316,27 @@ def main():
     args = parser.parse_args()
 
     #Load pseudo-germinal variants (generated from NEAT)
-    #df_germinal = load_germinal(args.neat)
+    df_germinal = load_germinal(args.neat)
+    df_germinal.to_csv("neat_variants.txt", sep="\t")
         
     #Load ground-truth variants (spiked-in from BAMSurgeon)
-    df_truth = load_ground_truth(vcf_indel = args.bamsurgeon)
-    #df_truth.to_csv("test.tsv", sep = "\t")
+    df_truth = load_ground_truth(args.bamsurgeon)
+    df_truth.to_csv("bamsurgeon_variants.txt", sep = "\t")
 
     #Load VarDict variants
     df_vardict_snv, df_vardict_indel = load_vardict(args.vardict)
-    df_vardict_snv.to_csv("test.txt", sep = "\t")
+    df_vardict_snv.to_csv("vardict_snv_variants.txt", sep = "\t")
+    df_vardict_indel.to_csv("vardict_indel_variants.txt", sep = "\t")
 
     #Load Mutect2 variants
-    #df_mutect = load_mutect(vcf_mutect)
+    df_mutect_snv, df_mutect_indel = load_mutect(args.mutect)
+    df_mutect_snv.to_csv("mutect_snv_variants.txt", sep = "\t")
+    df_mutect_indel.to_csv("mutect_indel_variants.txt", sep = "\t")
 
     #Load VarScan2 variants
-    #df_varscan = load_varscan(vcf_varscan)
+    df_varscan_snv, df_varscan_indel = load_varscan(args.varscan)
+    df_varscan_snv.to_csv("varscan_snv_variants.txt", sep = "\t")
+    df_varscan_indel.to_csv("varscan_indel_variants.txt", sep = "\t")
 
 
     #Calculate spiked-in variants for each caller

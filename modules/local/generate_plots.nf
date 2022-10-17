@@ -13,8 +13,25 @@ process GENERATE_PLOTS {
     path(varscan)
 
     output:
-    path("*.xlsx")                   , optional: true, emit: benchmark
-    path "versions.yml"              , emit: versions
+    path("*_variants.txt")                   , emit: variants_txt
+    p//ath("*_neat.xlsx")                  , emit: neat_xlsx
+
+    //path("*_bamsurgeon.txt")             , emit: bamsurgeon_txt
+    //path("*_bamsurgeon.xlsx")            , emit: bamsurgeon_xlsx
+
+    //path("*_vardict.txt")                , emit: vardict_txt
+    //path("*_vardict.xlsx")               , emit: vardict_xlsx
+
+    //path("*_mutect.txt")                 , emit: mutect_txt
+    //path("*_mutect.xlsx")                , emit: mutect_xlsx
+
+    //path("*_varscan.txt")                , emit: varscan_txt
+    //ath("*_varscan.xlsx")               , emit: varscan_xlsx
+
+    path("benchmark.txt")              ,  emit: benchmark_txt
+    //path("*_benchmark.xlsx")             ,  emit: benchmark_xlsx
+
+    path "versions.yml"                  , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
