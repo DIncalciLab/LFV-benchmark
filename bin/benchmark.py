@@ -109,7 +109,7 @@ def load_vardict(vcf):
         
     df_vardict_snv.columns = df_cols
     df_vardict_indel.columns = df_cols
-
+    print(df_vardict_indel)
     return df_vardict_snv, df_vardict_indel
 
 
@@ -343,8 +343,8 @@ def main():
 
     #Load VarDict variants
     df_vardict_snv, df_vardict_indel = load_vardict(args.vardict)
-    print(df_vardict_snv)
     df_vardict_snv.to_csv("test.tsv", sep = "\t")
+
     #Load Mutect2 variants
     #df_mutect = load_mutect(vcf_mutect)
 
