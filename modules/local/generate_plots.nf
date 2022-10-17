@@ -14,7 +14,7 @@ process GENERATE_PLOTS {
 
     output:
     path("*_variants.txt")                   , emit: variants_txt
-    p//ath("*_neat.xlsx")                  , emit: neat_xlsx
+    //path("*_neat.xlsx")                  , emit: neat_xlsx
 
     //path("*_bamsurgeon.txt")             , emit: bamsurgeon_txt
     //path("*_bamsurgeon.xlsx")            , emit: bamsurgeon_xlsx
