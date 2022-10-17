@@ -47,7 +47,7 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 */
 
 
-//include { NEAT        } from '../modules/local/neat.nf'
+include { NEAT        } from '../modules/local/neat.nf'
 include { BAMSURGEON } from '../modules/local/bamsurgeon.nf'
 include { VARIANT_CALLING } from '../subworkflows/local/variant_calling.nf'
 include { GENERATE_PLOTS  }  from '../modules/local/generate_plots.nf'
