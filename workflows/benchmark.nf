@@ -105,7 +105,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     //ch_versions = ch_versions.mix(NEAT.out.versions)
     
     BAMSURGEON(
-        ch_input,
         NEAT.out.bam,
         params.mut_number,
         params.min_fraction,
@@ -124,9 +123,19 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.bed
     )
 
-    neat_ch = ch_input
-        .map{ it -> it.vcf}
+    neat_ch = NEAT
+        .out
+        .vcf
+        .map{ it -> [
+            sample: it[0].sample,
+            vcf:    it[1]
+            ] 
+            }
         .collect()
+        .map{ it -> [
+            sample: it.sample, 
+            vcf: it.vcf
+        ]}
 
     bamsurgeon_ch = BAMSURGEON
         .out
@@ -141,7 +150,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             sample: it.sample, 
             vcf: it.vcf
         ]}
-    bamsurgeon_ch.view()
 
     vardict_ch = VARIANT_CALLING
         .out

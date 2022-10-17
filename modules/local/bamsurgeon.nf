@@ -6,16 +6,16 @@ process BAMSURGEON {
     container "aldosr/bamsurgeon:1.3-custom"
     
     input:
-    val meta
-    path neat
-    val mut_number
-    val minvaf
-    val maxvaf
-    val maxlen
-    val fasta
+    tuple val(meta), path(neat)
+    
+    val (mut_number)
+    val (minvaf)
+    val (maxvaf)
+    val (maxlen)
+    val (fasta)
 
-    path bed
-    path picardjar
+    path (bed)
+    path (picardjar)
 
     output:
     tuple val(meta), path("*.txt")                                                 , emit: random_mut
@@ -60,7 +60,7 @@ process BAMSURGEON {
     addsnv.py \\
         $args2 \\
         -v ${prefix}_random_snv.txt \\
-        -f "${meta.info}" \\
+        -f "${neat}" \\
         -r "${fasta}" \\
         -o ${prefix}_spiked_snv.bam \\
         --picardjar $picardjar \\
