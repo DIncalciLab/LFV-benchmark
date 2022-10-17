@@ -81,7 +81,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     ch_input = Channel
     .fromPath(params.input)
     .splitCsv(header:true, quote:'\"', sep: ",")
-    .map { row -> [sample: row.sample, info: row.info, vcf: row.vcf]
+    .map { row -> [sample: row.sample, info: row.info]
                 }
 /*
     ch_rng = Channel
@@ -89,7 +89,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
       .randomSample( 1 )
       .view()*/
 
-/*
     NEAT(
         ch_input,
         params.readlen,
@@ -107,6 +106,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     
     BAMSURGEON(
         ch_input,
+        NEAT.vcf,
         params.mut_number,
         params.min_fraction,
         params.max_fraction,

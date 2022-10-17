@@ -7,6 +7,7 @@ process BAMSURGEON {
     
     input:
     val meta
+    path neat
     val mut_number
     val minvaf
     val maxvaf
@@ -103,7 +104,7 @@ process BAMSURGEON {
     addindel.py \\
         $args3 \\
         -v ${prefix}_random_indel.txt \\
-        -f "${meta.info}" \\
+        -f "${neat}" \\
         -r "${fasta}" \\
         -o ${prefix}_spiked_indel.bam \\
         --picardjar $picardjar \\
@@ -157,7 +158,7 @@ process BAMSURGEON {
    addsnv.py \\
         $args2 \\
         -v ${prefix}_random_snv.txt \\
-        -f "${meta.info}" \\
+        -f "${neat}" \\
         -r "${fasta}" \\
         -o ${prefix}_spiked_snv.bam \\
         --picardjar $picardjar \\
