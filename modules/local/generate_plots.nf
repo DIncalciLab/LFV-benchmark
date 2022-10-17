@@ -41,7 +41,7 @@ process GENERATE_PLOTS {
     def prefix = task.ext.prefix ?: ""
     
     """
-    python3 benchmark.py \\
+    benchmark.py \\
         -n ${neat} \\
         -b ${bamsurgeon} \\
         -v ${vardict} \\
