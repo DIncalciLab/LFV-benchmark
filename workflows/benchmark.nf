@@ -106,7 +106,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     
     BAMSURGEON(
         ch_input,
-        NEAT.vcf,
+        NEAT.out.bam,
         params.mut_number,
         params.min_fraction,
         params.max_fraction,
