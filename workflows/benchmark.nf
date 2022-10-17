@@ -102,7 +102,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.gc_model
     )
     
-    ch_versions = ch_versions.mix(NEAT.out.versions)*/
+    //ch_versions = ch_versions.mix(NEAT.out.versions)
     
     BAMSURGEON(
         ch_input,
