@@ -42,12 +42,12 @@ def load_ground_truth(vcf):
     """
     df_cols = ["sample", "chrom", "pos", "REF", "ALT", "VAF"]
 
-    df_groundtruth = pd.DataFrame()
+    df_bamsurgeon = pd.DataFrame()
 
     for file in vcf:
         samplename = file.replace('bamsurgeon_', '').replace('.vcf.gz', '')
         for variant in VCF(file):
-            df_groundtruth_snv = df_groundtruth_snv.append(
+            df_bamsurgeon = df_bamsurgeon.append(
                 [
                     [samplename, variant.CHROM,
                     variant.POS, variant.REF,
@@ -55,8 +55,8 @@ def load_ground_truth(vcf):
                     ]
                 ]
             )         
-    df_groundtruth.columns = df_cols
-    return df_groundtruth
+    df_bamsurgeon.columns = df_cols
+    return df_bamsurgeon
 
 def load_vardict(vcf):
     """
@@ -320,8 +320,8 @@ def main():
     df_germinal.to_csv("neat_variants.txt", sep="\t")
         
     #Load ground-truth variants (spiked-in from BAMSurgeon)
-    df_truth = load_ground_truth(args.bamsurgeon)
-    df_truth.to_csv("bamsurgeon_variants.txt", sep = "\t")
+    df_bamsurgeon = load_ground_truth(args.bamsurgeon)
+    df_bamsurgeon.to_csv("bamsurgeon_variants.txt", sep = "\t")
 
     #Load VarDict variants
     df_vardict_snv, df_vardict_indel = load_vardict(args.vardict)
