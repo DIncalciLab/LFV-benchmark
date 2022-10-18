@@ -172,13 +172,13 @@ def load_varscan(vcf):
     return df_varscan_snv, df_varscan_indel
 
 
-def calculate_spikein(df, df_truth, df_germinal):
+def calculate_spikein(df, df_bamsurgeon, df_neat):
     """
     Calculate the number of spiked-in variants called in the input variant caller
     """
 
-    df_spiked = df.merge(df_truth, on=['sample','chrom', 'pos', 'REF', 'ALT'], how="inner")
-    df_spiked_germinal = df.merge(df_germinal, on=['sample','chrom', 'pos', 'REF', 'ALT'], how="inner")
+    df_spiked = df.merge(df_bamsurgeon, on=['sample','chrom', 'pos', 'REF', 'ALT'], how="inner")
+    df_spiked_germinal = df.merge(df_neat, on=['sample','chrom', 'pos', 'REF', 'ALT'], how="inner")
 
     return df_spiked, df_spiked_germinal
 
@@ -316,8 +316,8 @@ def main():
     args = parser.parse_args()
 
     #Load pseudo-germinal variants (generated from NEAT)
-    df_germinal = load_germinal(args.neat)
-    df_germinal.to_csv("neat_variants.txt", sep="\t")
+    df_neat = load_germinal(args.neat)
+    df_neat.to_csv("neat_variants.txt", sep="\t")
         
     #Load ground-truth variants (spiked-in from BAMSurgeon)
     df_bamsurgeon = load_ground_truth(args.bamsurgeon)
@@ -325,32 +325,32 @@ def main():
 
     #Load VarDict variants
     df_vardict_snv, df_vardict_indel = load_vardict(args.vardict)
-    df_vardict_snv.to_csv("vardict_snv_variants.txt", sep = "\t")
-    df_vardict_indel.to_csv("vardict_indel_variants.txt", sep = "\t")
+    df_vardict_tot = df_vardict_snv.append(df_vardict_indel)
+    df_vardict_tot.to_csv("vardict_variants.txt", sep = "\t")
 
     #Load Mutect2 variants
     df_mutect_snv, df_mutect_indel = load_mutect(args.mutect)
-    df_mutect_snv.to_csv("mutect_snv_variants.txt", sep = "\t")
-    df_mutect_indel.to_csv("mutect_indel_variants.txt", sep = "\t")
+    df_mutect_tot = df_mutect_snv.append(df_mutect_indel)
+    df_mutect_tot.to_csv("mutect_variants.txt", sep = "\t")
 
     #Load VarScan2 variants
     df_varscan_snv, df_varscan_indel = load_varscan(args.varscan)
-    df_varscan_snv.to_csv("varscan_snv_variants.txt", sep = "\t")
-    df_varscan_indel.to_csv("varscan_indel_variants.txt", sep = "\t")
+    df_varscan_tot = df_varscan_snv.append(df_varscan_indel)
+    df_varscan_tot.to_csv("varscan_variants.txt", sep = "\t")
 
 
     #Calculate spiked-in variants for each caller
-    #df_spikein_vardict, df_spikein_vardict_germinal = calculate_spikein(df_vardict, df_truth, df_germinal)
-    #df_spikein_mutect, df_spikein_mutect_germinal = calculate_spikein(df_mutect, df_truth, df_germinal)
-    #df_spikein_varscan, df_spikein_varscan_germinal = calculate_spikein(df_varscan, df_truth, df_germinal)
+    df_spikein_vardict, df_spikein_vardict_germinal = calculate_spikein(df_vardict_tot, df_bamsurgeon, df_neat)
+    df_spikein_mutect, df_spikein_mutect_germinal = calculate_spikein(df_mutect_tot, df_bamsurgeon, df_neat)
+    df_spikein_varscan, df_spikein_varscan_germinal = calculate_spikein(df_varscan_tot, df_bamsurgeon, df_neat)
 
     #Calculate performance for each caller
-    #df_performance_vardict = calculate_performance(df_vardict, df_spikein_vardict, df_spikein_vardict_germinal, df_truth)
-    #df_performance_mutect = calculate_performance(df_mutect, df_spikein_mutect, df_spikein_mutect_germinal, df_truth)
-    #df_performance_varscan = calculate_performance(df_varscan, df_spikein_varscan, df_spikein_varscan_germinal, df_truth)
+    df_performance_vardict = calculate_performance(df_vardict_tot, df_spikein_vardict, df_spikein_vardict_germinal, df_neat)
+    df_performance_mutect = calculate_performance(df_mutect_tot, df_spikein_mutect, df_spikein_mutect_germinal, df_neat)
+    df_performance_varscan = calculate_performance(df_varscan_tot, df_spikein_varscan, df_spikein_varscan_germinal, df_neat)
 
     #Plot performance
-    #plot_performance(df_performance_vardict, df_performance_mutect, df_performance_varscan)
+    plot_performance(df_performance_vardict, df_performance_mutect, df_performance_varscan)
 
 if __name__ == '__main__':
     main()
