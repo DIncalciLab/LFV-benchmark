@@ -6,7 +6,7 @@ process BAMSURGEON {
     container "aldosr/bamsurgeon:1.3-custom"
     
     input:
-    tuple val(meta), path(neat)
+    tuple val(meta), val(neat)
     
     val (mut_number)
     val (minvaf)
