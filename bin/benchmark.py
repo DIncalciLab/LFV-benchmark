@@ -238,14 +238,14 @@ def plot_performance(vardict, mutect, varscan):
     ax3.set_prop_cycle(marker_cycler)
 
     # Plot the sample
-    for key, df in d_snv.items():
+    for key, df in d.items():
         ax1.plot(df['PPV'], df['TPR'], markersize=15, label=key)
         
-    for key, df in d_ind.items():
-        ax2.plot(df['PPV'], df['TPR'], markersize=15, label=key)
+    #for key, df in d_ind.items():
+    #    ax2.plot(df['PPV'], df['TPR'], markersize=15, label=key)
         
-    for key, df in d_tot.items():
-        ax3.plot(df['PPV'], df['TPR'], markersize=15, label=key)
+    #for key, df in d_tot.items():
+    #    ax3.plot(df['PPV'], df['TPR'], markersize=15, label=key)
 
     # Edit the major and minor tick locations of x and y axes
     #ax.xaxis.set_major_locator(mpl.ticker.MultipleLocator(10))
