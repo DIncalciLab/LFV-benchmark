@@ -346,8 +346,13 @@ def main():
 
     #Calculate performance for each caller
     df_performance_vardict = calculate_performance(df_vardict_tot, df_spikein_vardict, df_spikein_vardict_germinal, df_neat)
+    df_performance_vardict.to_csv("varscan_performance.txt", sep = "\t")
+
     df_performance_mutect = calculate_performance(df_mutect_tot, df_spikein_mutect, df_spikein_mutect_germinal, df_neat)
+    df_performance_mutect.to_csv("varscan_performance.txt", sep = "\t")
+
     df_performance_varscan = calculate_performance(df_varscan_tot, df_spikein_varscan, df_spikein_varscan_germinal, df_neat)
+    df_performance_varscan.to_csv("varscan_performance.txt", sep = "\t")
 
     #Plot performance
     plot_performance(df_performance_vardict, df_performance_mutect, df_performance_varscan)

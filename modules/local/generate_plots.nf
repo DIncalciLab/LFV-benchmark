@@ -27,8 +27,10 @@ process GENERATE_PLOTS {
     //path("*_varscan.txt")                , emit: varscan_txt
     //ath("*_varscan.xlsx")               , emit: varscan_xlsx
 
-    path("benchmark.txt")              ,  emit: benchmark_txt
+    path("*_performance.txt")              ,  emit: benchmark_txt
     //path("*_benchmark.xlsx")             ,  emit: benchmark_xlsx
+
+    path("benchmark.png")                  , emit: benchmark_png
 
     path("versions.yml")                  , emit: versions
 
