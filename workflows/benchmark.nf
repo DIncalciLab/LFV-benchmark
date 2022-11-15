@@ -25,10 +25,10 @@ def checkPathParamList = [
     params.picardjar
 ]
 /*
-for (param in checkPathParamList) { 
-    if (param) { 
-        file(param, checkIfExists: true) 
-    } 
+for (param in checkPathParamList) {
+    if (param) {
+        file(param, checkIfExists: true)
+    }
 }*/
 
 /*
@@ -93,7 +93,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         ch_input,
         params.readlen,
         params.coverage,
-        params.bed, 
+        params.bed,
         params.fasta,
         params.neat_path,
         params.fraglen_model,
@@ -101,108 +101,109 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         params.mutation_model,
         params.gc_model
     )
-    
+
     //ch_versions = ch_versions.mix(NEAT.out.versions)
-    
-    BAMSURGEON(
-        NEAT.out.bam,
-        params.mut_number,
-        params.min_fraction,
-        params.max_fraction,
-        params.maxlen,
-        params.fasta,
-        params.bed,
-        params.picardjar
-    )
-    
+
+    if (params.generate_tumor){
+        BAMSURGEON(
+            NEAT.out.bam,
+            params.mut_number,
+            params.min_fraction,
+            params.max_fraction,
+            params.maxlen,
+            params.fasta,
+            params.bed,
+            params.picardjar
+        )
+
+        //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
+
+        VARIANT_CALLING(
+            BAMSURGEON.out.bam,
+            params.fasta,
+            params.bed
+        )
+
+        neat_ch = NEAT
+            .out
+            .vcf
+            .map{ it -> [
+                sample: it[0].sample,
+                vcf:    it[1]
+                ]
+                }
+            .collect()
+            .map{ it -> [
+                sample: it.sample,
+                vcf: it.vcf
+            ]}
+
+        bamsurgeon_ch = BAMSURGEON
+            .out
+            .vcf
+            .map{ it -> [
+                sample: it[0].sample,
+                vcf:    it[1]
+                ]
+                }
+            .collect()
+            .map{ it -> [
+                sample: it.sample,
+                vcf: it.vcf
+            ]}
+
+        vardict_ch = VARIANT_CALLING
+            .out
+            .vcf_vardict
+            .map{ it -> [
+                sample: it[0].sample,
+                vcf:    it[1]
+                ]
+                }
+            .collect()
+            .map{ it -> [
+                sample: it.sample,
+                vcf: it.vcf
+            ]}
+
+        mutect_ch  = VARIANT_CALLING
+            .out
+            .vcf_mutect
+            .map{ it -> [
+                sample: it[0].sample,
+                vcf:   it[1]
+                ]
+                }
+            .collect()
+            .map{ it -> [
+                sample: it.sample,
+                vcf: it.vcf
+            ]}
+
+        varscan_ch = VARIANT_CALLING
+            .out
+            .vcf_varscan
+            .map{ it -> [
+                sample: it[0].sample,
+                vcf:    it[1]
+                ]
+                }
+            .collect()
+            .map{ it -> [
+                sample: it.sample,
+                vcf: it.vcf
+            ]}
+
+        GENERATE_PLOTS(
+            neat_ch.vcf,
+            bamsurgeon_ch.vcf,
+            vardict_ch.vcf,
+            mutect_ch.vcf,
+            varscan_ch.vcf
+        )
+    }
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
 
-    VARIANT_CALLING(
-        BAMSURGEON.out.bam,
-        params.fasta,
-        params.bed
-    )
-
-    neat_ch = NEAT
-        .out
-        .vcf
-        .map{ it -> [
-            sample: it[0].sample,
-            vcf:    it[1]
-            ] 
-            }
-        .collect()
-        .map{ it -> [
-            sample: it.sample, 
-            vcf: it.vcf
-        ]}
-
-    bamsurgeon_ch = BAMSURGEON
-        .out
-        .vcf
-        .map{ it -> [
-            sample: it[0].sample,
-            vcf:    it[1]
-            ] 
-            }
-        .collect()
-        .map{ it -> [
-            sample: it.sample, 
-            vcf: it.vcf
-        ]}
-
-    vardict_ch = VARIANT_CALLING
-        .out
-        .vcf_vardict
-        .map{ it -> [
-            sample: it[0].sample,
-            vcf:    it[1]
-            ] 
-            }
-        .collect()
-        .map{ it -> [
-            sample: it.sample, 
-            vcf: it.vcf
-        ]}
-
-    mutect_ch  = VARIANT_CALLING
-        .out
-        .vcf_mutect
-        .map{ it -> [
-            sample: it[0].sample,
-            vcf:   it[1]
-            ] 
-            }
-        .collect()
-        .map{ it -> [
-            sample: it.sample, 
-            vcf: it.vcf
-        ]}
-
-    varscan_ch = VARIANT_CALLING
-        .out
-        .vcf_varscan
-        .map{ it -> [
-            sample: it[0].sample,
-            vcf:    it[1]
-            ] 
-            }
-        .collect()
-        .map{ it -> [
-            sample: it.sample, 
-            vcf: it.vcf
-        ]}
-
-    GENERATE_PLOTS(
-        neat_ch.vcf,
-        bamsurgeon_ch.vcf,
-        vardict_ch.vcf,
-        mutect_ch.vcf,
-        varscan_ch.vcf
-    )
-    
-    //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
-    
     // ch_versions = ch_versions.mix(FASTQC.out.versions.first())
     /*
     CUSTOM_DUMPSOFTWAREVERSIONS (
@@ -212,7 +213,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     //
     // MODULE: MultiQC
     //
-    
+
     workflow_summary    = WorkflowLowFrac.paramsSummaryMultiqc(workflow, summary_params)
     ch_workflow_summary = Channel.value(workflow_summary)
 
@@ -228,8 +229,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     )
     multiqc_report = MULTIQC.out.report.toList()
     ch_versions    = ch_versions.mix(MULTIQC.out.versions)*/
-    
-    
+
+
 }
 
 /*
