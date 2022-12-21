@@ -11,11 +11,17 @@
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
             "properties": {
+                "input": {
+                    "type": "string",
+                    "default": "None",
+                    "description": "The input samplesheet containing information about the samples to be created"
+                },
                 "outdir": {
                     "type": "string",
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
-                    "fa_icon": "fas fa-folder-open"
+                    "fa_icon": "fas fa-folder-open",
+                    "default": "None"
                 },
                 "email": {
                     "type": "string",
@@ -24,7 +30,11 @@
                     "help_text": "Set this parameter to your e-mail address to get a summary e-mail with details of the run sent to you when the workflow exits. If set in your user config file (`~/.nextflow/config`) then you don't need to specify this on the command line for every run.",
                     "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
                 }
-            }
+            },
+            "required": [
+                "input",
+                "outdir"
+            ]
         },
         "institutional_config_options": {
             "title": "Institutional config options",
@@ -197,58 +207,60 @@
                     "type": "string",
                     "default": "None"
                 },
-                "readlen": {
-                    "type": "integer",
-                    "default": 151
-                },
                 "coverage": {
                     "type": "integer",
-                    "default": 1000
+                    "default": 1000,
+                    "description": "Coverage (e.g. 100X) of the artificial samples"
+                },
+                "readlen": {
+                    "type": "integer",
+                    "default": 151,
+                    "description": "Reads length of the model"
                 },
                 "error_model": {
                     "type": "string",
-                    "default": "None"
+                    "default": "None",
+                    "description": "Path to the error model"
                 },
                 "mutation_model": {
                     "type": "string",
-                    "default": "None"
+                    "default": "None",
+                    "description": "Path to the mutational model"
                 },
                 "gc_model": {
                     "type": "string",
-                    "default": "None"
+                    "default": "None",
+                    "description": "Path to the GC model"
                 },
                 "fraglen_model": {
                     "type": "string",
-                    "default": "None"
+                    "default": "None",
+                    "description": "Path to the fragment length model"
                 }
             },
             "required": [
-                "readlen",
+                "neat_path",
                 "coverage",
+                "readlen",
                 "error_model",
                 "mutation_model",
                 "gc_model",
-                "fraglen_model",
-                "neat_path"
+                "fraglen_model"
             ]
         },
         "bamsurgeon_option": {
             "title": "BAMSurgeon option",
             "type": "object",
-            "description": "",
+            "description": "BAMSurgeon general options",
             "default": "",
             "properties": {
-                "bamsurgeon_path": {
-                    "type": "string",
-                    "default": "None"
-                },
                 "picardjar": {
                     "type": "string",
-                    "default": "None"
+                    "default": "None",
+                    "description": "Path to the picard JAR file"
                 }
             },
             "required": [
-                "bamsurgeon_path",
                 "picardjar"
             ]
         },
@@ -288,20 +300,37 @@
         "workflow_options": {
             "title": "Workflow options",
             "type": "object",
-            "description": "General parameters",
+            "description": "General parameters for the pipeline",
             "default": "",
             "properties": {
                 "fasta": {
                     "type": "string",
-                    "default": "None"
+                    "default": "None",
+                    "description": "Path to the reference FASTA file"
                 },
                 "bed": {
                     "type": "string",
-                    "default": "None"
+                    "default": "None",
+                    "description": "Path to the BED files containing the regions to be simulated"
                 },
                 "samples": {
                     "type": "integer",
-                    "default": 2
+                    "default": 2,
+                    "description": "Number of samples to be generated"
+                },
+                "generate_normal": {
+                    "type": "string",
+                    "default": "true",
+                    "description": "Set 'True' to generate the normal artificial files"
+                },
+                "generate_tumor": {
+                    "type": "string",
+                    "default": "false",
+                    "description": "Set 'True' to generate the artificial tumor files"
+                },
+                "mode": {
+                    "type": "string",
+                    "default": "default"
                 }
             },
             "required": [
@@ -337,21 +366,21 @@
         }
     ],
     "properties": {
-        "input": {
-            "type": "string",
-            "default": null
-        },
         "multiqc_config": {
             "type": "string",
-            "default": null
+            "default": "None"
         },
         "multiqc_title": {
             "type": "string",
-            "default": null
+            "default": "None"
         },
         "max_multiqc_email_size": {
             "type": "string",
             "default": "25.MB"
+        },
+        "spikein": {
+            "type": "string",
+            "default": "random"
         }
     }
 }
