@@ -80,8 +80,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     ch_versions = Channel.empty()
 
-    println "test"
-
     if (!(params.skip_normal_generation)){
         ch_input = Channel
         .fromPath(params.input)
