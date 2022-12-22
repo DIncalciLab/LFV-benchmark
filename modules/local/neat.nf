@@ -27,8 +27,7 @@ process NEAT {
 
 
     when:
-    params.generate_normal
-    task.ext.when == null || task.ext.when
+    task.ext.when == true
 
     script:
     def args = task.ext.args ?: ''
