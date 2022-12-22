@@ -320,15 +320,19 @@
                 },
                 "skip_normal_generation": {
                     "type": "string",
-                    "default": null
+                    "default": "None",
+                    "description": "Skip generation of normal artificial samples"
                 },
                 "skip_tumor_generation": {
                     "type": "string",
-                    "default": null
+                    "default": "None",
+                    "description": "Skip generation of tumor artificial samples",
+                    "help_text": ""
                 },
                 "skip_variant_calling": {
                     "type": "string",
-                    "default": null
+                    "default": "None",
+                    "description": "Skip variant calling"
                 }
             },
             "required": [
@@ -382,7 +386,7 @@
         },
         "mode": {
             "type": "string",
-            "default": null
+            "default": "None"
         }
     }
 }
