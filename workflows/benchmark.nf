@@ -78,7 +78,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     ch_versions = Channel.empty()
 
-    if (params.generate_normal){
+    if (!(params.skip_normal_generation)){
         ch_input = Channel
         .fromPath(params.input)
         .splitCsv(header:true, quote:'\"', sep: ",")
@@ -97,24 +97,24 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.mutation_model,
             params.gc_model
         )
+     }
     //ch_versions = ch_versions.mix(NEAT.out.versions)
 
-        if (params.generate_tumor){
-            BAMSURGEON(
-                NEAT.out.bam,
-                params.mut_number,
-                params.min_fraction,
-                params.max_fraction,
-                params.maxlen,
-                params.fasta,
-                params.bed,
-                params.picardjar
-            )
-        }
+    if (!(params.skip_tumor_generation && params.skip_normal_generation)){
+        BAMSURGEON(
+            NEAT.out.bam,
+            params.mut_number,
+            params.min_fraction,
+            params.max_fraction,
+            params.maxlen,
+            params.fasta,
+            params.bed,
+            params.picardjar
+        )
     }
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
 
-    if (params.variant_calling){
+    if (!(params.skip_variant_calling)){
         VARIANT_CALLING(
             BAMSURGEON.out.bam,
             params.fasta,
@@ -199,7 +199,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             varscan_ch.vcf
         )
         }
-    if (!params.generate_normal && !params.generate_tumor && !params.variant_calling){
+    if (!(params.skip_normal_generation && params.skip_tumor_generation && params.skip_variant_calling)){
         log.error "You need to specify an option for the pipeline. See the README for help."
         exit 1
     }
