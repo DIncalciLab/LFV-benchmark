@@ -33,6 +33,7 @@ process NEAT {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: ''
     def version = '3.2' //VERSION IS HARDCODED
+    def when = task.ext.when ?:
 
     def avail_mem = 3
     if (!task.memory) {
@@ -44,7 +45,7 @@ process NEAT {
     """
     python3 ${neat_path}/gen_reads.py \
         $args \
-        -r $fasta \
+        -r $when \
         -R $readlen \
         --pe-model $fraglenmodel \
         -c $coverage \
