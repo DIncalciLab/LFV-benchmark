@@ -318,24 +318,17 @@
                     "default": 2,
                     "description": "Number of samples to be generated"
                 },
-                "generate_normal": {
-                    "type": "string",
-                    "default": "true",
-                    "description": "Set to generate the normal artificial samples"
-                },
-                "generate_tumor": {
-                    "type": "string",
-                    "default": "false",
-                    "description": "Set to generate the artificial tumor samples"
-                },
-                "variant_calling": {
+                "skip_normal_generation": {
                     "type": "string",
                     "default": null
                 },
-                "high_sensitivity": {
+                "skip_tumor_generation": {
                     "type": "string",
-                    "default": "null",
-                    "description": "Set to run variant callers with optmized parameters"
+                    "default": null
+                },
+                "skip_variant_calling": {
+                    "type": "string",
+                    "default": null
                 }
             },
             "required": [
@@ -386,6 +379,10 @@
         "spikein": {
             "type": "string",
             "default": "random"
+        },
+        "mode": {
+            "type": "string",
+            "default": null
         }
     }
 }
