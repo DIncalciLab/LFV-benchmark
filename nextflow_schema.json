@@ -321,16 +321,21 @@
                 "generate_normal": {
                     "type": "string",
                     "default": "true",
-                    "description": "Set 'True' to generate the normal artificial files"
+                    "description": "Set to generate the normal artificial samples"
                 },
                 "generate_tumor": {
                     "type": "string",
                     "default": "false",
-                    "description": "Set 'True' to generate the artificial tumor files"
+                    "description": "Set to generate the artificial tumor samples"
                 },
-                "mode": {
+                "variant_calling": {
                     "type": "string",
-                    "default": "default"
+                    "default": null
+                },
+                "high_sensitivity": {
+                    "type": "string",
+                    "default": "null",
+                    "description": "Set to run variant callers with optmized parameters"
                 }
             },
             "required": [
