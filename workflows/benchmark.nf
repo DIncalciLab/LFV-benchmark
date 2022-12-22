@@ -78,7 +78,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     ch_versions = Channel.empty()
 
-    if (params.generate_normals){
+    if (params.generate_normal){
 
         ch_input = Channel
         .fromPath(params.input)
@@ -102,7 +102,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     //ch_versions = ch_versions.mix(NEAT.out.versions)
 
-        if (params.generate_tumors){
+        if (params.generate_tumor){
             BAMSURGEON(
                 NEAT.out.bam,
                 params.mut_number,
