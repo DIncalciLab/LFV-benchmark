@@ -21,8 +21,10 @@ def checkPathParamList = [
     params.mutation_model,
     params.gc_model,
     params.fraglen_model,
-    params.bamsurgeon_path,
-    params.picardjar
+    params.picardjar,
+    params.skip_normal_generation,
+    params.skip_tumor_generation,
+    params.skip_variant_calling
 ]
 /*
 for (param in checkPathParamList) {
