@@ -78,128 +78,125 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     ch_versions = Channel.empty()
 
-    if (params.generate_normal){
+    ch_input = Channel
+    .fromPath(params.input)
+    .splitCsv(header:true, quote:'\"', sep: ",")
+    .map { row -> [sample: row.sample, info: row.info]
+                }
 
-        ch_input = Channel
-        .fromPath(params.input)
-        .splitCsv(header:true, quote:'\"', sep: ",")
-        .map { row -> [sample: row.sample, info: row.info]
-                    }
+    NEAT(
+        ch_input,
+        params.readlen,
+        params.coverage,
+        params.bed,
+        params.fasta,
+        params.neat_path,
+        params.fraglen_model,
+        params.error_model,
+        params.mutation_model,
+        params.gc_model
+    )
 
-        NEAT(
-            ch_input,
-            params.readlen,
-            params.coverage,
-            params.bed,
-            params.fasta,
-            params.neat_path,
-            params.fraglen_model,
-            params.error_model,
-            params.mutation_model,
-            params.gc_model
-        )
-    }
 
     //ch_versions = ch_versions.mix(NEAT.out.versions)
 
-        if (params.generate_tumor){
-            BAMSURGEON(
-                NEAT.out.bam,
-                params.mut_number,
-                params.min_fraction,
-                params.max_fraction,
-                params.maxlen,
-                params.fasta,
-                params.bed,
-                params.picardjar
-            )
 
-            //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
+    BAMSURGEON(
+        NEAT.out.bam,
+        params.mut_number,
+        params.min_fraction,
+        params.max_fraction,
+        params.maxlen,
+        params.fasta,
+        params.bed,
+        params.picardjar
+    )
 
-            VARIANT_CALLING(
-                BAMSURGEON.out.bam,
-                params.fasta,
-                params.bed
-            )
+    //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
 
-            neat_ch = NEAT
-                .out
-                .vcf
-                .map{ it -> [
-                    sample: it[0].sample,
-                    vcf:    it[1]
-                    ]
-                    }
-                .collect()
-                .map{ it -> [
-                    sample: it.sample,
-                    vcf: it.vcf
-                ]}
+    VARIANT_CALLING(
+        BAMSURGEON.out.bam,
+        params.fasta,
+        params.bed
+    )
 
-            bamsurgeon_ch = BAMSURGEON
-                .out
-                .vcf
-                .map{ it -> [
-                    sample: it[0].sample,
-                    vcf:    it[1]
-                    ]
-                    }
-                .collect()
-                .map{ it -> [
-                    sample: it.sample,
-                    vcf: it.vcf
-                ]}
+    neat_ch = NEAT
+        .out
+        .vcf
+        .map{ it -> [
+            sample: it[0].sample,
+            vcf:    it[1]
+            ]
+            }
+        .collect()
+        .map{ it -> [
+            sample: it.sample,
+            vcf: it.vcf
+        ]}
 
-            vardict_ch = VARIANT_CALLING
-                .out
-                .vcf_vardict
-                .map{ it -> [
-                    sample: it[0].sample,
-                    vcf:    it[1]
-                    ]
-                    }
-                .collect()
-                .map{ it -> [
-                    sample: it.sample,
-                    vcf: it.vcf
-                ]}
+    bamsurgeon_ch = BAMSURGEON
+        .out
+        .vcf
+        .map{ it -> [
+            sample: it[0].sample,
+            vcf:    it[1]
+            ]
+            }
+        .collect()
+        .map{ it -> [
+            sample: it.sample,
+            vcf: it.vcf
+        ]}
 
-            mutect_ch  = VARIANT_CALLING
-                .out
-                .vcf_mutect
-                .map{ it -> [
-                    sample: it[0].sample,
-                    vcf:   it[1]
-                    ]
-                    }
-                .collect()
-                .map{ it -> [
-                    sample: it.sample,
-                    vcf: it.vcf
-                ]}
+    vardict_ch = VARIANT_CALLING
+        .out
+        .vcf_vardict
+        .map{ it -> [
+            sample: it[0].sample,
+            vcf:    it[1]
+            ]
+            }
+        .collect()
+        .map{ it -> [
+            sample: it.sample,
+            vcf: it.vcf
+        ]}
 
-            varscan_ch = VARIANT_CALLING
-                .out
-                .vcf_varscan
-                .map{ it -> [
-                    sample: it[0].sample,
-                    vcf:    it[1]
-                    ]
-                    }
-                .collect()
-                .map{ it -> [
-                    sample: it.sample,
-                    vcf: it.vcf
-                ]}
+    mutect_ch  = VARIANT_CALLING
+        .out
+        .vcf_mutect
+        .map{ it -> [
+            sample: it[0].sample,
+            vcf:   it[1]
+            ]
+            }
+        .collect()
+        .map{ it -> [
+            sample: it.sample,
+            vcf: it.vcf
+        ]}
 
-            GENERATE_PLOTS(
-                neat_ch.vcf,
-                bamsurgeon_ch.vcf,
-                vardict_ch.vcf,
-                mutect_ch.vcf,
-                varscan_ch.vcf
-            )
-    }
+    varscan_ch = VARIANT_CALLING
+        .out
+        .vcf_varscan
+        .map{ it -> [
+            sample: it[0].sample,
+            vcf:    it[1]
+            ]
+            }
+        .collect()
+        .map{ it -> [
+            sample: it.sample,
+            vcf: it.vcf
+        ]}
+
+    GENERATE_PLOTS(
+        neat_ch.vcf,
+        bamsurgeon_ch.vcf,
+        vardict_ch.vcf,
+        mutect_ch.vcf,
+        varscan_ch.vcf
+    )
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
 
     // ch_versions = ch_versions.mix(FASTQC.out.versions.first())

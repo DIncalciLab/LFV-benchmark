@@ -24,9 +24,10 @@ process NEAT {
     tuple val(meta), path("*.bai")                       , emit: bai
 
     tuple val(meta), path("*.yml")                       , emit: versions
-    
+
 
     when:
+    params.generate_normal
     task.ext.when == null || task.ext.when
 
     script:
@@ -53,7 +54,7 @@ process NEAT {
         -tr $bed \
         -m $mutmodel \
         -o $prefix
-    
+
     samtools index ${prefix}_golden.bam
 
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
@@ -61,7 +62,7 @@ process NEAT {
         ncsa/NEAT: 'Version $version'
         GC bias model: $gcbiasmodel
         Bed used: $bed
-        Mutational model: $mutmodel  
+        Mutational model: $mutmodel
         FASTA: $fasta
         Sequencing error model: $seqerrormodel
         Frag length model: $fraglenmodel
