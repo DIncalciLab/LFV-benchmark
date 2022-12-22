@@ -199,7 +199,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             varscan_ch.vcf
         )
         }
-    if (!params.generate_normal %% !params.generate_tumor && !params.variant_calling){
+    if (!params.generate_normal && !params.generate_tumor && !params.variant_calling){
         log.error "You need to specify an option for the pipeline. See the README for help."
         exit 1
     }
