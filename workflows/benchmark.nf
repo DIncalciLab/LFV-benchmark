@@ -102,18 +102,18 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
      }
     //ch_versions = ch_versions.mix(NEAT.out.versions)
 
-    if (!(params.skip_tumor_generation && params.skip_normal_generation)){
-        BAMSURGEON(
-            NEAT.out.bam,
-            params.mut_number,
-            params.min_fraction,
-            params.max_fraction,
-            params.maxlen,
-            params.fasta,
-            params.bed,
-            params.picardjar
-        )
-    }
+        if (!(params.skip_tumor_generation)){
+            BAMSURGEON(
+                NEAT.out.bam,
+                params.mut_number,
+                params.min_fraction,
+                params.max_fraction,
+                params.maxlen,
+                params.fasta,
+                params.bed,
+                params.picardjar
+            )
+        }
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
 
     if (!(params.skip_variant_calling)){
