@@ -102,7 +102,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
      }
     //ch_versions = ch_versions.mix(NEAT.out.versions)
 
-        if (!(params.skip_tumor_generation)){
+        if (!(params.skip_normal_generation) && !(params.skip_tumor_generation)){
             BAMSURGEON(
                 NEAT.out.bam,
                 params.mut_number,
