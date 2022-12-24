@@ -116,6 +116,26 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         }
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
 
+    if (params.skip_normal_generation && !(params.skip_tumor_generation)){
+
+        ch_bam = Channel
+        .fromPath(params.input + "/*.bam")
+        .map({ [it.getSimpleName(), it] })
+                    }
+
+        BAMSURGEON(
+            ch_bam,
+            params.mut_number,
+            params.min_fraction,
+            params.max_fraction,
+            params.maxlen,
+            params.fasta,
+            params.bed,
+            params.picardjar
+        )
+
+    }
+
     if (!(params.skip_variant_calling)){
         VARIANT_CALLING(
             BAMSURGEON.out.bam,
