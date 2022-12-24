@@ -102,18 +102,18 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
      }
     //ch_versions = ch_versions.mix(NEAT.out.versions)
 
-        if (!(params.skip_normal_generation) && !(params.skip_tumor_generation)){
-            BAMSURGEON(
-                NEAT.out.bam,
-                params.mut_number,
-                params.min_fraction,
-                params.max_fraction,
-                params.maxlen,
-                params.fasta,
-                params.bed,
-                params.picardjar
-            )
-        }
+    if (!(params.skip_normal_generation) && !(params.skip_tumor_generation)){
+        BAMSURGEON(
+            NEAT.out.bam,
+            params.mut_number,
+            params.min_fraction,
+            params.max_fraction,
+            params.maxlen,
+            params.fasta,
+            params.bed,
+            params.picardjar
+        )
+    }
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
 
     if (params.skip_normal_generation && !(params.skip_tumor_generation)){
@@ -121,6 +121,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         ch_bam = Channel
         .fromPath(params.input + "/*.bam")
         .map({ [it.getSimpleName(), it] })
+
+        println ch_bam
 
         BAMSURGEON(
             ch_bam,
