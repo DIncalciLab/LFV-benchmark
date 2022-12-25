@@ -118,11 +118,11 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
 
     if (params.skip_normal_generation && !(params.skip_tumor_generation)){
-
+/*
         ch_bam = Channel
         .fromPath(params.input + "/*.bam")
-        .map({  it -> [sample: it.getSimpleName(), it]}).view()
-
+        .map({[sample: it.getSimpleName(), it]}).view()
+*/
 
         BAMSURGEON(
             ch_bam,
