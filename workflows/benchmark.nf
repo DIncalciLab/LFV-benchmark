@@ -122,7 +122,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         .fromPath(params.input + "/*.bam")
         .map({[sample: it.getSimpleName(), it]}).view()
 
-
+        /*
         BAMSURGEON(
             ch_bam,
             params.mut_number,
@@ -132,7 +132,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.fasta,
             params.bed,
             params.picardjar
-        )
+        )*/
 
     }
 
