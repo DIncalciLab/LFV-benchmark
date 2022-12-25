@@ -121,7 +121,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
         ch_bam = Channel
         .fromPath(params.input + "/*.bam")
-        .map { it -> [sample: it.getSimpleName(), id]
+        .map { it -> [sample: it.getSimpleName(), info: id]
                     }.view()
 
 
