@@ -1,6 +1,6 @@
 process BAMSURGEON {
 
-    tag "Spike-in artificial somatic mutations in sample: ${meta.sample_name}"
+    tag "Spike-in artificial somatic mutations in sample: ${meta.sample}"
     label 'process_medium'
 
     container "aldosr/bamsurgeon:1.3-custom"
