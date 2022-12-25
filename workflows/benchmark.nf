@@ -84,7 +84,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         ch_input = Channel
         .fromPath(params.input)
         .splitCsv(header:true, quote:'\"', sep: ",")
-        .map({ it -> tuple(sample: it.getSimpleName(), file(id)) })
+        .map { row -> [sample: row.sample, info: row.info]
+                    }
 
         NEAT(
             ch_input,
@@ -120,9 +121,10 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
         ch_bam = Channel
         .fromPath(params.input + "/*.bam")
-        .map({it -> [it.getSimpleName(), it]}).view()
+        .map { it -> [sample: it.getSimpleName(), id]
+                    }
 
-        /*
+
         BAMSURGEON(
             ch_bam,
             params.mut_number,
@@ -132,7 +134,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.fasta,
             params.bed,
             params.picardjar
-        )*/
+        )
 
     }
 
