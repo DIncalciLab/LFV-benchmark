@@ -103,6 +103,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     //ch_versions = ch_versions.mix(NEAT.out.versions)
 
     if (!(params.skip_normal_generation) && !(params.skip_tumor_generation)){
+
         BAMSURGEON(
             NEAT.out.bam,
             params.mut_number,
@@ -120,10 +121,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
         ch_bam = Channel
         .fromPath(params.input + "/*.bam")
-        .map{  it -> [
-                sample: it[0].getSimpleName(),
-                it]
-                }.view()
+        .map({  it -> [sample: it[0].getSimpleName(), it]}).view()
 
 
         BAMSURGEON(
@@ -140,6 +138,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     }
 
     if (!(params.skip_variant_calling)){
+
         VARIANT_CALLING(
             BAMSURGEON.out.bam,
             params.fasta,
