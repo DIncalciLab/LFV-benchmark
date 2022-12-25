@@ -120,7 +120,10 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
         ch_bam = Channel
         .fromPath(params.input + "/*.bam")
-        .map{  [sample: it.getSimpleName(), it] }
+        .map{  it -> [
+                sample: it[0].getSimpleName(),
+                it]
+                }.view()
 
 
         BAMSURGEON(
@@ -220,7 +223,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             mutect_ch.vcf,
             varscan_ch.vcf
         )
-        }
+    }
     if (params.skip_normal_generation && params.skip_tumor_generation && params.skip_variant_calling){
         log.error "You need to specify an option for the pipeline. See the README for help."
         exit 1
