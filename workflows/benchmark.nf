@@ -122,8 +122,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         ch_bam = Channel
         .fromPath(params.input + "/*.bam")
         .map { it -> [[sample: it.getSimpleName()], it]
-                    }.view()
-
+                    }
 
         BAMSURGEON(
             ch_bam,
@@ -135,13 +134,84 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.bed,
             params.picardjar
         )
-
     }
 
-    if (!(params.skip_variant_calling)){
+    if (params.skip_normal_generation && params.skip_tumor_generation && !(params.skip_variant_calling)){
+
+        if (params.variant_calling_mode == "paired"){
+            ch_tumor_bam = Channel
+            .fromPath(params.input_tumor + "/*.bam")
+            .map { it -> [[sample: it.getSimpleName()], it]
+                        }.view()
+
+             ch_normal_bam = Channel
+            .fromPath(params.input_normal + "/*.bam")
+            .map { it -> [[sample: it.getSimpleName()], it]
+                        }.view()
+
+            VARIANT_CALLING(
+                ch_tumor_bam,
+                params.fasta,
+                params.bed
+            )
+
+
+
+        vardict_ch = VARIANT_CALLING
+            .out
+            .vcf_vardict
+            .map{ it -> [
+                sample: it[0].sample,
+                vcf:    it[1]
+                ]
+                }
+            .collect()
+            .map{ it -> [
+                sample: it.sample,
+                vcf: it.vcf
+            ]}
+
+        mutect_ch  = VARIANT_CALLING
+            .out
+            .vcf_mutect
+            .map{ it -> [
+                sample: it[0].sample,
+                vcf:   it[1]
+                ]
+                }
+            .collect()
+            .map{ it -> [
+                sample: it.sample,
+                vcf: it.vcf
+            ]}
+
+        varscan_ch = VARIANT_CALLING
+            .out
+            .vcf_varscan
+            .map{ it -> [
+                sample: it[0].sample,
+                vcf:    it[1]
+                ]
+                }
+            .collect()
+            .map{ it -> [
+                sample: it.sample,
+                vcf: it.vcf
+            ]}
+
+        GENERATE_PLOTS(
+            neat_ch.vcf,
+            bamsurgeon_ch.vcf,
+            vardict_ch.vcf,
+            mutect_ch.vcf,
+            varscan_ch.vcf
+        )
+    }
+
+/*if (params.skip_tumor_generation && !(params.skip_variant_calling)){
 
         VARIANT_CALLING(
-            BAMSURGEON.out.bam,
+            ch_tumor_bam,
             params.fasta,
             params.bed
         )
@@ -223,7 +293,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             mutect_ch.vcf,
             varscan_ch.vcf
         )
-    }
+    }*/
     if (params.skip_normal_generation && params.skip_tumor_generation && params.skip_variant_calling){
         log.error "You need to specify an option for the pipeline. See the README for help."
         exit 1
