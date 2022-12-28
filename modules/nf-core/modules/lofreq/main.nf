@@ -9,14 +9,14 @@ process LOFREQ {
         'quay.io/biocontainers/lofreq:2.1.5--py39hf2bf078_8' }"
 
     input:
-    tuple val(meta), path(mpileup)
-    //tuple val(meta), path(bai)
+    tuple val(meta), path(normal_bam)
+    tuple val(meta), path(tumor_bam)
 
     val   fasta
     path  bed
 
     output:
-    tuple val(meta), path("*.vcf")   , emit: vcf_varscan
+    tuple val(meta), path("*.vcf")   , emit: vcf_lofreq
     path "versions.yml"              , emit: versions
 
     when:
@@ -25,12 +25,12 @@ process LOFREQ {
     script:
     def args = task.ext.args ?: ''
     def args2 = task.ext.args2 ?: ''
-    def prefix = task.ext.prefix ?: "varscan"
-    def VERSION = '2.4.4' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
+    def prefix = task.ext.prefix ?: "lofreq"
+    def VERSION = '2.1.5'
 
     def avail_mem = 3
     if (!task.memory) {
-        log.info '[VarScan2] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
+        log.info '[LoFreq] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
     } else {
         avail_mem = task.memory.giga
     }
