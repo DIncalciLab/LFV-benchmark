@@ -102,26 +102,28 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
      }
     //ch_versions = ch_versions.mix(NEAT.out.versions)
 
-        if (!(params.skip_tumor_generation)){
-            BAMSURGEON(
-                NEAT.out.bam,
-                params.mut_number,
-                params.min_fraction,
-                params.max_fraction,
-                params.maxlen,
-                params.fasta,
-                params.bed,
-                params.picardjar
-            )
-        }
+    if (!(params.skip_normal_generation) && !(params.skip_tumor_generation)){
+
+        BAMSURGEON(
+            NEAT.out.bam,
+            params.mut_number,
+            params.min_fraction,
+            params.max_fraction,
+            params.maxlen,
+            params.fasta,
+            params.bed,
+            params.picardjar
+        )
+    }
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
 
     if (params.skip_normal_generation && !(params.skip_tumor_generation)){
 
         ch_bam = Channel
         .fromPath(params.input + "/*.bam")
-        .map({ [it.getSimpleName(), it] })
-                    }
+        .map { it -> [[sample: it.getSimpleName()], it]
+                    }.view()
+
 
         BAMSURGEON(
             ch_bam,
@@ -137,6 +139,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     }
 
     if (!(params.skip_variant_calling)){
+
         VARIANT_CALLING(
             BAMSURGEON.out.bam,
             params.fasta,
@@ -220,7 +223,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             mutect_ch.vcf,
             varscan_ch.vcf
         )
-        }
+    }
     if (params.skip_normal_generation && params.skip_tumor_generation && params.skip_variant_calling){
         log.error "You need to specify an option for the pipeline. See the README for help."
         exit 1

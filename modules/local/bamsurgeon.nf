@@ -1,13 +1,13 @@
 process BAMSURGEON {
-    
-    tag "Spike-in artificial random mutain in sample: ${meta.sample}"
-    label 'process_medium'
-   
+
+    tag "Spike-in artificial somatic mutations in sample: ${meta.sample}"
+    label 'process_high'
+
     container "aldosr/bamsurgeon:1.3-custom"
-    
+
     input:
     tuple val(meta), val(neat)
-    
+
     val (mut_number)
     val (minvaf)
     val (maxvaf)
@@ -25,7 +25,7 @@ process BAMSURGEON {
     tuple val(meta), path("*.vcf.gz"), path("*.tbi")                               , emit: vcf
 
     tuple val(meta), path("*.yml")                                                 , emit: versions
-    
+
 
     when:
     task.ext.when == null || task.ext.when
@@ -36,14 +36,14 @@ process BAMSURGEON {
     def args3 = task.ext.args3 ?: ''
     def prefix = task.ext.prefix ?: ''
     def version = '1.3' //VERSION IS HARDCODED
-    
+
     def avail_mem = 3
     if (!task.memory) {
         log.info '[BAMSurgeon/random_sites.py] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
     } else {
         avail_mem = task.memory.giga
     }
-    
+
     if (params.type == 'snv') {
 
     """
@@ -56,7 +56,7 @@ process BAMSURGEON {
         --maxvaf $maxvaf \\
         snv > ${prefix}_random_snv.txt
 
-    
+
     addsnv.py \\
         $args2 \\
         -v ${prefix}_random_snv.txt \\
@@ -69,7 +69,7 @@ process BAMSURGEON {
         --tmpdir tmp_addsnv
 
     samtools index ${prefix}_spiked_snv.bam
-    
+
     bcftools reheader --fai "${fasta}.fai" ${prefix}_spiked_snv.addsnv.${prefix}_random_snv.vcf \
         | bcftools sort | bgzip -c > ${prefix}_spiked_snv.vcf.gz
     tabix -p vcf ${prefix}_spiked_snv.vcf.gz
@@ -154,7 +154,7 @@ process BAMSURGEON {
         --maxvaf $maxvaf \\
         indel --maxlen $maxlen > ${prefix}_random_indel.txt
 
-    
+
    addsnv.py \\
         $args2 \\
         -v ${prefix}_random_snv.txt \\
@@ -167,7 +167,7 @@ process BAMSURGEON {
         --tmpdir tmp_addsnv
 
     samtools index ${prefix}_spiked_snv.bam
-    
+
     addindel.py \\
         $args3 \\
         -v ${prefix}_random_indel.txt \\
@@ -210,7 +210,7 @@ process BAMSURGEON {
         Meta: $meta
     END_VERSIONS
     """
-    
+
     } else {
         log.info 'ERROR: YOU MUST SPECIFY A MUTATION TYPE TO SPIKEIN'
     }
