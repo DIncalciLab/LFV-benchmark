@@ -38,6 +38,8 @@ workflow VARIANT_CALLING {
     GATK4_MUTECT2(
         normal_bam,
         tumor_bam,
+        germline_resources,
+        panel_of_normals,
         fasta,
         bed
     )
