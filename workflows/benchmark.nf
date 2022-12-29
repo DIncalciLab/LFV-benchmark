@@ -74,7 +74,7 @@ include { MULTIQC }                     from '../modules/nf-core/modules/multiqc
 */
 input_all    = !(params.skip_normal_generation)
                ? Channel
-               .fromPath(params.input)
+               .fromPath(params.input_all)
                .splitCsv(header:true, quote:'\"', sep: ",")
                .map { row -> [sample: row.sample, info: row.info] }
                : Channel.empty()
