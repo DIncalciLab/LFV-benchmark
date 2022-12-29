@@ -76,13 +76,13 @@ input_all    = !(params.skip_normal_generation)
                ? Channel
                .fromPath(params.input_all)
                .splitCsv(header:true, quote:'\"', sep: ",")
-               .map { row -> [sample: row.sample, info: row.info] }
+               .map { row -> [sample: row.sample, info: row.info] }.view()
                : Channel.empty()
 
 input_normal = ( params.skip_normal_generation && !(params.skip_tumor_generation) )
                ? Channel
                .fromPath(params.input_normal + "/*.bam")
-               .map { it -> [[sample: it.getSimpleName()], it] }
+               .map { it -> [[sample: it.getSimpleName()], it] }.view()
                : Channel.empty()
 
 input_tumor  = ( params.skip_normal_generation && params.skip_tumor_generation )
@@ -152,9 +152,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     if ( params.skip_normal_generation && params.skip_tumor_generation
          && !(params.skip_variant_calling) && params.paired_mode ){
-
-            input_normal.view()
-            input_tumor.view()
 
             VARIANT_CALLING(
                 input_normal,
