@@ -81,7 +81,7 @@ input_all    = !(params.skip_normal_generation)
 
 input_normal = ( params.skip_normal_generation && !(params.skip_tumor_generation) )
                ? Channel
-               .fromPath(params.input + "/*.bam")
+               .fromPath(params.input_normal + "/*.bam")
                .map { it -> [[sample: it.getSimpleName()], it] }
                : Channel.empty()
 
