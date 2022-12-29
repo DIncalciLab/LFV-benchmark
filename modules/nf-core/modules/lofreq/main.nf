@@ -1,6 +1,6 @@
 process LOFREQ {
     tag "Variant calling using LoFreq on BAMSurgeon spiked-in sample: ${meta.sample}"
-    label 'process_low'
+    label 'process_medium'
 
     // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
     conda (params.enable_conda ? "bioconda::lofreq" : null)
@@ -35,11 +35,11 @@ process LOFREQ {
         avail_mem = task.memory.giga
     }
 
-    if (params.mode == 'high-sensitivity') {
+    if (params.high_sensitivity && params.) {
     """
-    varscan mpileup2cns $mpileup  \\
-        $args \\
-        --variants > ${prefix}.vcf
+    lofreq call-parallel --pp-threads $task.cpus  \\
+        -f $fasta \\
+        -o ${prefix}.vcf aln.bam
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

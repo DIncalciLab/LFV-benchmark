@@ -69,6 +69,30 @@ include { MULTIQC }                     from '../modules/nf-core/modules/multiqc
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    INITIALIZE CHANNELS BASED ON PARAMS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+input_all    = !(params.skip_normal_generation)
+               ? Channel
+               .fromPath(params.input)
+               .splitCsv(header:true, quote:'\"', sep: ",")
+               .map { row -> [sample: row.sample, info: row.info] }
+               : Channel.empty()
+
+input_normal = ( params.skip_normal_generation && !(params.skip_tumor_generation) )
+               ? Channel
+               .fromPath(params.input + "/*.bam")
+               .map { it -> [[sample: it.getSimpleName()], it] }
+               : Channel.empty()
+
+input_tumor  = ( params.skip_normal_generation && params.skip_tumor_generation )
+               ? Channel
+               .fromPath(params.input_tumor + "/*.bam")
+               .map { it -> [[sample: it.getSimpleName()], it] }
+               : Channel.empty()
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -81,14 +105,15 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     ch_versions = Channel.empty()
 
     if (!(params.skip_normal_generation)){
+    /*
         ch_input = Channel
         .fromPath(params.input)
         .splitCsv(header:true, quote:'\"', sep: ",")
         .map { row -> [sample: row.sample, info: row.info]
                     }
-
+*/
         NEAT(
-            ch_input,
+            input_all,
             params.readlen,
             params.coverage,
             params.bed,
@@ -118,14 +143,14 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
 
     if (params.skip_normal_generation && !(params.skip_tumor_generation)){
-
+/*
         ch_bam = Channel
         .fromPath(params.input + "/*.bam")
         .map { it -> [[sample: it.getSimpleName()], it]
-                    }
+                    }*/
 
         BAMSURGEON(
-            ch_bam,
+            input_normal,
             params.mut_number,
             params.min_fraction,
             params.max_fraction,
@@ -136,76 +161,69 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         )
     }
 
-    if (params.skip_normal_generation && params.skip_tumor_generation && !(params.skip_variant_calling)){
+    if (params.skip_normal_generation && params.skip_tumor_generation
+        && !(params.skip_variant_calling) && params.paired_mode){
 
-        if (params.variant_calling_mode == "paired"){
-            ch_tumor_bam = Channel
-            .fromPath(params.input_tumor + "/*.bam")
-            .map { it -> [[sample: it.getSimpleName()], it]
-                        }.view()
 
-             ch_normal_bam = Channel
-            .fromPath(params.input_normal + "/*.bam")
-            .map { it -> [[sample: it.getSimpleName()], it]
-                        }.view()
-
-            VARIANT_CALLING(
-                ch_tumor_bam,
+            VARIANT_CALLING_PAIRED(
+                input_normal,
+                input_tumor,
                 params.fasta,
                 params.bed
             )
 
 
 
-        vardict_ch = VARIANT_CALLING
-            .out
-            .vcf_vardict
-            .map{ it -> [
-                sample: it[0].sample,
-                vcf:    it[1]
-                ]
-                }
-            .collect()
-            .map{ it -> [
-                sample: it.sample,
-                vcf: it.vcf
-            ]}
+            vardict_ch = VARIANT_CALLING
+                .out
+                .vcf_vardict
+                .map{ it -> [
+                    sample: it[0].sample,
+                    vcf:    it[1]
+                    ]
+                    }
+                .collect()
+                .map{ it -> [
+                    sample: it.sample,
+                    vcf: it.vcf
+                ]}
 
-        mutect_ch  = VARIANT_CALLING
-            .out
-            .vcf_mutect
-            .map{ it -> [
-                sample: it[0].sample,
-                vcf:   it[1]
-                ]
-                }
-            .collect()
-            .map{ it -> [
-                sample: it.sample,
-                vcf: it.vcf
-            ]}
+            mutect_ch  = VARIANT_CALLING
+                .out
+                .vcf_mutect
+                .map{ it -> [
+                    sample: it[0].sample,
+                    vcf:   it[1]
+                    ]
+                    }
+                .collect()
+                .map{ it -> [
+                    sample: it.sample,
+                    vcf: it.vcf
+                ]}
 
-        varscan_ch = VARIANT_CALLING
-            .out
-            .vcf_varscan
-            .map{ it -> [
-                sample: it[0].sample,
-                vcf:    it[1]
-                ]
-                }
-            .collect()
-            .map{ it -> [
-                sample: it.sample,
-                vcf: it.vcf
-            ]}
+            varscan_ch = VARIANT_CALLING
+                .out
+                .vcf_varscan
+                .map{ it -> [
+                    sample: it[0].sample,
+                    vcf:    it[1]
+                    ]
+                    }
+                .collect()
+                .map{ it -> [
+                    sample: it.sample,
+                    vcf: it.vcf
+                ]}
 
-        GENERATE_PLOTS(
-            neat_ch.vcf,
-            bamsurgeon_ch.vcf,
-            vardict_ch.vcf,
-            mutect_ch.vcf,
-            varscan_ch.vcf
-        )
+            GENERATE_PLOTS(
+                neat_ch.vcf,
+                bamsurgeon_ch.vcf,
+                vardict_ch.vcf,
+                mutect_ch.vcf,
+                varscan_ch.vcf
+            )
+            }
     }
 
 /*if (params.skip_tumor_generation && !(params.skip_variant_calling)){

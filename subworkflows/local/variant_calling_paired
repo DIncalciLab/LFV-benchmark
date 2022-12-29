@@ -9,7 +9,7 @@ include { STRELKA }                     from '../../modules/nf-core/modules/stre
 include { FREEBAYES }                   from '../../modules/nf-core/modules/freebayes/main.nf'
 
 
-workflow VARIANT_CALLING {
+workflow VARIANT_CALLING_PAIRED {
     take:
     normal_bam
     tumor_bam          // channel: [ val(meta), bam, bai ]
@@ -18,25 +18,31 @@ workflow VARIANT_CALLING {
 
     main:
     ch_vardict   = Channel.empty()
-    ch_mutect   = Channel.empty()
+    ch_mutect    = Channel.empty()
     ch_varscan   = Channel.empty()
+    ch_lofreq    = Channel.empty()
+    ch_strelka   = Channel.empty()
+    ch_freebayes = Channel.empty()
 
     ch_versions  = Channel.empty()
 
     VARDICTJAVA(
-        bam,
+        normal_bam,
+        tumor_bam,
         fasta,
         bed
     )
 
     GATK4_MUTECT2(
-        bam,
+        normal_bam,
+        tumor_bam,
         fasta,
         bed
     )
 
     SAMTOOLS_MPILEUP(
-        bam,
+        normal_bam,
+        tumor_bam,
         fasta
     )
 
@@ -46,14 +52,42 @@ workflow VARIANT_CALLING {
         bed
     )
 
-    ch_vardict = ch_vardict.mix(VARDICTJAVA.out.vcf_vardict)
-    ch_mutect = ch_mutect.mix(GATK4_MUTECT2.out.vcf_mutect)
-    ch_varscan = ch_varscan.mix(VARSCAN2.out.vcf_varscan)
+    LOFREQ(
+        normal_bam,
+        tumor_bam,
+        fasta,
+        bed
+    )
+
+    STRELKA(
+        normal_bam,
+        tumor_bam,
+        fasta,
+        bed
+    )
+
+    FREEBAYES(
+        normal_bam,
+        tumor_bam,
+        fasta,
+        bed
+    )
+
+
+    ch_vardict   = ch_vardict.mix(VARDICTJAVA.out.vcf_vardict)
+    ch_mutect    = ch_mutect.mix(GATK4_MUTECT2.out.vcf_mutect)
+    ch_varscan   = ch_varscan.mix(VARSCAN2.out.vcf_varscan)
+    ch_lofreq    = ch_vardict.mix(VARDICTJAVA.out.vcf_vardict)
+    ch_strelka   = ch_mutect.mix(GATK4_MUTECT2.out.vcf_mutect)
+    ch_freebayes = ch_varscan.mix(VARSCAN2.out.vcf_varscan)
 
     emit:
-    vcf_vardict   = ch_vardict        //  channel: [ val(meta), vcf ]
+    vcf_vardict   = ch_vardict       //   channel: [ val(meta), vcf ]
     vcf_mutect    = ch_mutect        //   channel: [ val(meta), vcf ]
-    vcf_varscan   = ch_varscan      //    channel: [ val(meta), vcf ]
+    vcf_varscan   = ch_varscan       //   channel: [ val(meta), vcf ]
+    vcf_lofreq    = ch_lofreq        //   channel: [ val(meta), vcf ]
+    vcf_strelka   = ch_strlka        //   channel: [ val(meta), vcf ]
+    vcf_freebayes = ch_freebayes     //   channel: [ val(meta), vcf ]
 
-    //versions  = ch_versions               //    path: versions.yml*/
+    //versions  = ch_versions        //   path: versions.yml*/
 }

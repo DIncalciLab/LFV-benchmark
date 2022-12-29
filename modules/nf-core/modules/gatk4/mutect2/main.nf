@@ -8,7 +8,8 @@ process GATK4_MUTECT2 {
         'quay.io/biocontainers/gatk4:4.2.3.0--hdfd78af_1' }"
 
     input:
-    tuple val(meta), path(bam), path(bai)
+    tuple val(meta), path(normal_bam), path(normal_bai)
+    tuple val(meta), path(tumor_bam), path(tumor_bai)
     
     val fasta
     path bed
@@ -27,9 +28,10 @@ process GATK4_MUTECT2 {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "mutect2"
     //def inputs = input.collect{ "--input $it"}.join(" ")
+    def normal_sample = normal_bam ? "-I $normal_bam" : ""
     //def interval_command = intervals ? "--intervals $intervals" : ""
-    //def pon_command = panel_of_normals ? "--panel-of-normals $panel_of_normals" : ""
-    //def gr_command = germline_resource ? "--germline-resource $germline_resource" : ""
+    def pon_command = panel_of_normals ? "--panel-of-normals $panel_of_normals" : ""
+    def gr_command = germline_resource ? "--germline-resource $germline_resource" : ""
 
     def avail_mem = 3
     if (!task.memory) {
@@ -38,11 +40,14 @@ process GATK4_MUTECT2 {
         avail_mem = task.memory.giga
     }
 
-    if (params.mode == 'high-sensitivity'){
+    if (params.high_sensitivity){
     """
     gatk --java-options "-Xmx${avail_mem}g" Mutect2 \\
         -I $bam \\
+        $normal_sample \\
         --reference $fasta \\
+        $pon_command \\
+        $gr_command \\
         -L $bed \\
         $args \\
         -O ${prefix}.vcf
@@ -52,11 +57,16 @@ process GATK4_MUTECT2 {
         gatk4: \$(echo \$(gatk --version 2>&1) | sed 's/^.*(GATK) v//; s/ .*\$//')
     END_VERSIONS
     """
-    } else{
+    }
+
+    if (!params.high_sensitivity){
     """
         gatk --java-options "-Xmx${avail_mem}g" Mutect2 \\
         -I $bam \\
+        $normal_sample \\
         --reference $fasta \\
+        $pon_command \\
+        $gr_command \\
         -L $bed \\
         -O ${prefix}.vcf
 

@@ -9,8 +9,8 @@ process VARDICTJAVA {
         'quay.io/biocontainers/vardict-java:1.8.2--hdfd78af_3' }"
 
     input:
-    tuple val(meta), path(bam), path(bai)
-    //tuple val(meta), path(bai)
+    tuple val(meta), path(normal_bam), path(normal_bai)
+    tuple val(meta), path(tumor_bam),  path(tumor_bai)
     
     val   fasta
     path  bed
@@ -35,41 +35,86 @@ process VARDICTJAVA {
         avail_mem = task.memory.giga
     }
 
-    if (params.mode == 'high-sensitivity') {
-    """
-    vardict-java \
-        -G ${fasta} \
-        -N ${prefix} \
-        -f 0.0001 \
-        -b $bam \
-        $args \
-        $bed \
-            | teststrandbias.R \
-                | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
-    
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        vardict-java: $VERSION
-        var2vcf_valid.pl: \$(echo \$(var2vcf_valid.pl -h | sed -n 2p | awk '{ print \$2 }'))
-    END_VERSIONS
-    """
-    } else {
-    """
-    vardict-java \
-        -G ${fasta} \
-        -N ${prefix} \
-        -f 0.01 \
-        -b $bam \
-        $args \
-        $bed \
-            | teststrandbias.R \
-                | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
-    
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        vardict-java: $VERSION
-        var2vcf_valid.pl: \$(echo \$(var2vcf_valid.pl -h | sed -n 2p | awk '{ print \$2 }'))
-    END_VERSIONS
-    """
-    }
+
+
+   if (params.high_sensitivity && params.tumor_only){
+   """
+   vardict-java \
+       -G ${fasta} \
+       -N ${prefix} \
+       -f 0.0001 \
+       -b $tumor_bam \
+       $args \
+       $bed \
+           | teststrandbias.R \
+               | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
+
+   cat <<-END_VERSIONS > versions.yml
+   "${task.process}":
+       vardict-java: $VERSION
+       var2vcf_valid.pl: \$(echo \$(var2vcf_valid.pl -h | sed -n 2p | awk '{ print \$2 }'))
+   END_VERSIONS
+   """
+   }
+
+   if (params.high_sensitivity && params.paired_mode){
+   """
+   vardict-java \
+       -G ${fasta} \
+       -N ${prefix} \
+       -f 0.0001 \
+       -b "${tumor_bam}|${normal_bam}" \
+       $args \
+       $bed \
+           | teststrandbias.R \
+               | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
+
+   cat <<-END_VERSIONS > versions.yml
+   "${task.process}":
+       vardict-java: $VERSION
+       var2vcf_valid.pl: \$(echo \$(var2vcf_valid.pl -h | sed -n 2p | awk '{ print \$2 }'))
+   END_VERSIONS
+   """
+   }
+
+   if ((!params.high_sensitivity) && params.tumor_only) {
+   """
+   vardict-java \
+       -G ${fasta} \
+       -N ${prefix} \
+       -f 0.01 \
+       -b $tumor_bam \
+       $args \
+       $bed \
+           | teststrandbias.R \
+               | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
+
+   cat <<-END_VERSIONS > versions.yml
+   "${task.process}":
+       vardict-java: $VERSION
+       var2vcf_valid.pl: \$(echo \$(var2vcf_valid.pl -h | sed -n 2p | awk '{ print \$2 }'))
+   END_VERSIONS
+   """
+   }
+
+   if ((!params.high_sensitivity) && params.paired_mode){
+   """
+   vardict-java \
+       -G ${fasta} \
+       -N ${prefix} \
+       -f 0.01 \
+       -b "${tumor_bam}|${normal_bam}" \
+       $args \
+       $bed \
+           | teststrandbias.R \
+               | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
+
+   cat <<-END_VERSIONS > versions.yml
+   "${task.process}":
+       vardict-java: $VERSION
+       var2vcf_valid.pl: \$(echo \$(var2vcf_valid.pl -h | sed -n 2p | awk '{ print \$2 }'))
+   END_VERSIONS
+   """
+   }
+
 }
