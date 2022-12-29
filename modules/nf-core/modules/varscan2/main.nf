@@ -40,7 +40,8 @@ process VARSCAN2 {
 
     if ( params.high_sensitivity ) {
     """
-    varscan $tumor_only $paired  \\
+    varscan $tumor_only \\
+        $paired  \\
         $args \\
         --variants > ${prefix}.vcf
 
@@ -51,7 +52,7 @@ process VARSCAN2 {
     """
     }
 
-    if ( !params.high_sensitivity )
+    if ( !params.high_sensitivity ){
     """
     varscan $tumor_only $paired  \\
         --output-vcf \\
