@@ -1,6 +1,6 @@
 process FREEBAYES {
-    tag "$meta.id"
-    label 'process_single'
+    tag 'Variant calling using FreeBayes on BAMSurgeon spiked-in sample: ${meta.sample}'
+    label 'process_medium'
 
     conda (params.enable_conda ? "bioconda::freebayes=1.3.6" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
