@@ -14,6 +14,7 @@ process LOFREQ {
 
     val   fasta
     path  bed
+    path dbsnp_vcf
 
     output:
     tuple val(meta), path("*.vcf")   , emit: vcf_lofreq
@@ -26,6 +27,7 @@ process LOFREQ {
     def args = task.ext.args ?: ''
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "lofreq"
+    def dbsnp =  dbsnp_vcf ? "--d $dbsnp_vcf" : ""
     def VERSION = '2.1.5'
 
     def avail_mem = 3
@@ -35,22 +37,29 @@ process LOFREQ {
         avail_mem = task.memory.giga
     }
 
-    if (params.high_sensitivity && params.) {
+    if (params.high_sensitivity) {
     """
     lofreq call-parallel --pp-threads $task.cpus  \\
         -f $fasta \\
-        -o ${prefix}.vcf aln.bam
+        -o ${prefix}.vcf \\
+        aln.bam
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         varscan2_version: $VERSION
     END_VERSIONS
     """
-    } else {
+    }
+
+    if ( !params.high_sensitivity ){
     """
-    varscan mpileup2cns $mpileup  \\
-        --output-vcf \\
-        --variants > ${prefix}.vcf
+    lofreq somatic              \\
+        -n $normal_bam          \\
+        -t $tumor_bam           \\
+        -f $fasta               \\
+        --threads $task.cpus    \\
+        -o ${prefix}.vcf        \\
+        $dbsnp
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

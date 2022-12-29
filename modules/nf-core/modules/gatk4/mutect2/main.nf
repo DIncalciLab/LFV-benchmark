@@ -13,6 +13,8 @@ process GATK4_MUTECT2 {
     
     val fasta
     path bed
+    path panel_of_normals
+    path germline_resource
 
     output:
     tuple val(meta), path("*.vcf")        , emit: vcf_mutect
