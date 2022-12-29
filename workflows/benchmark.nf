@@ -105,13 +105,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     ch_versions = Channel.empty()
 
     if (!(params.skip_normal_generation)){
-    /*
-        ch_input = Channel
-        .fromPath(params.input)
-        .splitCsv(header:true, quote:'\"', sep: ",")
-        .map { row -> [sample: row.sample, info: row.info]
-                    }
-*/
+
         NEAT(
             input_all,
             params.readlen,
@@ -143,11 +137,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
 
     if (params.skip_normal_generation && !(params.skip_tumor_generation)){
-/*
-        ch_bam = Channel
-        .fromPath(params.input + "/*.bam")
-        .map { it -> [[sample: it.getSimpleName()], it]
-                    }*/
 
         BAMSURGEON(
             input_normal,
@@ -161,8 +150,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         )
     }
 
-    if (params.skip_normal_generation && params.skip_tumor_generation
-        && !(params.skip_variant_calling) && params.paired_mode){
+    if ( params.skip_normal_generation && params.skip_tumor_generation
+         && !(params.skip_variant_calling) && params.paired_mode ){
 
 
             VARIANT_CALLING_PAIRED(
@@ -224,7 +213,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                 varscan_ch.vcf
             )
             }
-    }
 
 /*if (params.skip_tumor_generation && !(params.skip_variant_calling)){
 
