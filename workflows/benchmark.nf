@@ -168,6 +168,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             VARIANT_CALLING(
                 input_normal,
                 input_tumor,
+                germline_resource,
+                panel_of_normals,
                 params.fasta,
                 params.bed
             )

@@ -13,6 +13,8 @@ workflow VARIANT_CALLING {
     take:
     normal_bam
     tumor_bam          // channel: [ val(meta), bam, bai ]
+    germline_resources
+    panel_of_normals
     fasta
     bed
 
