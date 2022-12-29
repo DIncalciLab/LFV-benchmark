@@ -153,8 +153,10 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     if ( params.skip_normal_generation && params.skip_tumor_generation
          && !(params.skip_variant_calling) && params.paired_mode ){
 
+            input_normal.view()
+            input_tumor.view()
 
-            VARIANT_CALLING_PAIRED(
+            VARIANT_CALLING(
                 input_normal,
                 input_tumor,
                 params.fasta,

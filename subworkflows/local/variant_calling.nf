@@ -9,7 +9,7 @@ include { STRELKA }                     from '../../modules/nf-core/modules/stre
 include { FREEBAYES }                   from '../../modules/nf-core/modules/freebayes/main.nf'
 
 
-workflow VARIANT_CALLING_PAIRED {
+workflow VARIANT_CALLING {
     take:
     normal_bam
     tumor_bam          // channel: [ val(meta), bam, bai ]
