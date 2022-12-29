@@ -72,24 +72,36 @@ include { MULTIQC }                     from '../modules/nf-core/modules/multiqc
     INITIALIZE CHANNELS BASED ON PARAMS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-input_all    = !(params.skip_normal_generation)
-               ? Channel
-               .fromPath(params.input_all)
-               .splitCsv(header:true, quote:'\"', sep: ",")
-               .map { row -> [sample: row.sample, info: row.info] }.view()
-               : Channel.empty()
+input_all          = !(params.skip_normal_generation)
+                     ? Channel
+                     .fromPath(params.input_all)
+                     .splitCsv(header:true, quote:'\"', sep: ",")
+                     .map { row -> [sample: row.sample, info: row.info] }.view()
+                     : Channel.empty()
 
-input_normal = ( params.skip_normal_generation && !(params.skip_tumor_generation) )
-               ? Channel
-               .fromPath(params.input_normal + "/*.bam")
-               .map { it -> [[sample: it.getSimpleName()], it] }.view()
-               : Channel.empty()
+input_normal       = ( params.skip_normal_generation && !(params.skip_tumor_generation) )
+                     ? Channel
+                     .fromPath(params.input_normal + "/*.bam")
+                     .map { it -> [[sample: it.getSimpleName()], it] }.view()
+                     : Channel.empty()
 
-input_tumor  = ( params.skip_normal_generation && params.skip_tumor_generation )
-               ? Channel
-               .fromPath(params.input_tumor + "/*.bam")
-               .map { it -> [[sample: it.getSimpleName()], it] }
-               : Channel.empty()
+input_tumor        = ( params.skip_normal_generation && params.skip_tumor_generation )
+                     ? Channel
+                     .fromPath(params.input_tumor + "/*.bam")
+                     .map { it -> [[sample: it.getSimpleName()], it] }
+                     : Channel.empty()
+
+germline_resource  = params.germline_resource
+                     ? Channel
+                     .fromPath(params.germline_resource)
+                     .collect()
+                     : Channel.value([])
+
+panel_of_normals   = params.panel_of_normals
+                     ? Channel
+                     .fromPath(params.panel_of_normals)
+                     .collect()
+                     : Channel.value([])
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -159,8 +171,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                 params.fasta,
                 params.bed
             )
-
-
 
             vardict_ch = VARIANT_CALLING
                 .out
