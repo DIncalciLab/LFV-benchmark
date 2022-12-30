@@ -79,7 +79,7 @@ input_all          = !(params.skip_normal_generation)
                      .map { row -> [sample: row.sample, info: row.info] }
                      : Channel.empty()
 
-input_normal       = ( params.skip_normal_generation && !(params.skip_tumor_generation) )
+input_normal       = ( params.skip_normal_generation )
                      ? Channel
                      .fromFilePairs(params.input_normal + "/*.{bam,bai}", checkIfExists:true )
                      { file -> file.name.replaceAll(/.bam|.bai$/,'') }.view()
