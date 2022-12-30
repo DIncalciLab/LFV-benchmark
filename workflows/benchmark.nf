@@ -92,6 +92,10 @@ input_tumor        = ( params.skip_normal_generation && params.skip_tumor_genera
                      { file -> file.name.replaceAll(/.tumor|.bam|.bai$/,'') }.view()
                      : Channel.empty()
 
+tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation )
+                     ? input_normal.join(input_tumor)
+                     : Channel.empty().view()
+
 germline_resource  = params.germline_resource
                      ? Channel
                      .fromPath(params.germline_resource)
@@ -165,10 +169,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         )
     }
 
-    if ( params.skip_normal_generation && params.skip_tumor_generation) {
-
-        tumor_normal_pair = input_normal.join(input_tumor)
-    }
 /*
     if ( params.paired_mode ){
 
