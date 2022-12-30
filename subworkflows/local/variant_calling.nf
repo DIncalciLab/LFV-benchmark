@@ -12,7 +12,7 @@ include { FREEBAYES }                   from '../../modules/nf-core/modules/free
 workflow VARIANT_CALLING {
     take:
     bam
-    germline_resources
+    germline_resource
     panel_of_normals
     dbsnp_vcf
     fasta
@@ -37,7 +37,7 @@ workflow VARIANT_CALLING {
 
     GATK4_MUTECT2(
         bam,
-        germline_resources,
+        germline_resource,
         panel_of_normals,
         fasta,
         bed
