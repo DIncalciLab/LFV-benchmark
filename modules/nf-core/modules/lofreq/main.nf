@@ -13,8 +13,9 @@ process LOFREQ {
     tuple val(meta), path(tumor_bam)
 
     val   fasta
+
     path  bed
-    path dbsnp_vcf
+    path  dbsnp_vcf
 
     output:
     tuple val(meta), path("*.vcf")   , emit: vcf_lofreq

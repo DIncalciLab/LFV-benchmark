@@ -103,6 +103,8 @@ panel_of_normals   = params.panel_of_normals
                      .collect()
                      : Channel.value([])
 
+dbsnp_vcf          = params.dbsnp_vcf          ?: Channel.empty()
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
@@ -170,6 +172,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                 input_tumor,
                 germline_resource,
                 panel_of_normals,
+                dbsnp_vcf,
                 params.fasta,
                 params.bed
             )

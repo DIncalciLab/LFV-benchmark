@@ -15,6 +15,7 @@ workflow VARIANT_CALLING {
     tumor_bam          // channel: [ val(meta), bam, bai ]
     germline_resources
     panel_of_normals
+    dbsnp_vcf
     fasta
     bed
 
@@ -60,7 +61,8 @@ workflow VARIANT_CALLING {
         normal_bam,
         tumor_bam,
         fasta,
-        bed
+        bed,
+        dbsnp_vcf
     )
 
     STRELKA(
