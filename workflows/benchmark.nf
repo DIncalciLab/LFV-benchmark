@@ -83,7 +83,7 @@ input_normal       = ( params.skip_normal_generation )
                      ? Channel
                      .fromFilePairs(params.input_normal + "/*.{bam,bai}", checkIfExists:true )
                      { file -> file.name.replaceAll(/.normal|.bam|.bai$/,'') }
-                     .map { name, files -> [meta: name, sample: *files ] }.view()
+                     .map { name, files -> [sample: name, *files ] }.view()
                      //.map { it -> [[sample: it.getSimpleName()], it] }.view()
                      : Channel.empty()
 
