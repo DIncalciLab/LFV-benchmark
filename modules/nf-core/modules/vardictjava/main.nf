@@ -1,6 +1,6 @@
 process VARDICTJAVA {
     tag "Variant calling using VarDict on BAMSurgeon spiked-in sample: ${meta.sample}"
-    label 'process_low'
+    label 'process_medium'
 
     // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
     conda (params.enable_conda ? "bioconda::vardict-java=1.8.2" : null)
@@ -9,8 +9,8 @@ process VARDICTJAVA {
         'quay.io/biocontainers/vardict-java:1.8.2--hdfd78af_3' }"
 
     input:
-    tuple val(meta), path(normal_bam), path(normal_bai)
-    tuple val(meta), path(tumor_bam),  path(tumor_bai)
+    tuple val(meta), path(tumor_bam),   path(tumor_bai)
+    tuple val(meta), path(normal_bam),  path(normal_bai), path(tumor_bam),  path(tumor_bai)
     
     val   fasta
     path  bed
@@ -26,6 +26,10 @@ process VARDICTJAVA {
     def args = task.ext.args ?: ''
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "vardict"
+    def mode = ( normal_bam && tumor_bam ) ?
+                "testsomatic.R | var2vcf_paired.pl -N ${meta.sa}|${normal_bam}" :
+                "teststrandbias.R | var2vcf_valid.pl -N ${prefix} -E"
+    def paired = ( normal_bam && tumor_bam ) ? "testsomatic.R" : "teststrandbias.R"
     def VERSION = '1.8.2' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
 
     def avail_mem = 3
@@ -37,16 +41,16 @@ process VARDICTJAVA {
 
 
 
-   if (params.high_sensitivity && params.tumor_only){
+   if ( params.high_sensitivity ){
    """
    vardict-java \
        -G ${fasta} \
        -N ${prefix} \
        -f 0.0001 \
-       -b $tumor_bam \
+       -b $bam \
        $args \
        $bed \
-           | teststrandbias.R \
+           | $paired \
                | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
 
    cat <<-END_VERSIONS > versions.yml
@@ -57,7 +61,7 @@ process VARDICTJAVA {
    """
    }
 
-   if (params.high_sensitivity && params.paired_mode){
+   if ( params.high_sensitivity ){
    """
    vardict-java \
        -G ${fasta} \

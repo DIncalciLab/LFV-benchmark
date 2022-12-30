@@ -1,4 +1,9 @@
-//tag "Variant calling on $bam"
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    VARIANT CALLING WORKFLOW
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+
 
 include { GATK4_MUTECT2 }               from '../../modules/nf-core/modules/gatk4/mutect2/main.nf'
 include { VARDICTJAVA }                 from '../../modules/nf-core/modules/vardictjava/main.nf'
@@ -11,7 +16,8 @@ include { FREEBAYES }                   from '../../modules/nf-core/modules/free
 
 workflow VARIANT_CALLING {
     take:
-    bam
+    tumor_only
+    paired
     germline_resource
     panel_of_normals
     dbsnp_vcf
@@ -29,14 +35,15 @@ workflow VARIANT_CALLING {
     ch_versions  = Channel.empty()
 
     VARDICTJAVA(
-        normal_bam,
-        tumor_bam,
+        tumor_only,
+        paired,
         fasta,
         bed
     )
 
     GATK4_MUTECT2(
-        bam,
+        tumor_only,
+        paired,
         germline_resource,
         panel_of_normals,
         fasta,
@@ -44,7 +51,8 @@ workflow VARIANT_CALLING {
     )
 
     SAMTOOLS_MPILEUP(
-        bam,
+        tumor_only,
+        paired,
         fasta
     )
 
@@ -55,20 +63,23 @@ workflow VARIANT_CALLING {
     )
 
     LOFREQ(
-        bam,
+        tumor_only,
+        paired,
         fasta,
         bed,
         dbsnp_vcf
     )
 
     STRELKA_SOMATIC(
-        bam,
+        tumor_only,
+        paired,
         fasta,
         bed
     )
 
     FREEBAYES(
-        bam,
+        tumor_only,
+        paired,
         fasta,
         bed
     )
