@@ -9,8 +9,7 @@ process VARSCAN2 {
         'quay.io/biocontainers/varscan:2.4.4--0' }"
 
     input:
-    tuple val(meta), path(mpileup_tumor)
-    tuple val(meta), path(mpileup_normal)
+    tuple val(meta), path(mpileup)
     //tuple val(meta), path(bai)
 
     val   fasta
@@ -27,8 +26,7 @@ process VARSCAN2 {
     def args = task.ext.args ?: ''
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "varscan"
-    def tumor_only = ( !mpileup_normal && mpileup_tumor ) ? "mpileup2cns $mpileup_tumor" : ""
-    def paired = ( mpileup_normal && mpileup_tumor ) ? "somatic $mpileup_normal $mpileup_tumor" : ""
+    def mpileup = ( mpileup.contains("normal") ) ? "somatic $mpileup" : "mpileup2cns $mpileup"
     def VERSION = '2.4.4' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
     
     def avail_mem = 3
@@ -40,7 +38,7 @@ process VARSCAN2 {
 
     if ( params.high_sensitivity ) {
     """
-    varscan $tumor_only \\
+    varscan $mpileup \\
         $paired  \\
         $args \\
         --variants > ${prefix}.vcf
@@ -54,7 +52,7 @@ process VARSCAN2 {
 
     if ( !params.high_sensitivity ){
     """
-    varscan $tumor_only $paired  \\
+    varscan $mpileup  \\
         --output-vcf \\
         --variants > ${prefix}.vcf
 

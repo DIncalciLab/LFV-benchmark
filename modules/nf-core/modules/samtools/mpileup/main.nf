@@ -8,13 +8,14 @@ process SAMTOOLS_MPILEUP {
         'quay.io/biocontainers/samtools:1.13--h8c37831_0' }"
     
     input:
-    tuple val(meta), path(bam), path(bai)
+    tuple val(meta), path(tumor_bam),  path(tumor_bai)
+    tuple val(meta), path(normal_bam), path(normal_bai)
     
     path  fasta
 
     output:
-    tuple val(meta), path("*.mpileup")             , emit: mpileup
-    path  "versions.yml"                           , emit: versions
+    tuple val(meta), path("*.mpileup")              , emit: mpileup
+    path  "versions.yml"                            , emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -22,6 +23,7 @@ process SAMTOOLS_MPILEUP {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "mpileup"
+    def bam = ( normal_bam && tumor_bam ) ? "$normal_bam $tumor_bam" : "$tumor_bam"
 
     """
     samtools mpileup \\
