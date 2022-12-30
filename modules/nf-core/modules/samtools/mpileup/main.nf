@@ -8,8 +8,7 @@ process SAMTOOLS_MPILEUP {
         'quay.io/biocontainers/samtools:1.13--h8c37831_0' }"
     
     input:
-    tuple val(meta), path(tumor_bam),  path(tumor_bai)
-    tuple val(meta), path(normal_bam), path(normal_bai)
+    tuple val(meta), path(normal_bam), path(normal_bai), path(tumor_bam),  path(tumor_bai)
     
     path  fasta
 

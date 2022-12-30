@@ -9,8 +9,7 @@ process LOFREQ {
         'quay.io/biocontainers/lofreq:2.1.5--py39hf2bf078_8' }"
 
     input:
-    tuple val(meta), path(normal_bam)
-    tuple val(meta), path(tumor_bam)
+    tuple val(meta), path(normal_bam), path(tumor_bam)
 
     val   fasta
 
@@ -43,7 +42,7 @@ process LOFREQ {
     lofreq call-parallel --pp-threads $task.cpus  \\
         -f $fasta \\
         -o ${prefix}.vcf \\
-        aln.bam
+        $tumor_bam
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

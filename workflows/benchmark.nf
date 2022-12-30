@@ -81,8 +81,9 @@ input_all          = !(params.skip_normal_generation)
 
 input_normal       = ( params.skip_normal_generation && !(params.skip_tumor_generation) )
                      ? Channel
-                     .fromPath(params.input_normal + "/*.bam")
-                     .map { it -> [[sample: it.getSimpleName()], it] }.view()
+                     .fromFilePairs(params.input_normal + "/*.{bam,bai}", checkIfExists:true )
+                     { file -> file.name.replaceAll(/.bam|.bai$/,'') }
+                     //.map { it -> [[sample: it.getSimpleName()], it] }.view()
                      : Channel.empty()
 
 input_tumor        = ( params.skip_normal_generation && params.skip_tumor_generation )
@@ -164,12 +165,15 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         )
     }
 
-    if ( params.skip_normal_generation && params.skip_tumor_generation
-         && !(params.skip_variant_calling) && params.paired_mode ){
+    if ( params.skip_normal_generation && params.skip_tumor_generation) {
+
+        tumor_normal_pair = input_normal.join(input_tumor)
+    }
+/*
+    if ( params.paired_mode ){
 
             VARIANT_CALLING(
-                input_normal,
-                input_tumor,
+                tumor_normal_pair,
                 germline_resource,
                 panel_of_normals,
                 dbsnp_vcf,

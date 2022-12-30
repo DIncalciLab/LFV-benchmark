@@ -11,8 +11,7 @@ include { FREEBAYES }                   from '../../modules/nf-core/modules/free
 
 workflow VARIANT_CALLING {
     take:
-    normal_bam
-    tumor_bam          // channel: [ val(meta), bam, bai ]
+    bam
     germline_resources
     panel_of_normals
     dbsnp_vcf
@@ -37,8 +36,7 @@ workflow VARIANT_CALLING {
     )
 
     GATK4_MUTECT2(
-        normal_bam,
-        tumor_bam,
+        bam,
         germline_resources,
         panel_of_normals,
         fasta,
@@ -46,8 +44,7 @@ workflow VARIANT_CALLING {
     )
 
     SAMTOOLS_MPILEUP(
-        normal_bam,
-        tumor_bam,
+        bam,
         fasta
     )
 
@@ -58,23 +55,20 @@ workflow VARIANT_CALLING {
     )
 
     LOFREQ(
-        normal_bam,
-        tumor_bam,
+        bam,
         fasta,
         bed,
         dbsnp_vcf
     )
 
-    STRELKA(
-        normal_bam,
-        tumor_bam,
+    STRELKA_SOMATIC(
+        bam,
         fasta,
         bed
     )
 
     FREEBAYES(
-        normal_bam,
-        tumor_bam,
+        bam,
         fasta,
         bed
     )
