@@ -1,5 +1,5 @@
 process SAMTOOLS_MPILEUP {
-    tag "Creation of VarScan input mpileup for sample $meta.sample"
+    tag "Creation of VarScan input mpileup for sample ${meta.sample_name}"
     label 'process_low'
 
     conda (params.enable_conda ? "bioconda::samtools=1.13" : null)
@@ -8,8 +8,9 @@ process SAMTOOLS_MPILEUP {
         'quay.io/biocontainers/samtools:1.13--h8c37831_0' }"
     
     input:
-    tuple val(meta), path(normal_bam), path(normal_bai), path(tumor_bam),  path(tumor_bai)
-    
+    tuple val(meta), val(tumor_only)
+    tuple val(meta), val(normal), val(tumor)
+
     path  fasta
 
     output:
@@ -22,7 +23,7 @@ process SAMTOOLS_MPILEUP {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "mpileup"
-    def bam = ( normal_bam && tumor_bam ) ? "$normal_bam $tumor_bam" : "$tumor_bam"
+    def bam = ( normal && tumor ) ? "${normal.bam} ${tumor.bam}" : "${tumor.bam}"
 
     """
     samtools mpileup \\

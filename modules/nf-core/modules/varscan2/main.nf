@@ -1,5 +1,5 @@
 process VARSCAN2 {
-    tag "Variant calling using VarScan2 on BAMSurgeon spiked-in sample: ${meta.sample}"
+    tag "Variant calling using VarScan2 on BAMSurgeon spiked-in sample: ${meta.sample_name}"
     label 'process_low'
 
     // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
@@ -26,7 +26,9 @@ process VARSCAN2 {
     def args = task.ext.args ?: ''
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "varscan"
-    def mpileup = ( mpileup.contains("normal") ) ? "somatic $mpileup" : "mpileup2cns $mpileup"
+    def mpileup = ( mpileup.contains("normal") )
+                    ? "somatic $mpileup"
+                    : "mpileup2cns $mpileup \\ --variants \\ --output-vcf"
     def VERSION = '2.4.4' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
     
     def avail_mem = 3
@@ -39,9 +41,8 @@ process VARSCAN2 {
     if ( params.high_sensitivity ) {
     """
     varscan $mpileup \\
-        $paired  \\
         $args \\
-        --variants > ${prefix}.vcf
+        > ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -52,9 +53,8 @@ process VARSCAN2 {
 
     if ( !params.high_sensitivity ){
     """
-    varscan $mpileup  \\
-        --output-vcf \\
-        --variants > ${prefix}.vcf
+    varscan $mpileup \\
+         > ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

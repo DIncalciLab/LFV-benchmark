@@ -1,5 +1,5 @@
 process LOFREQ {
-    tag "Variant calling using LoFreq on BAMSurgeon spiked-in sample: ${meta.sample}"
+    tag "Variant calling using LoFreq on BAMSurgeon spiked-in sample: ${meta.sample_name}"
     label 'process_medium'
 
     // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
@@ -9,6 +9,7 @@ process LOFREQ {
         'quay.io/biocontainers/lofreq:2.1.5--py39hf2bf078_8' }"
 
     input:
+    tuple val(meta), path(tumor_only)
     tuple val(meta), path(normal_bam), path(tumor_bam)
 
     val   fasta
@@ -27,6 +28,8 @@ process LOFREQ {
     def args = task.ext.args ?: ''
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "lofreq"
+    def bam    = (normal && tumor)
+                    ? "somatic -n ${normal.bam} -t ${tumor.bam}" : "call-parallel ${tumor_only.bam}"
     def dbsnp =  dbsnp_vcf ? "--d $dbsnp_vcf" : ""
     def VERSION = '2.1.5'
 
@@ -39,10 +42,10 @@ process LOFREQ {
 
     if (params.high_sensitivity) {
     """
-    lofreq call-parallel --pp-threads $task.cpus  \\
+    lofreq $bam \\
+        --pp-threads $task.cpus \\
         -f $fasta \\
-        -o ${prefix}.vcf \\
-        $tumor_bam
+        -o ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

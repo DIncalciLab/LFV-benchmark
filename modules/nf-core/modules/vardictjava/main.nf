@@ -1,5 +1,5 @@
 process VARDICTJAVA {
-    tag "Variant calling using VarDict on BAMSurgeon spiked-in sample: ${meta.sample}"
+    tag "Variant calling using VarDict on BAMSurgeon spiked-in sample: ${meta.sample_name}"
     label 'process_medium'
 
     // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
@@ -9,8 +9,8 @@ process VARDICTJAVA {
         'quay.io/biocontainers/vardict-java:1.8.2--hdfd78af_3' }"
 
     input:
-    tuple val(meta), path(tumor_bam),   path(tumor_bai)
-    tuple val(meta), path(normal_bam),  path(normal_bai), path(tumor_bam),  path(tumor_bai)
+    tuple val(meta), val(tumor_only)
+    tuple val(meta), val(normal), val(tumor)
     
     val   fasta
     path  bed
@@ -26,10 +26,10 @@ process VARDICTJAVA {
     def args = task.ext.args ?: ''
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "vardict"
-    def mode = ( normal_bam && tumor_bam ) ?
-                "testsomatic.R | var2vcf_paired.pl -N ${meta.sa}|${normal_bam}" :
+    def bam     = ( normal && tumor ) ? "${tumor.bam}|${normal.bam}" : "${tumor_only.bam}"
+    def mode = ( normal && tumor ) ?
+                "testsomatic.R | var2vcf_paired.pl -N ${prefix}_tumor|${prefix}_normal" :
                 "teststrandbias.R | var2vcf_valid.pl -N ${prefix} -E"
-    def paired = ( normal_bam && tumor_bam ) ? "testsomatic.R" : "teststrandbias.R"
     def VERSION = '1.8.2' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
 
     def avail_mem = 3
@@ -39,84 +39,42 @@ process VARDICTJAVA {
         avail_mem = task.memory.giga
     }
 
-
-
    if ( params.high_sensitivity ){
    """
    vardict-java \
        -G ${fasta} \
-       -N ${prefix} \
        -f 0.0001 \
+       -N ${prefix} \
        -b $bam \
        $args \
        $bed \
-           | $paired \
-               | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
+           | $mode  -f 0.0001 > ${prefix}.vcf
 
    cat <<-END_VERSIONS > versions.yml
    "${task.process}":
        vardict-java: $VERSION
        var2vcf_valid.pl: \$(echo \$(var2vcf_valid.pl -h | sed -n 2p | awk '{ print \$2 }'))
+       var2vcf_paired.pl: \$(echo \$(var2vcf_paired.pl -h | sed -n 2p | awk '{ print \$2 }'))
    END_VERSIONS
    """
    }
 
-   if ( params.high_sensitivity ){
+   if ( !params.high_sensitivity ) {
    """
    vardict-java \
        -G ${fasta} \
-       -N ${prefix} \
-       -f 0.0001 \
-       -b "${tumor_bam}|${normal_bam}" \
-       $args \
-       $bed \
-           | teststrandbias.R \
-               | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
-
-   cat <<-END_VERSIONS > versions.yml
-   "${task.process}":
-       vardict-java: $VERSION
-       var2vcf_valid.pl: \$(echo \$(var2vcf_valid.pl -h | sed -n 2p | awk '{ print \$2 }'))
-   END_VERSIONS
-   """
-   }
-
-   if ((!params.high_sensitivity) && params.tumor_only) {
-   """
-   vardict-java \
-       -G ${fasta} \
-       -N ${prefix} \
        -f 0.01 \
-       -b $tumor_bam \
-       $args \
-       $bed \
-           | teststrandbias.R \
-               | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
-
-   cat <<-END_VERSIONS > versions.yml
-   "${task.process}":
-       vardict-java: $VERSION
-       var2vcf_valid.pl: \$(echo \$(var2vcf_valid.pl -h | sed -n 2p | awk '{ print \$2 }'))
-   END_VERSIONS
-   """
-   }
-
-   if ((!params.high_sensitivity) && params.paired_mode){
-   """
-   vardict-java \
-       -G ${fasta} \
        -N ${prefix} \
-       -f 0.01 \
-       -b "${tumor_bam}|${normal_bam}" \
+       -b $bam \
        $args \
        $bed \
-           | teststrandbias.R \
-               | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
+           | $mode  -f 0.0001 > ${prefix}.vcf
 
    cat <<-END_VERSIONS > versions.yml
    "${task.process}":
        vardict-java: $VERSION
        var2vcf_valid.pl: \$(echo \$(var2vcf_valid.pl -h | sed -n 2p | awk '{ print \$2 }'))
+       var2vcf_paired.pl: \$(echo \$(var2vcf_paired.pl -h | sed -n 2p | awk '{ print \$2 }'))
    END_VERSIONS
    """
    }

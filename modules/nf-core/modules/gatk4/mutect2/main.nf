@@ -1,5 +1,5 @@
 process GATK4_MUTECT2 {
-    tag "Variant calling using Mutect2 on BAMSurgeon spiked-in sample: ${meta.sample}"
+    tag "Variant calling using Mutect2 on BAMSurgeon spiked-in sample: ${meta.sample_name}"
     label 'process_low'
 
     conda (params.enable_conda ? "bioconda::gatk4-4.2.3.0-1" : null)
@@ -8,8 +8,8 @@ process GATK4_MUTECT2 {
         'quay.io/biocontainers/gatk4:4.2.3.0--hdfd78af_1' }"
 
     input:
-    tuple val(meta), path(normal_bam), path(normal_bai)
-    tuple val(meta), path(tumor_bam), path(tumor_bai)
+    tuple val(meta), val(tumor_only)
+    tuple val(meta), val(normal), val(tumor)
     
     val fasta
     path bed
@@ -30,7 +30,9 @@ process GATK4_MUTECT2 {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "mutect2"
     //def inputs = input.collect{ "--input $it"}.join(" ")
-    def normal_sample = normal_bam ? "-I $normal_bam" : ""
+    def bam = (normal && tumor)
+               ? "-I ${tumor.bam} \\ -I ${normal.bam} \\ -normal ${meta.sample_name}_normal "
+               : "-I {tumor_only.bam}"
     //def interval_command = intervals ? "--intervals $intervals" : ""
     def pon_command = panel_of_normals ? "--panel-of-normals $panel_of_normals" : ""
     def gr_command = germline_resource ? "--germline-resource $germline_resource" : ""
@@ -46,7 +48,6 @@ process GATK4_MUTECT2 {
     """
     gatk --java-options "-Xmx${avail_mem}g" Mutect2 \\
         -I $bam \\
-        $normal_sample \\
         --reference $fasta \\
         $pon_command \\
         $gr_command \\
@@ -65,7 +66,6 @@ process GATK4_MUTECT2 {
     """
         gatk --java-options "-Xmx${avail_mem}g" Mutect2 \\
         -I $bam \\
-        $normal_sample \\
         --reference $fasta \\
         $pon_command \\
         $gr_command \\
