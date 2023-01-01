@@ -112,6 +112,14 @@ panel_of_normals   = params.panel_of_normals
 
 dbsnp_vcf          = params.dbsnp_vcf          ?: Channel.empty()
 
+germline_resource  = params.manta_candidate_small_indels
+                     ? Channel
+                     .fromPath(params.manta_candidate_small_indels)
+                     .collect()
+                     : Channel.value([])
+
+
+
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
