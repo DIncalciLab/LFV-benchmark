@@ -118,7 +118,23 @@ manta_candidate_small_indels  = params.manta_candidate_small_indels
                      .collect()
                      : Channel.value([])
 
+freebayes_samples = params.freebayes_samples
+                     ? Channel
+                     .fromPath(params.freebayes_samples)
+                     .collect()
+                     : Channel.value([])
 
+freebayes_population = params.freebayes_population
+                     ? Channel
+                     .fromPath(params.freebayes_population)
+                     .collect()
+                     : Channel.value([])
+
+freebayes_cnv = params.freebayes_cnv
+                     ? Channel
+                     .fromPath(params.freebayes_cnv)
+                     .collect()
+                     : Channel.value([])
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -188,6 +204,9 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             panel_of_normals,
             dbsnp_vcf,
             manta_candidate_small_indels,
+            freebayes_samples,
+            freebayes_population,
+            freebayes_cnv,
             params.fasta,
             params.bed
         )

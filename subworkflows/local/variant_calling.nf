@@ -22,6 +22,9 @@ workflow VARIANT_CALLING {
     panel_of_normals
     dbsnp_vcf
     manta_candidate_small_indels
+    freebayes_samples
+    freebayes_population
+    freebayes_cnv
     fasta
     bed
 
@@ -82,6 +85,9 @@ workflow VARIANT_CALLING {
     FREEBAYES(
         tumor_only,
         paired,
+        freebayes_samples,
+        freebayes_population,
+        freebayes_cnv,
         fasta,
         bed
     )

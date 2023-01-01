@@ -13,9 +13,9 @@ process FREEBAYES {
     path fasta
     path target_bed
     //path fasta_fai
-    //path samples
-    //path populations
-    //path cnv
+    path samples
+    path populations
+    path cnv
 
     output:
     tuple val(meta), path("*.vcf.gz"), emit: vcf
