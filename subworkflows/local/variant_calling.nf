@@ -97,7 +97,7 @@ workflow VARIANT_CALLING {
     vcf_mutect    = ch_mutect        //   channel: [ val(meta), vcf ]
     vcf_varscan   = ch_varscan       //   channel: [ val(meta), vcf ]
     vcf_lofreq    = ch_lofreq        //   channel: [ val(meta), vcf ]
-    vcf_strelka   = ch_strlka        //   channel: [ val(meta), vcf ]
+    vcf_strelka   = ch_strelka        //   channel: [ val(meta), vcf ]
     vcf_freebayes = ch_freebayes     //   channel: [ val(meta), vcf ]
 
     //versions  = ch_versions        //   path: versions.yml*/
