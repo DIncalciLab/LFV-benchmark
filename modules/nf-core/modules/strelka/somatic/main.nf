@@ -1,5 +1,5 @@
 process STRELKA_SOMATIC {
-    tag 'Variant calling using Strelka2 (somatic) on BAMSurgeon spiked-in sample: ${meta.sample}'
+    tag 'Variant calling using Strelka2 (somatic) on BAMSurgeon spiked-in sample: ${meta.sample_name}'
     label 'process_medium'
 
     conda (params.enable_conda ? "bioconda::strelka=2.9.10" : null)
@@ -8,11 +8,12 @@ process STRELKA_SOMATIC {
         'quay.io/biocontainers/strelka:2.9.10--h9ee0642_1' }"
 
     input:
-    tuple val(meta), path(input_normal), path(input_index_normal),           path(input_tumor),
-          path(input_index_tumor),       path(manta_candidate_small_indels), path(manta_candidate_small_indels_tbi),
-          path(target_bed),              path(target_bed_index)
+    tuple val(meta), path(normal),       path(tumor)
+          //path(manta_candidate_small_indels), path(manta_candidate_small_indels_tbi),
+          //path(target_bed),              path(target_bed_index)
     path  fasta
-    path  fai
+    path target_bed
+    //path  fai
 
     output:
     tuple val(meta), path("*.somatic_indels.vcf.gz")    , emit: vcf_indels
@@ -32,8 +33,8 @@ process STRELKA_SOMATIC {
     """
 
     configureStrelkaSomaticWorkflow.py \\
-        --tumor $input_tumor \\
-        --normal $input_normal \\
+        --tumor ${tumor.bam} \\
+        --normal ${normal.bam} \\
         --referenceFasta $fasta \\
         ${options_target_bed} \\
         ${options_manta} \\
