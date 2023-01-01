@@ -13,6 +13,7 @@ process STRELKA_SOMATIC {
     val(manta_candidate_small_indels)//, path(manta_candidate_small_indels_tbi),
           //path(target_bed),              path(target_bed_index)
     path  fasta
+    path  fasta_fai
     path target_bed
     //path  fai
 

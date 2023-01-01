@@ -26,6 +26,7 @@ workflow VARIANT_CALLING {
     freebayes_population
     freebayes_cnv
     fasta
+    fasta_fai
     bed
 
     main:
@@ -79,6 +80,7 @@ workflow VARIANT_CALLING {
         paired,
         manta_candidate_small_indels,
         fasta,
+        fasta_fai,
         bed
     )
 
