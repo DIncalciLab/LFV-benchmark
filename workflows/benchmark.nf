@@ -171,7 +171,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         )
     }
 
-    if ( !params.skip_variant_calling )
+    if ( !params.skip_variant_calling ){
 
         VARIANT_CALLING(
             input_tumor,
