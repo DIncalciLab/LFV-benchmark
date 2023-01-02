@@ -29,7 +29,7 @@ process STRELKA_SOMATIC {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.sample_name}"
-    def options_target_bed = target_bed ? "--callRegions ${target_bed}" : ""
+    def options_target_bed = target_bed ? "--callRegions ${target_bed}" : "" //disabled due to bug in strelka2
     def options_manta = manta_candidate_small_indels ? "--indelCandidates ${manta_candidate_small_indels}" : ""
     """
 
@@ -37,7 +37,6 @@ process STRELKA_SOMATIC {
         --tumorBam ${tumor_bam} \\
         --normalBam ${normal_bam} \\
         --referenceFasta $fasta \\
-        ${options_target_bed} \\
         ${options_manta} \\
         $args \\
         --runDir strelka
