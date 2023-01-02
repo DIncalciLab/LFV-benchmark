@@ -26,7 +26,6 @@ workflow VARIANT_CALLING {
     freebayes_population
     freebayes_cnv
     fasta
-    fasta_fai
     bed
 
     main:
