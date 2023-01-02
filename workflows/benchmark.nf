@@ -217,8 +217,34 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.fasta,
             params.bed
         )
-        VARIANT_CALLING.out.vcf.view()
-        /*
+
+        ch_variant_calling = VARIANT_CALLING
+            .out
+            .vcf
+            .map{ it -> [
+                sample: it[0].sample_name,
+                vcf_vardict: it[1],
+                vcf_mutect: it[2],
+                vcf_varscam: it[3],
+                vcf_freebayes: it[4],
+                vcf_lofreq: it[5],
+                vcf_strelka_indels: it[6],
+                vcf_strelka_snv: it[7]
+                ]
+            }
+            .collect()
+            .map{ it -> [
+                sample: it.sample,
+                vcf_vardict: it.vcf_vardict,
+                vcf_mutect: it.vcf_mutect,
+                vcf_varscan: it.vcf_varscan,
+                vcf_freebayes: it.vcf_freebayes,
+                vcf_lofreq: it.vcf_lofreq,
+                vcf_strelka_indels: it.vcf_strelka_indels,
+                vcf_strelka_snv: it.vcf_strelka_snv
+                ]
+            }
+/*
         vardict_ch = VARIANT_CALLING
             .out
             .vcf_vardict
