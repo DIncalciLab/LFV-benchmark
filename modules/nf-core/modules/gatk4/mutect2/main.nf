@@ -31,7 +31,7 @@ process GATK4_MUTECT2 {
     def prefix = task.ext.prefix ?: "mutect2"
     //def inputs = input.collect{ "--input $it"}.join(" ")
     def bam = (normal && tumor)
-               ? "-I ${tumor.tumor_bam} -I ${normal.normal_bam} -normal ${meta.sample_name}"
+               ? "-I ${meta.sample_name}_tumor.bam -I ${meta.sample_name}_normal.bam -normal ${meta.sample_name}_normal"
                : "-I {tumor_only.tumor_bam}"
     //def interval_command = intervals ? "--intervals $intervals" : ""
     def pon_command = panel_of_normals ? "--panel-of-normals $panel_of_normals" : ""
@@ -44,6 +44,30 @@ process GATK4_MUTECT2 {
         avail_mem = task.memory.giga
     }
 
+    if (normal && tumor){
+
+    """
+    java -jar ${params.picardjar} \\
+        AddOrReplaceReadGroups I=${normal.normal_bam} \
+        O=${meta.sample_name}_normal.bam \\
+        VALIDATION_STRINGENCY=LENIENT \\
+        RGID=${meta.sample_name}_normal \\
+        RGLB=${meta.sample_name}_normal \\
+        RGPL=${meta.sample_name}_normal \\
+        RGPU=${meta.sample_name}_normal \\
+        RGSM=${meta.sample_name}_normal
+
+    java -jar ${params.picardjar} \\
+        AddOrReplaceReadGroups I=${tumor.tumor_bam} \
+        O=${meta.sample_name}_tumor.bam \\
+        VALIDATION_STRINGENCY=LENIENT \\
+        RGID=${meta.sample_name}_tumor \\
+        RGLB=${meta.sample_name}_tumor \\
+        RGPL=${meta.sample_name}_tumor \\
+        RGPU=${meta.sample_name}_tumor \\
+        RGSM=${meta.sample_name}_tumor
+    """
+    }
     if (params.high_sensitivity){
     """
     gatk --java-options "-Xmx${avail_mem}g" Mutect2 \\
