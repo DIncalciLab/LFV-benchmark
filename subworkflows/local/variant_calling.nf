@@ -80,7 +80,6 @@ workflow VARIANT_CALLING {
         paired,
         manta_candidate_small_indels,
         fasta,
-        fasta_fai,
         bed
     )
 

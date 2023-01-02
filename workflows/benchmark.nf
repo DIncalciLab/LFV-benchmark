@@ -136,7 +136,6 @@ freebayes_cnv = params.freebayes_cnv
                      .collect()
                      : Channel.value([])
 
-fasta_fai          = params.fasta_fai          ? Channel.fromPath(params.fasta_fai).collect()                : Channel.empty()
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -210,7 +209,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             freebayes_population,
             freebayes_cnv,
             params.fasta,
-            params.fasta_fai,
             params.bed
         )
 
