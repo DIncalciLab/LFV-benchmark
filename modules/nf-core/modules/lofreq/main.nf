@@ -10,7 +10,7 @@ process LOFREQ {
 
     input:
     tuple val(meta), path(tumor_only)
-    tuple val(meta), path(normal), path(tumor)
+    tuple val(meta), path(normal_bam), path(normal_bai), path(tumor_bam), path(tumor_bai)
 
     val   fasta
 
@@ -29,7 +29,7 @@ process LOFREQ {
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "lofreq"
     def bam    = (normal && tumor)
-                    ? "somatic -n ${normal.normal_bam} -t ${tumor.tumor_bam}" : "call-parallel ${tumor_only.tumor_bam}"
+                    ? "somatic -n ${normal_bam} -t ${tumor_bam}" : "call-parallel ${tumor_only.tumor_bam}"
     def dbsnp =  dbsnp_vcf ? "--d $dbsnp_vcf" : ""
     def VERSION = '2.1.5'
 

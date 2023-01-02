@@ -9,10 +9,10 @@ process STRELKA_SOMATIC {
 
     input:
     tuple val(meta), val(tumor_only)
-    tuple val(meta), val(normal),       val(tumor)
-    val(manta_candidate_small_indels)//, path(manta_candidate_small_indels_tbi),
+    tuple val(meta), path(normal_bam), path(normal_bai),       path(tumor_bam), path(tumor_bai)
+    path(manta_candidate_small_indels)//, path(manta_candidate_small_indels_tbi),
           //path(target_bed),              path(target_bed_index)
-    val  fasta
+    val fasta
     val target_bed
     //path  fai
 
@@ -28,14 +28,14 @@ process STRELKA_SOMATIC {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.sample_name}"
     def options_target_bed = target_bed ? "--callRegions ${target_bed}" : ""
     def options_manta = manta_candidate_small_indels ? "--indelCandidates ${manta_candidate_small_indels}" : ""
     """
 
     configureStrelkaSomaticWorkflow.py \\
-        --tumor ${tumor.tumor_bam} \\
-        --normal ${normal.normal_bam} \\
+        --tumor ${tumor_bam} \\
+        --normal ${normal_bam} \\
         --referenceFasta $fasta \\
         ${options_target_bed} \\
         ${options_manta} \\

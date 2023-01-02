@@ -9,7 +9,7 @@ process SAMTOOLS_MPILEUP {
     
     input:
     tuple val(meta), val(tumor_only)
-    tuple val(meta), val(normal), val(tumor)
+    tuple val(meta), path(normal_bam), path(normal_bai), path(tumor_bam), path(tumor_bai)
 
     path  fasta
 
@@ -23,7 +23,7 @@ process SAMTOOLS_MPILEUP {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "mpileup"
-    def bam = ( normal && tumor ) ? "${normal.normal_bam} ${tumor.tumor_bam}" : "${tumor.tumor_bam}"
+    def bam = ( normal && tumor ) ? "${normal_bam} ${tumor_bam}" : "${tumor.tumor_bam}"
 
     """
     samtools mpileup \\
