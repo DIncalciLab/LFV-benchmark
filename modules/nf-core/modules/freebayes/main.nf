@@ -10,12 +10,13 @@ process FREEBAYES {
     input:
     tuple val(meta), val(tumor_only)
     tuple val(meta), val(normal), val(tumor)//, path(input_2), path(input_2_index), path(target_bed)
-    path fasta
-    path target_bed
-    //path fasta_fai
     path samples
     path populations
     path cnv
+    path fasta
+    path target_bed
+    //path fasta_fai
+
 
     output:
     tuple val(meta), path("*.vcf.gz"), emit: vcf
@@ -26,7 +27,7 @@ process FREEBAYES {
 
     script:
     def args = task.ext.args ?: ''
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.isample_name}"
     def input            = (tumor && normal)       ? "${tumor.tumor_bam} ${normal.normal_bam}"        : "${tumor_only.tumor_bam}"
     def targets_file     = target_bed     ? "--target ${target_bed}"       : ""
     def samples_file     = samples        ? "--samples ${samples}"         : ""
