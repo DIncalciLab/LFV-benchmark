@@ -2,6 +2,8 @@ process ADJUST_BAM_RG {
     tag "Adjust read groups for input BAM: ${meta.sample_name}"
     label 'process_low'
 
+    container "aldosr/bamsurgeon:1.3-custom"
+
     input:
     tuple val(meta), val(normal), val(tumor)
 
