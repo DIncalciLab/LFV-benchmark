@@ -243,7 +243,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                 vcf_strelka_indels: it.vcf_strelka_indels,
                 vcf_strelka_snv: it.vcf_strelka_snv
                 ]
-            }
+            }.view()
 /*
         vardict_ch = VARIANT_CALLING
             .out
