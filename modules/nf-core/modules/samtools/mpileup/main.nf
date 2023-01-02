@@ -23,7 +23,7 @@ process SAMTOOLS_MPILEUP {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "mpileup"
-    def bam = ( normal && tumor ) ? "${normal_bam} ${tumor_bam}" : "${tumor.tumor_bam}"
+    def bam = ( normal_bam && tumor_bam ) ? "${normal_bam} ${tumor_bam}" : "${tumor.tumor_bam}"
 
     """
     samtools mpileup \\
