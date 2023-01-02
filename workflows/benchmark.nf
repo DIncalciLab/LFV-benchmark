@@ -196,6 +196,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         )
     }
 
+
+
     if ( !params.skip_variant_calling ){
 
         VARIANT_CALLING(
