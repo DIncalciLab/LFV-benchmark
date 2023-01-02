@@ -17,7 +17,7 @@ include { FREEBAYES }                   from '../../modules/nf-core/modules/free
 workflow VARIANT_CALLING {
     take:
     tumor_only
-    tuple val(meta), path(paired)
+    paired
     germline_resource
     panel_of_normals
     dbsnp_vcf
@@ -108,7 +108,7 @@ workflow VARIANT_CALLING {
     //ch_freebayes = ch_varscan.mix(VARSCAN2.out.vcf_varscan)
 
     emit:
-    vcf =  [meta, ch_output]
+    vcf =  ch_output
     //vcf_vardict   = ch_vardict       //   channel: [ val(meta), vcf ]
     //vcf_mutect    = ch_mutect        //   channel: [ val(meta), vcf ]
     //vcf_varscan   = ch_varscan       //   channel: [ val(meta), vcf ]
