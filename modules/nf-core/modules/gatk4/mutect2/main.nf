@@ -10,11 +10,11 @@ process GATK4_MUTECT2 {
     input:
     tuple val(meta), val(tumor_only)
     tuple val(meta), val(normal), val(tumor)
-    
-    val fasta
-    path bed
     path panel_of_normals
     path germline_resource
+    val fasta
+    path bed
+
 
     output:
     tuple val(meta), path("*.vcf")        , emit: vcf_mutect
@@ -47,7 +47,7 @@ process GATK4_MUTECT2 {
     if (params.high_sensitivity){
     """
     gatk --java-options "-Xmx${avail_mem}g" Mutect2 \\
-        -I $bam \\
+        $bam \\
         --reference $fasta \\
         $pon_command \\
         $gr_command \\
