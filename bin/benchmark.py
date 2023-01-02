@@ -313,13 +313,15 @@ def main():
 
     args = parser.parse_args()
 
-    # Load pseudo-germinal variants (generated from NEAT)
-    df_neat = load_germinal(args.neat)
-    df_neat.to_csv("neat_variants.txt", sep="\t")
+    if (args.normal)
 
-    # Load ground-truth variants (spiked-in from BAMSurgeon)
-    df_bamsurgeon = load_ground_truth(args.bamsurgeon)
-    df_bamsurgeon.to_csv("bamsurgeon_variants.txt", sep="\t")
+        # Load pseudo-germinal variants (generated from NEAT)
+        df_normal = load_germinal(args.normal)
+        df_normal.to_csv("germinal_variants.txt", sep="\t")
+
+    # Load ground-truth somatic variants (spiked-in from BAMSurgeon)
+    df_somatic = load_ground_truth(args.somatic)
+    df_somatic.to_csv("somatic_spikein_variants.txt", sep="\t")
 
     # Load VarDict variants
     df_vardict_snv, df_vardict_indel = load_vardict(args.vardict)
@@ -337,20 +339,20 @@ def main():
     df_varscan_tot.to_csv("varscan_variants.txt", sep="\t")
 
     # Calculate spiked-in variants for each caller
-    df_spikein_vardict, df_spikein_vardict_germinal = calculate_spikein(df_vardict_tot, df_bamsurgeon, df_neat)
-    df_spikein_mutect, df_spikein_mutect_germinal = calculate_spikein(df_mutect_tot, df_bamsurgeon, df_neat)
-    df_spikein_varscan, df_spikein_varscan_germinal = calculate_spikein(df_varscan_tot, df_bamsurgeon, df_neat)
+    df_spikein_vardict, df_spikein_vardict_germinal = calculate_spikein(df_vardict_tot, df_somatic, df_normal)
+    df_spikein_mutect, df_spikein_mutect_germinal = calculate_spikein(df_mutect_tot, df_somatic, df_normal)
+    df_spikein_varscan, df_spikein_varscan_germinal = calculate_spikein(df_varscan_tot, df_somatic, df_normal)
 
     # Calculate performance for each caller
     df_performance_vardict = calculate_performance(df_vardict_tot, df_spikein_vardict, df_spikein_vardict_germinal,
-                                                   df_neat)
+                                                   df_normal)
     df_performance_vardict.to_csv("vardict_performance.txt", sep="\t")
 
-    df_performance_mutect = calculate_performance(df_mutect_tot, df_spikein_mutect, df_spikein_mutect_germinal, df_neat)
+    df_performance_mutect = calculate_performance(df_mutect_tot, df_spikein_mutect, df_spikein_mutect_germinal, df_normal)
     df_performance_mutect.to_csv("mutect_performance.txt", sep="\t")
 
     df_performance_varscan = calculate_performance(df_varscan_tot, df_spikein_varscan, df_spikein_varscan_germinal,
-                                                   df_neat)
+                                                   df_normal)
     df_performance_varscan.to_csv("varscan_performance.txt", sep="\t")
 
     # Plot performance

@@ -203,7 +203,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             tumor_normal_pair,
             params.picardjar
         )
-        ADJUST_BAM_RG.out.paired_bam.view()
+        ADJUST_BAM_RG.out.paired_bam
         VARIANT_CALLING(
             input_tumor,
             ADJUST_BAM_RG.out.paired_bam,
@@ -259,7 +259,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                 sample: it.sample,
                 vcf: it.vcf
             ]}
-/*
+/*  if ( tumor_normal_pair)
         GENERATE_PLOTS(
             neat_ch.vcf,
             bamsurgeon_ch.vcf,
