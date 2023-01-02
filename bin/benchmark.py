@@ -300,9 +300,9 @@ def plot_performance(vardict, mutect, varscan):
 def main():
     parser = argparse.ArgumentParser(description='Generate plots for artificial mutation benchmark')
 
-    parser.add_argument('-n', '--neat', required=True, nargs='+', help='Pseudo-germinal variants generated from NEAT')
+    parser.add_argument('-n', '--normal', required=False, nargs='+', help='Normal samples')
 
-    parser.add_argument('-b', '--bamsurgeon', required=True, nargs='+', help='Mutations spiked-in from BamSurgeon')
+    parser.add_argument('-b', '--somatic', required=True, nargs='+', help='Somatic samples')
 
     parser.add_argument('-v', '--vardict', required=True, nargs='+',
                         help='VarDict VCF with spiked-in artificial mutations')
