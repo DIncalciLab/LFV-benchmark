@@ -17,7 +17,7 @@ include { FREEBAYES }                   from '../../modules/nf-core/modules/free
 workflow VARIANT_CALLING {
     take:
     tumor_only
-    paired
+    tuple val(meta), path(paired)
     germline_resource
     panel_of_normals
     dbsnp_vcf
