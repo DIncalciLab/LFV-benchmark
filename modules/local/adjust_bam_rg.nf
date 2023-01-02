@@ -6,6 +6,7 @@ process ADJUST_BAM_RG {
 
     input:
     tuple val(meta), val(normal), val(tumor)
+    path picardjar
 
     output:
     tuple val(meta), val("*_normal.bam"), val("*_normal.bam.bai"), val("*_tumor.bam"), val("*_tumor.bam.bai"), emit: paired_bam
@@ -16,7 +17,7 @@ process ADJUST_BAM_RG {
     script:
 
     """
-    java -jar ${params.picardjar} \\
+    java -jar ${picardjar} \\
         AddOrReplaceReadGroups I=${normal.normal_bam} \
         O=${meta.sample_name}_normal \\
         VALIDATION_STRINGENCY=LENIENT \\
@@ -28,7 +29,7 @@ process ADJUST_BAM_RG {
 
     samtools index ${meta.sample_name}_normal.bam
 
-    java -jar ${params.picardjar} \\
+    java -jar ${picardjar} \\
         AddOrReplaceReadGroups I=${tumor.tumor_bam} \
         O=${meta.sample_name}_tumor \\
         VALIDATION_STRINGENCY=LENIENT \\
