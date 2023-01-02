@@ -300,21 +300,26 @@ def plot_performance(vardict, mutect, varscan):
 def main():
     parser = argparse.ArgumentParser(description='Generate plots for artificial mutation benchmark')
 
-    parser.add_argument('-n', '--normal', required=False, nargs='+', help='Normal samples')
+    parser.add_argument('-n', '--normal', nargs='+', help='Normal samples')
 
-    parser.add_argument('-b', '--somatic', required=True, nargs='+', help='Somatic samples')
+    parser.add_argument('-b', '--somatic', nargs='+', help='Somatic samples')
 
-    parser.add_argument('-v', '--vardict', required=True, nargs='+',
-                        help='VarDict VCF with spiked-in artificial mutations')
-    parser.add_argument('-m', '--mutect', required=True, nargs='+',
-                        help='Mutect2 VCF with spiked-in artificial mutations')
-    parser.add_argument('-s', '--varscan', required=True, nargs='+',
-                        help='VarScan2 VCF with spiked-in artificial mutations')
+    parser.add_argument('-v', '--vardict', nargs='+',
+                        help='VarDict calls')
+    parser.add_argument('-m', '--mutect', nargs='+',
+                        help='Mutect2 calls')
+    parser.add_argument('-s', '--varscan', nargs='+',
+                        help='VarScan2 calls')
+    parser.add_argument('-f', '--freebayes', nargs='+',
+                        help='FreeBayes calls')
+    parser.add_argument('-k', '--strelka', required=True, nargs='+',
+                        help='Strelka2 calls')
+    parser.add_argument('-lofreq', '--lofreq', required=True, nargs='+',
+                        help='LoFreq calls')
 
     args = parser.parse_args()
 
-    if (args.normal)
-
+    if (args.normal):
         # Load pseudo-germinal variants (generated from NEAT)
         df_normal = load_germinal(args.normal)
         df_normal.to_csv("germinal_variants.txt", sep="\t")

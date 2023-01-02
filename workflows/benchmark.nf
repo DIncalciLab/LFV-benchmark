@@ -259,10 +259,25 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                 sample: it.sample,
                 vcf: it.vcf
             ]}
-/*  if ( tumor_normal_pair)
+
+         freebayes_ch = VARIANT_CALLING
+            .out
+            .vcf_freebayes
+            .map{ it -> [
+                sample: it[0].sample,
+                vcf:    it[1]
+                ]
+                }
+            .collect()
+            .map{ it -> [
+                sample: it.sample,
+                vcf: it.vcf
+            ]}
+
         GENERATE_PLOTS(
             neat_ch.vcf,
             bamsurgeon_ch.vcf,
+
             vardict_ch.vcf,
             mutect_ch.vcf,
             varscan_ch.vcf

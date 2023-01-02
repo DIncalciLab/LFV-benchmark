@@ -92,21 +92,28 @@ workflow VARIANT_CALLING {
         bed
     )
 
+    ch_output = [ch_vardict.mix(VARDICTJAVA.out.vcf_vardict),
+                 ch_mutect.mix(GATK4_MUTECT2.out.vcf_mutect),
+                 ch_varscan.mix(VARSCAN2.out.vcf_varscan),
+                 ch_freebayes.mix(FREEBAYES.out.vcf_freebayes),
+                 ch_lofreq.mix(LOFREQ.out.vcf_lofreq),
+                 ch_strelka.mix(STRELKA_SOMATIC.out.vcf_strelka)]
 
-    ch_vardict   = ch_vardict.mix(VARDICTJAVA.out.vcf_vardict)
-    ch_mutect    = ch_mutect.mix(GATK4_MUTECT2.out.vcf_mutect)
-    ch_varscan   = ch_varscan.mix(VARSCAN2.out.vcf_varscan)
-    ch_lofreq    = ch_vardict.mix(VARDICTJAVA.out.vcf_vardict)
-    ch_strelka   = ch_mutect.mix(GATK4_MUTECT2.out.vcf_mutect)
-    ch_freebayes = ch_varscan.mix(VARSCAN2.out.vcf_varscan)
+    //ch_vardict   = ch_vardict.mix(VARDICTJAVA.out.vcf_vardict)
+    //ch_mutect    = ch_mutect.mix(GATK4_MUTECT2.out.vcf_mutect)
+    //ch_varscan   = ch_varscan.mix(VARSCAN2.out.vcf_varscan)
+    //ch_lofreq    = ch_vardict.mix(VARDICTJAVA.out.vcf_vardict)
+    //ch_strelka   = ch_mutect.mix(GATK4_MUTECT2.out.vcf_mutect)
+    //ch_freebayes = ch_varscan.mix(VARSCAN2.out.vcf_varscan)
 
     emit:
-    vcf_vardict   = ch_vardict       //   channel: [ val(meta), vcf ]
-    vcf_mutect    = ch_mutect        //   channel: [ val(meta), vcf ]
-    vcf_varscan   = ch_varscan       //   channel: [ val(meta), vcf ]
-    vcf_lofreq    = ch_lofreq        //   channel: [ val(meta), vcf ]
-    vcf_strelka   = ch_strelka        //   channel: [ val(meta), vcf ]
-    vcf_freebayes = ch_freebayes     //   channel: [ val(meta), vcf ]
+    tuple val(meta), val(ch_output)
+    //vcf_vardict   = ch_vardict       //   channel: [ val(meta), vcf ]
+    //vcf_mutect    = ch_mutect        //   channel: [ val(meta), vcf ]
+    //vcf_varscan   = ch_varscan       //   channel: [ val(meta), vcf ]
+    //vcf_lofreq    = ch_lofreq        //   channel: [ val(meta), vcf ]
+    //vcf_strelka   = ch_strelka        //   channel: [ val(meta), vcf ]
+    //vcf_freebayes = ch_freebayes     //   channel: [ val(meta), vcf ]
 
     //versions  = ch_versions        //   path: versions.yml*/
 }

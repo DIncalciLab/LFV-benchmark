@@ -28,7 +28,7 @@ process VARDICTJAVA {
     def prefix = task.ext.prefix ?: "vardict"
     def bam     = ( normal_bam && tumor_bam ) ? "'${tumor_bam}|${normal_bam}'" : "${tumor_only.tumor_bam}"
     def mode = ( normal_bam && tumor_bam ) ?
-                "testsomatic.R | var2vcf_paired.pl -N ${prefix}_tumor|${prefix}_normal" :
+                "testsomatic.R | var2vcf_paired.pl -N '${prefix}_tumor|${prefix}_normal'" :
                 "teststrandbias.R | var2vcf_valid.pl -N ${prefix} -E"
     def VERSION = '1.8.2' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
 
