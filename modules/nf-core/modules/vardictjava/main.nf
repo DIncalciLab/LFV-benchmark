@@ -68,7 +68,7 @@ process VARDICTJAVA {
        -b $bam \
        $args \
        $bed \
-           | $mode  -f 0.0001 > ${prefix}.vcf
+           | $mode  -f 0.01 > ${prefix}.vcf
 
    cat <<-END_VERSIONS > versions.yml
    "${task.process}":
