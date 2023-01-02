@@ -95,7 +95,7 @@ input_tumor        = ( params.skip_normal_generation && params.skip_tumor_genera
                      : Channel.empty()
 
 tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation )
-                     ? (input_normal.join(input_tumor, failOnMismatch: true)).view()
+                     ? (input_normal.join(input_tumor, failOnMismatch: true))
                      : Channel.empty()
 
 germline_resource  = params.germline_resource
@@ -196,13 +196,15 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         )
     }
 
-
-
     if ( !params.skip_variant_calling ){
 
+        ADJUST_BAM_RG(
+            tumor_normal_pair
+        )
+        ADJUST_BAM_RG.out.paired_bam.view()
         VARIANT_CALLING(
             input_tumor,
-            tumor_normal_pair,
+            ADJUST_BAM_RG.out.paired_bam,
             germline_resource,
             panel_of_normals,
             dbsnp_vcf,
