@@ -107,7 +107,7 @@ workflow VARIANT_CALLING {
     //ch_freebayes = ch_varscan.mix(VARSCAN2.out.vcf_varscan)
 
     emit:
-    vcf: tuple val(meta), val(ch_output)
+    vcf: [val(meta), val(ch_output)]
     //vcf_vardict   = ch_vardict       //   channel: [ val(meta), vcf ]
     //vcf_mutect    = ch_mutect        //   channel: [ val(meta), vcf ]
     //vcf_varscan   = ch_varscan       //   channel: [ val(meta), vcf ]
