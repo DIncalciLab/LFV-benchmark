@@ -34,8 +34,8 @@ process STRELKA_SOMATIC {
     """
 
     configureStrelkaSomaticWorkflow.py \\
-        --tumor ${tumor_bam} \\
-        --normal ${normal_bam} \\
+        --tumorBam ${tumor_bam} \\
+        --normalBam ${normal_bam} \\
         --referenceFasta $fasta \\
         ${options_target_bed} \\
         ${options_manta} \\
