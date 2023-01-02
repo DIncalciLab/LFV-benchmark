@@ -97,7 +97,8 @@ workflow VARIANT_CALLING {
                  ch_varscan.mix(VARSCAN2.out.vcf_varscan),
                  ch_freebayes.mix(FREEBAYES.out.vcf_freebayes),
                  ch_lofreq.mix(LOFREQ.out.vcf_lofreq),
-                 ch_strelka.mix(STRELKA_SOMATIC.out.vcf_strelka)]
+                 ch_strelka.mix(STRELKA_SOMATIC.out.vcf_strelka_snvs),
+                 ch_strelka.mix(STRELKA_SOMATIC.out.vcf_strelka_indels)]
 
     //ch_vardict   = ch_vardict.mix(VARDICTJAVA.out.vcf_vardict)
     //ch_mutect    = ch_mutect.mix(GATK4_MUTECT2.out.vcf_mutect)
