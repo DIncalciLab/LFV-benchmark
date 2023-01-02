@@ -28,11 +28,36 @@ process FREEBAYES {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.isample_name}"
-    def input            = (tumor && normal)       ? "${tumor.tumor_bam} ${normal.normal_bam}"        : "${tumor_only.tumor_bam}"
+    def input            = (tumor && normal)       ? "${meta.sample_name}_tumorl.bam ${meta.sample_name}_normal.bam"        : "${tumor_only.tumor_bam}"
     def targets_file     = target_bed     ? "--target ${target_bed}"       : ""
     def samples_file     = samples        ? "--samples ${samples}"         : ""
     def populations_file = populations    ? "--populations ${populations}" : ""
     def cnv_file         = cnv            ? "--cnv-map ${cnv}"             : ""
+
+    if (normal && tumor){
+
+    """
+    java -jar ${params.picardjar} \\
+        AddOrReplaceReadGroups I=${normal.normal_bam} \
+        O=${meta.sample_name}_normal.bam \\
+        VALIDATION_STRINGENCY=LENIENT \\
+        RGID=${meta.sample_name}_normal \\
+        RGLB=${meta.sample_name}_normal \\
+        RGPL=${meta.sample_name}_normal \\
+        RGPU=${meta.sample_name}_normal \\
+        RGSM=${meta.sample_name}_normal
+
+    java -jar ${params.picardjar} \\
+        AddOrReplaceReadGroups I=${tumor.tumor_bam} \
+        O=${meta.sample_name}_tumor.bam \\
+        VALIDATION_STRINGENCY=LENIENT \\
+        RGID=${meta.sample_name}_tumor \\
+        RGLB=${meta.sample_name}_tumor \\
+        RGPL=${meta.sample_name}_tumor \\
+        RGPU=${meta.sample_name}_tumor \\
+        RGSM=${meta.sample_name}_tumor
+    """
+    }
 
     """
     freebayes \\
