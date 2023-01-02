@@ -203,7 +203,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             tumor_normal_pair,
             params.picardjar
         )
-        ADJUST_BAM_RG.out.paired_bam
+
         VARIANT_CALLING(
             input_tumor,
             ADJUST_BAM_RG.out.paired_bam,
@@ -217,7 +217,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.fasta,
             params.bed
         )
-
+        VARIANT_CALLING.out.vcf.view()
+        /*
         vardict_ch = VARIANT_CALLING
             .out
             .vcf_vardict
