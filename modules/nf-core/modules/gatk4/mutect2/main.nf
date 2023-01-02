@@ -65,7 +65,7 @@ process GATK4_MUTECT2 {
     if (!params.high_sensitivity){
     """
         gatk --java-options "-Xmx${avail_mem}g" Mutect2 \\
-        -I $bam \\
+        $bam \\
         --reference $fasta \\
         $pon_command \\
         $gr_command \\
