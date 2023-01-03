@@ -19,11 +19,10 @@ process LOFREQ {
 
     output:
     //tuple val(meta),
-    path("*_somatic_final.snvs.vcf.gz")   , emit: vcf_lofreq_snv
-    path("*_somatic_final_minus-dbsnp.snvs.vcf.gz")   , emit: vcf_lofreq_snv_minus_dbsnp, optional: true
-    path("*_minus-dbsnp.snvs.vcf.gz"), emit: vcf_lofreq_indels_minus_dbsnp, optional: true
+    path("*_somatic_final.snvs.vcf.gz")   , emit: vcf_lofreq_snvs
+    path("*_somatic_final_minus-dbsnp.snvs.vcf.gz")   , emit: vcf_lofreq_snvs_minus_dbsnp, optional: true
     path("*_somatic_final.indels.vcf.gz"), emit: vcf_lofreq_indels, optional: true
-    path("*_somatic_final_minus-dbsnp.indels.vcf.gz"), emit: vcf_lofreq_indels, optional: true
+    path("*_somatic_final_minus-dbsnp.indels.vcf.gz"), emit: vcf_lofreq_indels_minus_dbsnp, optional: true
     path "versions.yml"              , emit: versions
 
     when:

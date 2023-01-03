@@ -96,7 +96,8 @@ workflow VARIANT_CALLING {
                 .mix(   GATK4_MUTECT2.out.vcf_mutect,
                         VARSCAN2.out.vcf_varscan,
                         FREEBAYES.out.vcf_freebayes,
-                        LOFREQ.out.vcf_lofreq,
+                        LOFREQ.out.vcf_lofreq_snvs,
+                        LOFREQ.out.vcf_lofreq_indels,
                         STRELKA_SOMATIC.out.vcf_strelka_snvs,
                         STRELKA_SOMATIC.out.vcf_strelka_indels )
 
