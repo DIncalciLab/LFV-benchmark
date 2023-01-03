@@ -28,14 +28,6 @@ workflow VARIANT_CALLING {
     bed
 
     main:
-    ch_vardict   = Channel.empty()
-    ch_mutect    = Channel.empty()
-    ch_varscan   = Channel.empty()
-    ch_lofreq    = Channel.empty()
-    ch_strelka   = Channel.empty()
-    ch_freebayes = Channel.empty()
-
-    ch_versions  = Channel.empty()
 
     VARDICTJAVA(
         tumor_only,
@@ -64,9 +56,8 @@ workflow VARIANT_CALLING {
         fasta,
         bed
     )
-    prova = paired.view()
 
-    LOFREQ (
+    LOFREQ(
         tumor_only,
         paired,
         fasta,
