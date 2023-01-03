@@ -207,7 +207,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         )
 
     LOFREQ (
-        tumor_only,
+        input_tumor,
         ADJUST_BAM_RG.out.paired_bam,
         params.fasta,
         params.bed,
