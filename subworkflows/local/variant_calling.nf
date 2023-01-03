@@ -20,7 +20,6 @@ workflow VARIANT_CALLING {
     paired
     germline_resource
     panel_of_normals
-    dbsnp_vcf
     manta_candidate_small_indels
     freebayes_samples
     freebayes_population
@@ -70,8 +69,7 @@ workflow VARIANT_CALLING {
         tumor_only,
         paired,
         fasta,
-        bed,
-        dbsnp_vcf
+        bed
     )
 
     STRELKA_SOMATIC(

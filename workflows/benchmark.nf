@@ -54,8 +54,6 @@ include { BAMSURGEON }         from '../modules/local/bamsurgeon.nf'
 include { ADJUST_BAM_RG }      from '../modules/local/adjust_bam_rg.nf'
 include { VARIANT_CALLING }    from '../subworkflows/local/variant_calling.nf'
 include { GENERATE_PLOTS  }    from '../modules/local/generate_plots.nf'
-include { LOFREQ }                      from '../modules/nf-core/modules/lofreq/main.nf'
-
 //include { INPUT_CHECK } from '../subworkflows/local/input_check'
 
 /*
@@ -113,7 +111,7 @@ panel_of_normals   = params.panel_of_normals
                      .collect()
                      : Channel.value([])
 
-dbsnp_vcf          = params.dbsnp_vcf          ?: Channel.value([])
+dbsnp_vcf          = params.dbsnp_vcf          ?: Channel.empty()
 
 manta_candidate_small_indels  = params.manta_candidate_small_indels
                      ? Channel
@@ -206,21 +204,11 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.picardjar
         )
 
-    LOFREQ (
-        input_tumor,
-        ADJUST_BAM_RG.out.paired_bam,
-        params.fasta,
-        params.bed,
-        dbsnp_vcf
-    )
-    /*
-
         VARIANT_CALLING(
             input_tumor,
             ADJUST_BAM_RG.out.paired_bam,
             germline_resource,
             panel_of_normals,
-            dbsnp_vcf,
             manta_candidate_small_indels,
             freebayes_samples,
             freebayes_population,
