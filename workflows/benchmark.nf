@@ -232,18 +232,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                 vcf_strelka_snv: it[7]
                 ]
             }
-            .collect()
-            .map{ it -> [
-                sample: it.sample,
-                vcf_vardict: it.vcf_vardict,
-                vcf_mutect: it.vcf_mutect,
-                vcf_varscan: it.vcf_varscan,
-                vcf_freebayes: it.vcf_freebayes,
-                vcf_lofreq: it.vcf_lofreq,
-                vcf_strelka_indels: it.vcf_strelka_indels,
-                vcf_strelka_snv: it.vcf_strelka_snv
-                ]
-            }.view()
+            .collect().view()
 /*
         vardict_ch = VARIANT_CALLING
             .out

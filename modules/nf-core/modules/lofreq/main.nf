@@ -56,13 +56,10 @@ process LOFREQ {
 
     if ( !params.high_sensitivity ){
     """
-    lofreq somatic              \\
-        -n $normal_bam          \\
-        -t $tumor_bam           \\
-        -f $fasta               \\
-        --threads $task.cpus    \\
-        -o ${prefix}.vcf        \\
-        $dbsnp
+    lofreq $bam \\
+        --pp-threads $task.cpus \\
+        -f $fasta \\
+        -o ${prefix}.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
