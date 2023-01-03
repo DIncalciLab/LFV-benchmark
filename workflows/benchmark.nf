@@ -221,17 +221,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         ch_variant_calling = VARIANT_CALLING
             .out
             .vcf
-            .map{ it -> [
-                sample: it[0].sample_name,
-                vcf_vardict: it[1],
-                vcf_mutect: it[2],
-                vcf_varscam: it[3],
-                vcf_freebayes: it[4],
-                vcf_lofreq: it[5],
-                vcf_strelka_indels: it[6],
-                vcf_strelka_snv: it[7]
-                ]
-            }
             .collect().view()
 /*
         vardict_ch = VARIANT_CALLING
