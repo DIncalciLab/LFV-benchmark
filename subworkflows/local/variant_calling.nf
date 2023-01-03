@@ -9,7 +9,7 @@ include { GATK4_MUTECT2 }               from '../../modules/nf-core/modules/gatk
 include { VARDICTJAVA }                 from '../../modules/nf-core/modules/vardictjava/main.nf'
 include { SAMTOOLS_MPILEUP }            from '../../modules/nf-core/modules/samtools/mpileup/main.nf'
 include { VARSCAN2 }                    from '../../modules/nf-core/modules/varscan2/main.nf'
-include { LOFREQ }                      from '../../modules/nf-core/modules/lofreq/main.nf'
+include { LOFREQ }                      from '../../modules/nf-core/modules/lofreq/main_.nf'
 include { STRELKA_SOMATIC }             from '../../modules/nf-core/modules/strelka/somatic/main.nf'
 include { FREEBAYES }                   from '../../modules/nf-core/modules/freebayes/main.nf'
 
