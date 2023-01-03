@@ -85,7 +85,7 @@ process GATK4_MUTECT2 {
     }
 
     stub:
-    def prefix = task.ext.prefix ?: "${meta.id}"
+    def prefix = task.ext.prefix ?: "${meta.sample_name}"
     """
     touch ${prefix}.vcf.gz
     touch ${prefix}.vcf.gz.tbi
