@@ -80,6 +80,8 @@ workflow VARIANT_CALLING {
         bed
     )
 
+    prova = paired.view()
+
     FREEBAYES(
         tumor_only,
         paired,

@@ -1,6 +1,6 @@
 process LOFREQ {
     tag "Variant calling using LoFreq on BAMSurgeon spiked-in sample: ${meta.sample_name}"
-    label 'process_medium'
+    label 'process_low'
 
     // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
     conda (params.enable_conda ? "bioconda::lofreq=2.1.5" : null)

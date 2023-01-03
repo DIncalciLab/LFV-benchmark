@@ -203,6 +203,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             tumor_normal_pair,
             params.picardjar
         )
+        test = ADJUST_BAM_RG.out.paired_bam.view()
 
         VARIANT_CALLING(
             input_tumor,
