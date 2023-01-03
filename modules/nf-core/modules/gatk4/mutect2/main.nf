@@ -17,10 +17,14 @@ process GATK4_MUTECT2 {
 
 
     output:
-    tuple val(meta), path("*.vcf")        , emit: vcf_mutect
-    tuple val(meta), path("*.idx")        , emit: idx_mutect
-    tuple val(meta), path("*.stats")      , emit: stats_mutect
-    tuple val(meta), path("*.f1r2.tar.gz"), optional:true, emit: f1r2
+    //tuple val(meta),
+    path("*.vcf")        , emit: vcf_mutect
+    //tuple val(meta),
+    path("*.idx")        , emit: idx_mutect
+    //tuple val(meta),
+    path("*.stats")      , emit: stats_mutect
+    //tuple val(meta),
+    path("*.f1r2.tar.gz"), optional:true, emit: f1r2
     path "versions.yml"                   , emit: versions
 
     when:

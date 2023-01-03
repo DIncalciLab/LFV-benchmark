@@ -16,7 +16,8 @@ process VARDICTJAVA {
     path  bed
 
     output:
-    tuple val(meta), path("*.vcf")   , emit: vcf_vardict
+    //tuple val(meta),
+    path("*.vcf")   , emit: vcf_vardict
     path "versions.yml"              , emit: versions
 
     when:

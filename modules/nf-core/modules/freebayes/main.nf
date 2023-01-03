@@ -19,7 +19,8 @@ process FREEBAYES {
 
 
     output:
-    tuple val(meta), path("*.vcf.gz"), emit: vcf_freebayes
+    //tuple val(meta),
+    path("*.vcf.gz"), emit: vcf_freebayes
     path  "versions.yml"             , emit: versions
 
     when:

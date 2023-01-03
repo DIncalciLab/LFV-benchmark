@@ -18,7 +18,12 @@ process LOFREQ {
     path  dbsnp_vcf
 
     output:
-    tuple val(meta), path("*.vcf")   , emit: vcf_lofreq
+    //tuple val(meta),
+    path("*_somatic_final.snvs.vcf.gz")   , emit: vcf_lofreq_snv
+    path("*_somatic_final_minus-dbsnp.snvs.vcf.gz")   , emit: vcf_lofreq_snv_minus_dbsnp, optional: true
+    path("*_minus-dbsnp.snvs.vcf.gz"), emit: vcf_lofreq_indels_minus_dbsnp, optional: true
+    path("*_somatic_final.indels.vcf.gz"), emit: vcf_lofreq_indels, optional: true
+    path("*_somatic_final_minus-dbsnp.indels.vcf.gz"), emit: vcf_lofreq_indels, optional: true
     path "versions.yml"              , emit: versions
 
     when:
@@ -45,7 +50,7 @@ process LOFREQ {
     """
     lofreq $bam \\
         -f $fasta \\
-        -o ${prefix}.vcf
+        -o ${prefix}_
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -58,7 +63,7 @@ process LOFREQ {
     """
     lofreq $bam \\
         -f $fasta \\
-        -o ${prefix}.vcf
+        -o ${prefix}_
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

@@ -16,7 +16,8 @@ process VARSCAN2 {
     path  bed
 
     output:
-    tuple val(meta), path("*.vcf")   , emit: vcf_varscan
+    //tuple val(meta),
+    path("*.vcf")   , emit: vcf_varscan
     path "versions.yml"              , emit: versions
 
     when:
