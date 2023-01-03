@@ -29,7 +29,8 @@ process LOFREQ {
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "lofreq"
     def bam    = ( normal_bam && tumor_bam )
-                    ? "somatic -n ${normal_bam} -t ${tumor_bam}" : "call-parallel ${tumor_only.tumor_bam}"
+                    ? "somatic -n ${normal_bam} -t ${tumor_bam} --threads $task.cpus"
+                    : "call-parallel ${tumor_only.tumor_bam} --pp-threads $task.cpus"
     def dbsnp =  dbsnp_vcf ? "--d $dbsnp_vcf" : ""
     def VERSION = '2.1.5'
 
@@ -43,7 +44,6 @@ process LOFREQ {
     if (params.high_sensitivity) {
     """
     lofreq $bam \\
-        --pp-threads $task.cpus \\
         -f $fasta \\
         -o ${prefix}.vcf
 
@@ -57,7 +57,6 @@ process LOFREQ {
     if ( !params.high_sensitivity ){
     """
     lofreq $bam \\
-        --pp-threads $task.cpus \\
         -f $fasta \\
         -o ${prefix}.vcf
 
