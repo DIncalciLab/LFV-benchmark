@@ -22,7 +22,7 @@ process LOFREQ {
     output:
     //tuple val(meta),
     path("*_somatic_final.snvs.vcf.gz")   , emit: vcf_lofreq_snvs
-    path("*_somatic_final_minus-dbsnp.snvs.vcf.gz")   , emit: vcf_lofreq_snvs_minus_dbsnp, optional: true
+    path("*_somatic_final_minus-dbsnp.snvs.vcf.gz") , emit: vcf_lofreq_snvs_minus_dbsnp, optional: true
     path("*_somatic_final.indels.vcf.gz"), emit: vcf_lofreq_indels, optional: true
     path("*_somatic_final_minus-dbsnp.indels.vcf.gz"), emit: vcf_lofreq_indels_minus_dbsnp, optional: true
     path "versions.yml"              , emit: versions
@@ -35,9 +35,9 @@ process LOFREQ {
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "lofreq"
     def bam    = ( normal_bam && tumor_bam )
-                    ? "somatic -n ${normal_bam} -t ${tumor_bam} --threads $task.cpus"
-                    : "call-parallel ${tumor_only.tumor_bam} --pp-threads $task.cpus"
-    def dbsnp =  dbsnp_vcf ? "--d $dbsnp_vcf" : ""
+                    ? "somatic -n ${normal_bam} -t ${tumor_bam} --threads ${task}.cpus"
+                    : "call-parallel ${tumor_only.tumor_bam} --pp-threads ${task}.cpus"
+    def dbsnp =  dbsnp_vcf ? "--d ${dbsnp_vcf}" : ""
     def VERSION = '2.1.5'
 
     def avail_mem = 3

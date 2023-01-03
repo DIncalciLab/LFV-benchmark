@@ -113,7 +113,7 @@ panel_of_normals   = params.panel_of_normals
                      .collect()
                      : Channel.value([])
 
-dbsnp_vcf          = params.dbsnp_vcf          ?: Channel.empty()
+dbsnp_vcf          = params.dbsnp_vcf          ?: Channel.value([])
 
 manta_candidate_small_indels  = params.manta_candidate_small_indels
                      ? Channel
