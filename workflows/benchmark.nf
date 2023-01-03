@@ -54,6 +54,8 @@ include { BAMSURGEON }         from '../modules/local/bamsurgeon.nf'
 include { ADJUST_BAM_RG }      from '../modules/local/adjust_bam_rg.nf'
 include { VARIANT_CALLING }    from '../subworkflows/local/variant_calling.nf'
 include { GENERATE_PLOTS  }    from '../modules/local/generate_plots.nf'
+include { LOFREQ }                      from '../modules/nf-core/modules/lofreq/main.nf'
+
 //include { INPUT_CHECK } from '../subworkflows/local/input_check'
 
 /*
@@ -203,6 +205,15 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             tumor_normal_pair,
             params.picardjar
         )
+
+    LOFREQ (
+        tumor_only,
+        ADJUST_BAM_RG.out.paired_bam,
+        params.fasta,
+        params.bed,
+        dbsnp_vcf
+    )
+    /*
 
         VARIANT_CALLING(
             input_tumor,

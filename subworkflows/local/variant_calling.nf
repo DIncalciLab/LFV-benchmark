@@ -66,7 +66,7 @@ workflow VARIANT_CALLING {
         bed
     )
 
-    LOFREQ(
+    LOFREQ (
         tumor_only,
         paired,
         fasta,
