@@ -64,6 +64,7 @@ workflow VARIANT_CALLING {
         fasta,
         bed
     )
+    prova = paired.view()
 
     LOFREQ (
         tumor_only,
@@ -80,7 +81,7 @@ workflow VARIANT_CALLING {
         bed
     )
 
-    prova = paired.view()
+
 
     FREEBAYES(
         tumor_only,
