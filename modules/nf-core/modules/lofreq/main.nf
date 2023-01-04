@@ -11,7 +11,7 @@ process LOFREQ {
     input:
     tuple val(meta), path(normal_bam), path(normal_bai), path(tumor_bam), path(tumor_bai)
     val fasta
-    path bed
+    val bed
 
     output:
     path("*_somatic_final.snvs.vcf.gz"),                                emit: vcf_lofreq_snvs
