@@ -19,4 +19,4 @@ process TEST {
     """
     lofreq call -f ${fasta} -o vars.vcf.gz ${normal_bam}
 
-    """
+    """}
