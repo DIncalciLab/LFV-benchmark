@@ -3,11 +3,11 @@ process LOFREQ {
     label 'process_low'
 
     // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
-    //conda (params.enable_conda ? "bioconda::lofreq=2.1.5" : null)
-    //container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-      //  'https://depot.galaxyproject.org/singularity/lofreq:2.1.5--py36h5b61e8e_8' :
-        //'quay.io/biocontainers/lofreq:2.1.5--py36h5b61e8e_8' }"
-    container "aldosr/lofreq:2.1.5"
+    conda (params.enable_conda ? "bioconda::lofreq=2.1.5" : null)
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/lofreq:2.1.5--py36h5b61e8e_8' :
+        'quay.io/biocontainers/lofreq:2.1.5--py36h5b61e8e_8' }"
+    //container "aldosr/lofreq:2.1.5"
 
 
     input:
@@ -18,11 +18,11 @@ process LOFREQ {
     path dbsnp_vcf
 
     output:
-    path("*_somatic_final.snvs.vcf.gz")   , emit: vcf_lofreq_snvs
-    path("*_somatic_final_minus-dbsnp.snvs.vcf.gz"), optional: true, emit: vcf_lofreq_snvs_minus_dbsnp
-    path("*_somatic_final.indels.vcf.gz"), optional: true, emit: vcf_lofreq_indels,
-    path("*_somatic_final_minus-dbsnp.indels.vcf.gz"), optional: true, emit: vcf_lofreq_indels_minus_dbsnp
-    path "versions.yml"              , emit: versions
+    path("*_somatic_final.snvs.vcf.gz"),                                emit: vcf_lofreq_snvs
+    path("*_somatic_final_minus-dbsnp.snvs.vcf.gz"),   optional: true,  emit: vcf_lofreq_snvs_minus_dbsnp
+    path("*_somatic_final.indels.vcf.gz"),             optional: true,  emit: vcf_lofreq_indels
+    path("*_somatic_final_minus-dbsnp.indels.vcf.gz"), optional: true,  emit: vcf_lofreq_indels_minus_dbsnp
+    path ("versions.yml"),                                              emit: versions
 
     when:
     task.ext.when == null || task.ext.when
