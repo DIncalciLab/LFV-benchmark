@@ -17,7 +17,7 @@ process VARSCAN2 {
 
     output:
     //tuple val(meta),
-    path("*.vcf")   , emit: vcf_varscan
+    path("*.vcf.gz")   , emit: vcf_varscan
     //path("*.vcf.tbi")   , emit: vcf_varscan_tbi
     path "versions.yml"              , emit: versions
 
