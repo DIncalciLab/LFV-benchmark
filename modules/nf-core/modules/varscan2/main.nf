@@ -43,8 +43,7 @@ process VARSCAN2 {
     if ( params.high_sensitivity ) {
     """
     varscan $mpileup \\
-        $args \\
-        | gzip -c > ${prefix}.vcf.gz
+        $args | gzip -c > ${prefix}.vcf.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -56,8 +55,7 @@ process VARSCAN2 {
     if ( !params.high_sensitivity ){
     """
     varscan $mpileup \\
-        $args
-        | gzip -c > ${prefix}.vcf.gz
+        $args | gzip -c > ${prefix}.vcf.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
