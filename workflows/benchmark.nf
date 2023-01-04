@@ -221,7 +221,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         ch_variant_calling = VARIANT_CALLING
             .out
             .vcf
-            .collect()
+            .collect().view()
 /*
         vardict_ch = VARIANT_CALLING
             .out

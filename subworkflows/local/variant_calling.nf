@@ -88,8 +88,9 @@ workflow VARIANT_CALLING {
         bed
     )*/
 
-    ch_output = VARDICTJAVA.out.vcf_vardict
-                .mix(   //GATK4_MUTECT2.out.vcf_mutect,
+    ch_output = Channel.empty()
+                .mix(   //VARDICTJAVA.out.vcf_vardict
+                        //GATK4_MUTECT2.out.vcf_mutect,
                         //VARSCAN2.out.vcf_varscan,
                         //FREEBAYES.out.vcf_freebayes,
                         TEST.out.vcf_lofreq_snvs,
