@@ -10,6 +10,8 @@ include { VARDICTJAVA }                 from '../../modules/nf-core/modules/vard
 include { SAMTOOLS_MPILEUP }            from '../../modules/nf-core/modules/samtools/mpileup/main.nf'
 include { VARSCAN2 }                    from '../../modules/nf-core/modules/varscan2/main.nf'
 include { LOFREQ }                      from '../../modules/nf-core/modules/lofreq/main.nf'
+include { TEST }                      from '../../modules/nf-core/modules/lofreq/test.nf'
+
 include { STRELKA_SOMATIC }             from '../../modules/nf-core/modules/strelka/somatic/main.nf'
 include { FREEBAYES }                   from '../../modules/nf-core/modules/freebayes/main.nf'
 
@@ -58,13 +60,15 @@ workflow VARIANT_CALLING {
         bed
     )
 
+    TEST(paired, fasta, bed)
+    /*
     LOFREQ(
         tumor_only,
         paired,
         fasta,
         bed,
         dbsnp_vcf
-    )
+    )*/
 
     STRELKA_SOMATIC(
         tumor_only,
