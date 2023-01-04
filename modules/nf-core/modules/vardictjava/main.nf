@@ -18,7 +18,7 @@ process VARDICTJAVA {
     output:
     //tuple val(meta),
     path("*.vcf.gz"),                  emit: vcf_vardict
-    path("*.vcf.gz.tbi"),              emit: vcf_vardict_tbi
+    //path("*.vcf.gz.tbi"),              emit: vcf_vardict_tbi
     path "versions.yml"              , emit: versions
 
     when:
