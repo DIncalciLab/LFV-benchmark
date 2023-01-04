@@ -29,7 +29,7 @@ workflow VARIANT_CALLING {
     bed
 
     main:
-/*
+
     VARDICTJAVA(
         tumor_only,
         paired,
@@ -56,7 +56,7 @@ workflow VARIANT_CALLING {
         SAMTOOLS_MPILEUP.out.mpileup,
         fasta,
         bed
-    )*/
+    )
 
     LOFREQ(
         paired,
