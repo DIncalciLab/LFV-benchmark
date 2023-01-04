@@ -18,6 +18,7 @@ process VARSCAN2 {
     output:
     //tuple val(meta),
     path("*.vcf")   , emit: vcf_varscan
+    path("*.vcf.tbi")   , emit: vcf_varscan_tbi
     path "versions.yml"              , emit: versions
 
     when:
@@ -45,6 +46,9 @@ process VARSCAN2 {
         $args \\
         > ${prefix}.vcf
 
+    bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
+    tabix -p vcf ${prefix}.vcf.gz
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         varscan2_version: $VERSION
@@ -56,6 +60,9 @@ process VARSCAN2 {
     """
     varscan $mpileup \\
          > ${prefix}.vcf
+
+    bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
+    tabix -p vcf ${prefix}.vcf.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

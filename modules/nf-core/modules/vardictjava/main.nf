@@ -17,7 +17,8 @@ process VARDICTJAVA {
 
     output:
     //tuple val(meta),
-    path("*.vcf")   , emit: vcf_vardict
+    path("*.vcf.gz"),                  emit: vcf_vardict
+    path("*.vcf.gz.tbi"),              emit: vcf_vardict_tbi
     path "versions.yml"              , emit: versions
 
     when:
@@ -51,6 +52,9 @@ process VARDICTJAVA {
        $bed \
            | $mode  -f 0.0001 > ${prefix}.vcf
 
+    bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
+    tabix -p vcf ${prefix}.vcf.gz
+
    cat <<-END_VERSIONS > versions.yml
    "${task.process}":
        vardict-java: $VERSION
@@ -70,6 +74,9 @@ process VARDICTJAVA {
        $args \
        $bed \
            | $mode  -f 0.01 > ${prefix}.vcf
+
+    bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
+    tabix -p vcf ${prefix}.vcf.gz
 
    cat <<-END_VERSIONS > versions.yml
    "${task.process}":

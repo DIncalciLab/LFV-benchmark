@@ -21,6 +21,7 @@ process FREEBAYES {
     output:
     //tuple val(meta),
     path("*.vcf.gz"), emit: vcf_freebayes
+    path("*.vcf.gz.tbi"), emit: vcf_freebayes_tbi
     path  "versions.yml"             , emit: versions
 
     when:
@@ -46,7 +47,8 @@ process FREEBAYES {
         $args \\
         $input > ${prefix}.vcf
 
-    bgzip ${prefix}.vcf
+    bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
+    tabix -p vcf ${prefix}.vcf.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

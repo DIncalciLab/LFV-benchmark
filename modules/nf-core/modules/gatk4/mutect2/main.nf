@@ -18,7 +18,8 @@ process GATK4_MUTECT2 {
 
     output:
     //tuple val(meta),
-    path("*.vcf")        , emit: vcf_mutect
+    path("*.vcf.gz")        , emit: vcf_mutect
+    path("*.vcf.gz.tbi")        , emit: vcf_mutect_tbi
     //tuple val(meta),
     path("*.idx")        , emit: idx_mutect
     //tuple val(meta),
@@ -59,6 +60,9 @@ process GATK4_MUTECT2 {
         $args \\
         -O ${prefix}.vcf
 
+    bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
+    tabix -p vcf ${prefix}.vcf.gz
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         gatk4: \$(echo \$(gatk --version 2>&1) | sed 's/^.*(GATK) v//; s/ .*\$//')
@@ -75,6 +79,9 @@ process GATK4_MUTECT2 {
         $gr_command \\
         -L $bed \\
         -O ${prefix}.vcf
+
+    bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
+    tabix -p vcf ${prefix}.vcf.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
