@@ -19,7 +19,7 @@ process GATK4_MUTECT2 {
     output:
     //tuple val(meta),
     path("*.vcf.gz")        , emit: vcf_mutect
-    path("*.vcf.gz.tbi")        , emit: vcf_mutect_tbi
+    //path("*.vcf.gz.tbi")        , emit: vcf_mutect_tbi
     //tuple val(meta),
     path("*.idx")        , emit: idx_mutect
     //tuple val(meta),
@@ -58,10 +58,7 @@ process GATK4_MUTECT2 {
         $gr_command \\
         -L $bed \\
         $args \\
-        -O ${prefix}.vcf
-
-    bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
-    tabix -p vcf ${prefix}.vcf.gz
+        -O ${prefix}.vcf.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -78,10 +75,7 @@ process GATK4_MUTECT2 {
         $pon_command \\
         $gr_command \\
         -L $bed \\
-        -O ${prefix}.vcf
-
-    bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
-    tabix -p vcf ${prefix}.vcf.gz
+        -O ${prefix}.vcf.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
