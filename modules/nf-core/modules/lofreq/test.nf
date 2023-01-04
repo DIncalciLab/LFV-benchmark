@@ -27,6 +27,17 @@ process TEST {
     script:
     def prefix = task.ext.prefix ?: "lofreq"
     def bam = (normal_bam && tumor_bam) ? "somatic -n ${normal_bam} -t ${tumor_bam} --threads ${task.cpus}" : ''
+    def indel = ( params.type == 'indel' || params.type == 'both') ? "--call-indels" : ''
+    def VERSION = '2.1.5'
+
+    def avail_mem = 3
+    if (!task.memory) {
+        log.info '[LoFreq] Available memory not known - defaulting to 3GB. Specify process memory requirements to change this.'
+    } else {
+        avail_mem = task.memory.giga
+    }
+
+
     """
     lofreq ${bam} -f ${fasta} -o ${prefix}_
 
