@@ -5,8 +5,8 @@ process LOFREQ {
     // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
     conda (params.enable_conda ? "bioconda::lofreq=2.1.5" : null)
     container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        'https://depot.galaxyproject.org/singularity/lofreq:2.1.5--py37he17bdc7_8' :
-        'quay.io/biocontainers/lofreq:2.1.5--py37he17bdc7_8' }"
+        'https://depot.galaxyproject.org/singularity/lofreq:2.1.5--py36h5b61e8e_8' :
+        'quay.io/biocontainers/lofreq:2.1.5--py36h5b61e8e_8' }"
 
     //container "aldosr/lofreq:2.1.5"
 
