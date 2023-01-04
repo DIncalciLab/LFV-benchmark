@@ -8,8 +8,6 @@ process TEST {
         'https://depot.galaxyproject.org/singularity/lofreq:2.1.5--py36h5b61e8e_8' :
         'quay.io/biocontainers/lofreq:2.1.5--py36h5b61e8e_8' }"
 
-    //container "aldosr/lofreq:2.1.5"
-
     input:
     tuple val(meta), path(normal_bam), path(normal_bai), path(tumor_bam), path(tumor_bai)
     val fasta
@@ -22,9 +20,16 @@ process TEST {
     path("*_somatic_final_minus-dbsnp.indels.vcf.gz"), optional: true,  emit: vcf_lofreq_indels_minus_dbsnp
     path ("versions.yml"),                                              emit: versions
 
+    when:
+    task.ext.when == null || task.ext.when
+
 
     script:
+    def prefix = task.ext.prefix ?: "lofreq"
+    def bam = (normal_bam && tumor_bam) ? "somatic -n ${normal_bam} -t ${tumor_bam} --threads ${task.cpus}" : ''
     """
-    lofreq call -f ${fasta} -o vars.vcf.gz ${normal_bam}
+    lofreq ${bam} -f ${fasta} -o ${suffix}_
 
-    """}
+    """
+
+    }

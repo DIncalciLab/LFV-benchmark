@@ -31,7 +31,7 @@ workflow VARIANT_CALLING {
     bed
 
     main:
-
+/*
     VARDICTJAVA(
         tumor_only,
         paired,
@@ -58,7 +58,7 @@ workflow VARIANT_CALLING {
         SAMTOOLS_MPILEUP.out.mpileup,
         fasta,
         bed
-    )
+    )*/
 
     TEST(paired, fasta, bed)
     /*
@@ -68,7 +68,7 @@ workflow VARIANT_CALLING {
         fasta,
         bed,
         dbsnp_vcf
-    )*/
+    )
 
     STRELKA_SOMATIC(
         tumor_only,
@@ -86,7 +86,7 @@ workflow VARIANT_CALLING {
         freebayes_cnv,
         fasta,
         bed
-    )
+    )*/
 
     ch_output = VARDICTJAVA.out.vcf_vardict
                 .mix(   GATK4_MUTECT2.out.vcf_mutect,
