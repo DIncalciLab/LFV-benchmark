@@ -3,21 +3,18 @@ process LOFREQ {
     label 'process_low'
 
     // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
-    //conda (params.enable_conda ? "bioconda::lofreq=2.1.5" : null)
-    //container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
-        //'https://depot.galaxyproject.org/singularity/lofreq:2.1.5--py36h5b61e8e_8' :
-        //'quay.io/biocontainers/lofreq:2.1.5--py36h5b61e8e_8' }"
-
-    container "aldosr/lofreq:2.1.5"
+    conda (params.enable_conda ? "bioconda::lofreq=2.1.5" : null)
+    container "${ workflow.containerEngine == 'singularity' && !task.ext.singularity_pull_docker_container ?
+        'https://depot.galaxyproject.org/singularity/lofreq:2.1.5--py36h5b61e8e_8' :
+        'quay.io/biocontainers/lofreq:2.1.5--py36h5b61e8e_8' }"
 
     input:
-    tuple val(meta), path(tumor_only)
+    tuple val(meta), val(tumor_only)
     tuple val(meta), path(normal_bam), path(normal_bai), path(tumor_bam), path(tumor_bai)
     val   fasta
     path  bed
 
     output:
-    //tuple val(meta),
     path("*_somatic_final.snvs.vcf.gz")   , emit: vcf_lofreq_snvs
     path("*_somatic_final_minus-dbsnp.snvs.vcf.gz") , emit: vcf_lofreq_snvs_minus_dbsnp, optional: true
     path("*_somatic_final.indels.vcf.gz"), emit: vcf_lofreq_indels, optional: true
