@@ -39,7 +39,7 @@ process LOFREQ {
 
 
     """
-    lofreq ${bam} -f ${fasta} --force-overwrite -o ${prefix}_
+    lofreq ${bam} -f ${fasta} -l ${bed} -o ${prefix}_
 
 
     cat <<-END_VERSIONS > versions.yml
