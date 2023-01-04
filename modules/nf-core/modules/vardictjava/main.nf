@@ -50,10 +50,7 @@ process VARDICTJAVA {
        -b $bam \
        $args \
        $bed \
-           | $mode  -f 0.0001 > ${prefix}.vcf
-
-    bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
-    tabix -p vcf ${prefix}.vcf.gz
+           | $mode  -f 0.0001 | gzip -c > ${prefix}.vcf.gz
 
    cat <<-END_VERSIONS > versions.yml
    "${task.process}":
@@ -73,10 +70,7 @@ process VARDICTJAVA {
        -b $bam \
        $args \
        $bed \
-           | $mode  -f 0.01 > ${prefix}.vcf
-
-    bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
-    tabix -p vcf ${prefix}.vcf.gz
+           | $mode  -f 0.01 | gzip -c > ${prefix}.vcf.gz
 
    cat <<-END_VERSIONS > versions.yml
    "${task.process}":
