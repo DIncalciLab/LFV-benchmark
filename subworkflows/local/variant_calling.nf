@@ -62,7 +62,7 @@ workflow VARIANT_CALLING {
         paired,
         fasta,
         bed)
-    /*
+
 
 
     STRELKA_SOMATIC(
@@ -82,7 +82,7 @@ workflow VARIANT_CALLING {
         fasta,
         bed
     )
-
+/*
     ch_output = Channel.empty()
                 .mix(   //VARDICTJAVA.out.vcf_vardict
                         //GATK4_MUTECT2.out.vcf_mutect,
