@@ -21,7 +21,7 @@ process GATK4_MUTECT2 {
     path("*.vcf.gz")        , emit: vcf_mutect
     //path("*.vcf.gz.tbi")        , emit: vcf_mutect_tbi
     //tuple val(meta),
-    path("*.idx")        , emit: idx_mutect
+    path("*.vcf.gz.tbi")        , emit: vcf_mutect_tbi
     //tuple val(meta),
     path("*.stats")      , emit: stats_mutect
     //tuple val(meta),
