@@ -28,7 +28,7 @@ process TEST {
     def prefix = task.ext.prefix ?: "lofreq"
     def bam = (normal_bam && tumor_bam) ? "somatic -n ${normal_bam} -t ${tumor_bam} --threads ${task.cpus}" : ''
     """
-    lofreq ${bam} -f ${fasta} -o ${suffix}_
+    lofreq ${bam} -f ${fasta} -o ${prefix}_
 
     """
 
