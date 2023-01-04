@@ -89,13 +89,13 @@ workflow VARIANT_CALLING {
     )*/
 
     ch_output = VARDICTJAVA.out.vcf_vardict
-                .mix(   GATK4_MUTECT2.out.vcf_mutect,
-                        VARSCAN2.out.vcf_varscan,
-                        FREEBAYES.out.vcf_freebayes,
+                .mix(   //GATK4_MUTECT2.out.vcf_mutect,
+                        //VARSCAN2.out.vcf_varscan,
+                        //FREEBAYES.out.vcf_freebayes,
                         TEST.out.vcf_lofreq_snvs,
                         TEST.out.vcf_lofreq_indels,
-                        STRELKA_SOMATIC.out.vcf_strelka_snvs,
-                        STRELKA_SOMATIC.out.vcf_strelka_indels )
+                        //STRELKA_SOMATIC.out.vcf_strelka_snvs,
+                        //STRELKA_SOMATIC.out.vcf_strelka_indels )
 
     //ch_vardict   = ch_vardict.mix(VARDICTJAVA.out.vcf_vardict)
     //ch_mutect    = ch_mutect.mix(GATK4_MUTECT2.out.vcf_mutect)
