@@ -9,10 +9,11 @@ process LOFREQ {
         'quay.io/biocontainers/lofreq:2.1.5--py36h5b61e8e_8' }"
 
     input:
-    tuple val(meta), val(tumor_only)
+    tuple val(meta), path(tumor_only)
     tuple val(meta), path(normal_bam), path(normal_bai), path(tumor_bam), path(tumor_bai)
     val   fasta
     path  bed
+    path dbsnp_vcf
 
     output:
     path("*_somatic_final.snvs.vcf.gz")   , emit: vcf_lofreq_snvs

@@ -78,7 +78,7 @@ input_all          = !(params.skip_normal_generation)
                      .fromPath(params.input_all)
                      .splitCsv(header:true, quote:'\"', sep: ",")
                      .map { row -> [sample: row.sample, info: row.info] }
-                     : Channel.empty()
+                     : Channel.value([])
 
 input_normal       = ( params.skip_normal_generation )
                      ? Channel
@@ -86,18 +86,18 @@ input_normal       = ( params.skip_normal_generation )
                      { sample_name -> sample_name.name.replaceAll(/.normal|.bam|.bai$/,'') }
                      .map { sample_name, bam, bed -> [[sample_name: sample_name], [normal_bam: bam, normal_bai: bed ]]}
                      //.map { it -> [[sample: it.getSimpleName()], it] }.view()
-                     : Channel.empty()
+                     : Channel.value([])
 
 input_tumor        = ( params.skip_normal_generation && params.skip_tumor_generation )
                      ? Channel
                      .fromFilePairs(params.input_tumor + "/*.{bam,bai}", checkIfExists:true, flat:true )
                      { sample_name -> sample_name.name.replaceAll(/.tumor|.bam|.bai$/,'') }
                      .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}
-                     : Channel.empty()
+                     : Channel.value([])
 
 tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation )
                      ? (input_normal.join(input_tumor, failOnMismatch: true))
-                     : Channel.empty()
+                     : Channel.value([])
 
 germline_resource  = params.germline_resource
                      ? Channel
@@ -111,7 +111,7 @@ panel_of_normals   = params.panel_of_normals
                      .collect()
                      : Channel.value([])
 
-dbsnp_vcf          = params.dbsnp_vcf          ?: Channel.empty()
+dbsnp_vcf          = params.dbsnp_vcf          ?: Channel.value([])
 
 manta_candidate_small_indels  = params.manta_candidate_small_indels
                      ? Channel
@@ -213,6 +213,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             freebayes_samples,
             freebayes_population,
             freebayes_cnv,
+            dbsnp_vcf,
             params.fasta,
             params.bed
         )

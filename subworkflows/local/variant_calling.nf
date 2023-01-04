@@ -24,6 +24,7 @@ workflow VARIANT_CALLING {
     freebayes_samples
     freebayes_population
     freebayes_cnv
+    dbsnp_vcf
     fasta
     bed
 
@@ -57,12 +58,12 @@ workflow VARIANT_CALLING {
         bed
     )
 
-    paired.view()
     LOFREQ(
         tumor_only,
         paired,
         fasta,
-        bed
+        bed,
+        dbsnp_vcf
     )
 
     STRELKA_SOMATIC(
