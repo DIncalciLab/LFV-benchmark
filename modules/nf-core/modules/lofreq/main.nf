@@ -15,13 +15,13 @@ process LOFREQ {
     tuple val(meta), path(normal_bam), path(normal_bai), path(tumor_bam), path(tumor_bai)
     val   fasta
     path  bed
-    val dbsnp_vcf
+    path dbsnp_vcf
 
     output:
     path("*_somatic_final.snvs.vcf.gz")   , emit: vcf_lofreq_snvs
-    path("*_somatic_final_minus-dbsnp.snvs.vcf.gz") , emit: vcf_lofreq_snvs_minus_dbsnp, optional: true
-    path("*_somatic_final.indels.vcf.gz"), emit: vcf_lofreq_indels, optional: true
-    path("*_somatic_final_minus-dbsnp.indels.vcf.gz"), emit: vcf_lofreq_indels_minus_dbsnp, optional: true
+    path("*_somatic_final_minus-dbsnp.snvs.vcf.gz"), optional: true, emit: vcf_lofreq_snvs_minus_dbsnp
+    path("*_somatic_final.indels.vcf.gz"), optional: true, emit: vcf_lofreq_indels,
+    path("*_somatic_final_minus-dbsnp.indels.vcf.gz"), optional: true, emit: vcf_lofreq_indels_minus_dbsnp
     path "versions.yml"              , emit: versions
 
     when:
