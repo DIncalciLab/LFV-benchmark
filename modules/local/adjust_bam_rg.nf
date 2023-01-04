@@ -1,6 +1,6 @@
 process ADJUST_BAM_RG {
     tag "Adjust read groups for input BAM: ${meta.sample_name}"
-    label 'process_low'
+    label 'process_medium'
 
     container "aldosr/bamsurgeon:1.3-custom"
 

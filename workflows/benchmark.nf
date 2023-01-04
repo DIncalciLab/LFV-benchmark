@@ -220,53 +220,11 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         ch_variant_calling = VARIANT_CALLING
             .out
             .vcf
-            .collect().view()
+            .collect()
 /*
         vardict_ch = VARIANT_CALLING
             .out
             .vcf_vardict
-            .map{ it -> [
-                sample: it[0].sample,
-                vcf:    it[1]
-                ]
-                }
-            .collect()
-            .map{ it -> [
-                sample: it.sample,
-                vcf: it.vcf
-            ]}
-
-        mutect_ch  = VARIANT_CALLING
-            .out
-            .vcf_mutect
-            .map{ it -> [
-                sample: it[0].sample,
-                vcf:   it[1]
-                ]
-                }
-            .collect()
-            .map{ it -> [
-                sample: it.sample,
-                vcf: it.vcf
-            ]}
-
-        varscan_ch = VARIANT_CALLING
-            .out
-            .vcf_varscan
-            .map{ it -> [
-                sample: it[0].sample,
-                vcf:    it[1]
-                ]
-                }
-            .collect()
-            .map{ it -> [
-                sample: it.sample,
-                vcf: it.vcf
-            ]}
-
-         freebayes_ch = VARIANT_CALLING
-            .out
-            .vcf_freebayes
             .map{ it -> [
                 sample: it[0].sample,
                 vcf:    it[1]
