@@ -59,7 +59,8 @@ process VARSCAN2 {
     if ( !params.high_sensitivity ){
     """
     varscan $mpileup \\
-         > ${prefix}.vcf
+        $args
+        > ${prefix}.vcf
 
     bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
     tabix -p vcf ${prefix}.vcf.gz
