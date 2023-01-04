@@ -41,6 +41,11 @@ process TEST {
     """
     lofreq ${bam} -f ${fasta} -o ${prefix}_
 
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        lofreq_version: $VERSION
+    END_VERSIONS
     """
 
     }
