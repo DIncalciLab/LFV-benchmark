@@ -32,8 +32,8 @@ process VARSCAN2 {
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "varscan"
     def mpileup = ( normal_bam && tumor_bam )
-                    ? "somatic $mpileup --mpileup 1"
-                    : "mpileup2cns $mpileup --variants --output-vcf"
+                    ? "somatic $mpileup ${prefix} --mpileup 1"
+                    : "mpileup2cns $mpileup --variants"
     def VERSION = '2.4.4' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
     
     def avail_mem = 3
@@ -62,7 +62,6 @@ process VARSCAN2 {
     if ( !params.high_sensitivity ){
     """
     varscan $mpileup \\
-        ${prefix} \\
         $args
 
     gzip -c ${prefix}.snp.vcf > ${prefix}.snp.vcf.gz
