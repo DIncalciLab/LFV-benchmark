@@ -40,6 +40,7 @@ process FREEBAYES {
     """
     freebayes \\
         -f $fasta \\
+        -F 0.0001
         $targets_file \\
         $samples_file \\
         $populations_file \\
