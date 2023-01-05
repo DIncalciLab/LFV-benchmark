@@ -53,6 +53,8 @@ workflow VARIANT_CALLING {
     )
 
     VARSCAN2(
+        tumor_only,
+        paired,
         SAMTOOLS_MPILEUP.out.mpileup,
         fasta,
         bed
@@ -62,8 +64,6 @@ workflow VARIANT_CALLING {
         paired,
         fasta,
         bed)
-
-
 
     STRELKA_SOMATIC(
         tumor_only,
