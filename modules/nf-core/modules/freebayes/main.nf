@@ -13,7 +13,7 @@ process FREEBAYES {
     path samples
     path populations
     path cnv
-    path fasta
+    val fasta
     path target_bed
     //path fasta_fai
 
