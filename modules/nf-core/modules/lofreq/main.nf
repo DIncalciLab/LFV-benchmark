@@ -37,7 +37,7 @@ process LOFREQ {
         avail_mem = task.memory.giga
     }
 
-
+    if ( !params.high_sensitivity ) {
     """
     lofreq ${bam} -f ${fasta} -l ${bed} -o ${prefix}_
 
@@ -47,5 +47,6 @@ process LOFREQ {
         lofreq_version: $VERSION
     END_VERSIONS
     """
+    }
 
     }

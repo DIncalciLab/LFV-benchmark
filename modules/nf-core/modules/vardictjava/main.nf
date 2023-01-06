@@ -65,7 +65,7 @@ process VARDICTJAVA {
    """
    vardict-java \
        -G ${fasta} \
-       -f 0.0001 \
+       -f 0.01 \
        -N ${prefix} \
        -b $bam \
        $args \

@@ -35,8 +35,9 @@ process STRELKA_SOMATIC {
     def prefix = task.ext.prefix ?: "${meta.sample_name}"
     def options_target_bed = target_bed ? "--callRegions ${target_bed}" : "" //disabled due to bug in strelka2
     def options_manta = manta_candidate_small_indels ? "--indelCandidates ${manta_candidate_small_indels}" : ""
-    """
 
+    if ( !params.high_sensitivity ){
+    """
     configureStrelkaSomaticWorkflow.py \\
         --tumorBam ${tumor_bam} \\
         --normalBam ${normal_bam} \\
@@ -57,4 +58,5 @@ process STRELKA_SOMATIC {
         strelka: \$( configureStrelkaSomaticWorkflow.py --version )
     END_VERSIONS
     """
+    }
 }

@@ -36,7 +36,7 @@ process FREEBAYES {
     def populations_file = populations    ? "--populations ${populations}" : ""
     def cnv_file         = cnv            ? "--cnv-map ${cnv}"             : ""
 
-
+    if ( params.high_sensitivity ) {
     """
     freebayes \\
         -f $fasta \\
@@ -56,4 +56,26 @@ process FREEBAYES {
         freebayes: \$(echo \$(freebayes --version 2>&1) | sed 's/version:\s*v//g' )
     END_VERSIONS
     """
+    }
+
+    if ( !params.high_sensitivity ) {
+    """
+    freebayes \\
+        -f $fasta \\
+        $targets_file \\
+        $samples_file \\
+        $populations_file \\
+        $cnv_file \\
+        $args \\
+        $input > ${prefix}.vcf
+
+    bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
+    tabix -p vcf ${prefix}.vcf.gz
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        freebayes: \$(echo \$(freebayes --version 2>&1) | sed 's/version:\s*v//g' )
+    END_VERSIONS
+    """
+    }
 }
