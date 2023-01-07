@@ -39,7 +39,11 @@ process LOFREQ {
 
     if ( !params.high_sensitivity ) {
     """
-    lofreq ${bam} -f ${fasta} -l ${bed} -o ${prefix}_
+    lofreq ${bam} \\
+        -f ${fasta} \\
+        -l ${bed} \\
+        ${indel} \\
+        -o ${prefix}_
 
 
     cat <<-END_VERSIONS > versions.yml
