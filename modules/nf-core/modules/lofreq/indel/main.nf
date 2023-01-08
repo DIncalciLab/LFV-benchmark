@@ -14,7 +14,7 @@ process LOFREQ_INDEL {
     val bed
 
     output:
-    path("*_somatic_final.snvs.vcf.gz"),                                emit: vcf_lofreq_snvs
+    path("*_somatic_final.snvs.vcf.gz"),               optional: true,  emit: vcf_lofreq_snvs
     path("*_somatic_final_minus-dbsnp.snvs.vcf.gz"),   optional: true,  emit: vcf_lofreq_snvs_minus_dbsnp
     path("*_somatic_final.indels.vcf.gz"),             optional: true,  emit: vcf_lofreq_indels
     path("*_somatic_final_minus-dbsnp.indels.vcf.gz"), optional: true,  emit: vcf_lofreq_indels_minus_dbsnp
@@ -54,6 +54,7 @@ process LOFREQ_INDEL {
         -n indel_processed_normal.bam \\
         -t indel_processed_tumor.bam \\
         --threads ${task.cpus} \\
+        --call-indels \\
         -f ${fasta} \\
         -l ${bed} \\
         -o ${prefix}_
