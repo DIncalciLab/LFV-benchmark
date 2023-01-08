@@ -30,7 +30,7 @@ workflow VARIANT_CALLING {
     bed
 
     main:
-    /*
+
     VARDICTJAVA(
         tumor_only,
         paired,
@@ -60,7 +60,7 @@ workflow VARIANT_CALLING {
         fasta,
         bed
     )
-*/
+
     if ( params.type == "snv"){
     LOFREQ_SNV(
         paired,
@@ -72,7 +72,7 @@ workflow VARIANT_CALLING {
                 fasta,
                 bed)
         }
-/*
+
     STRELKA_SOMATIC(
         tumor_only,
         paired,
@@ -89,7 +89,7 @@ workflow VARIANT_CALLING {
         freebayes_cnv,
         fasta,
         bed
-    )*/
+    )
 /*
     ch_output = Channel.empty()
                 .mix(   //VARDICTJAVA.out.vcf_vardict
