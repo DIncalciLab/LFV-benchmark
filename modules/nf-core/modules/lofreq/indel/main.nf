@@ -51,6 +51,9 @@ process LOFREQ_INDEL {
         -o indel_processed_tumor.bam \\
         ${tumor_bam}
 
+    samtools index indel_processed_normal.bam
+    samtools index indel_processed_tumor.bam
+
     lofreq somatic \\
         -n indel_processed_normal.bam \\
         -t indel_processed_tumor.bam \\
