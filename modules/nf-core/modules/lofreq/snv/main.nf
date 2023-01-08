@@ -1,6 +1,6 @@
-process LOFREQ {
+process LOFREQ_SNV {
     tag "Variant calling using LoFreq on BAMSurgeon spiked-in sample: ${meta.sample_name}"
-    label 'process_low'
+    label 'process_medium'
 
     // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
     conda (params.enable_conda ? "bioconda::lofreq=2.1.5" : null)
@@ -27,7 +27,6 @@ process LOFREQ {
     script:
     def prefix = task.ext.prefix ?: "lofreq"
     def bam = (normal_bam && tumor_bam) ? "somatic -n ${normal_bam} -t ${tumor_bam} --threads ${task.cpus}" : ''
-    def indel = ( params.type == 'indel' || params.type == 'both') ? "--call-indels" : ''
     def VERSION = '2.1.5'
 
     def avail_mem = 3
@@ -42,7 +41,6 @@ process LOFREQ {
     lofreq ${bam} \\
         -f ${fasta} \\
         -l ${bed} \\
-        ${indel} \\
         -o ${prefix}_
 
 

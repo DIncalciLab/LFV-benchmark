@@ -9,7 +9,8 @@ include { GATK4_MUTECT2 }               from '../../modules/nf-core/modules/gatk
 include { VARDICTJAVA }                 from '../../modules/nf-core/modules/vardictjava/main.nf'
 include { SAMTOOLS_MPILEUP }            from '../../modules/nf-core/modules/samtools/mpileup/main.nf'
 include { VARSCAN2 }                    from '../../modules/nf-core/modules/varscan2/main.nf'
-include { LOFREQ }                      from '../../modules/nf-core/modules/lofreq/main.nf'
+include { LOFREQ_SNV }                  from '../../modules/nf-core/modules/lofreq/snv/main.nf'
+include { LOFREQ_INDEL }                from '../../modules/nf-core/modules/lofreq/indel/main.nf'
 include { STRELKA_SOMATIC }             from '../../modules/nf-core/modules/strelka/somatic/main.nf'
 include { FREEBAYES }                   from '../../modules/nf-core/modules/freebayes/main.nf'
 
@@ -60,10 +61,17 @@ workflow VARIANT_CALLING {
         bed
     )
 */
+    if ( params.type == "snv"){
     LOFREQ(
         paired,
         fasta,
         bed)
+        } else if {
+            LOFREQ_INDEL(
+                paired,
+                fasta,
+                bed)
+        }
 /*
     STRELKA_SOMATIC(
         tumor_only,
