@@ -62,11 +62,11 @@ workflow VARIANT_CALLING {
     )
 */
     if ( params.type == "snv"){
-    LOFREQ(
+    LOFREQ_SNV(
         paired,
         fasta,
         bed)
-        } else if {
+        } else {
             LOFREQ_INDEL(
                 paired,
                 fasta,
