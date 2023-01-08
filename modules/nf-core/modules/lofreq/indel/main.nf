@@ -53,7 +53,6 @@ process LOFREQ_INDEL {
     lofreq somatic \\
         -n indel_processed_normal.bam \\
         -t indel_processed_tumor.bam \\
-        --threads ${task.cpus} \\
         --call-indels \\
         -f ${fasta} \\
         -l ${bed} \\
