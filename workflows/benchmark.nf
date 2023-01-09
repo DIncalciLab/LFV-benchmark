@@ -97,7 +97,7 @@ input_tumor        = ( params.skip_normal_generation && params.skip_tumor_genera
 
 check_mode         = input_normal.ifEmpty('tumor_only')
 
-tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation && check_mode == 'tumor_only')
+tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation && check_mode != 'tumor_only')
                      ? (input_normal.join(input_tumor, failOnMismatch: true))
                      : Channel.value([])
 
