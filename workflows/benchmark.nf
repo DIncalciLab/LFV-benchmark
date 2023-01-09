@@ -90,12 +90,14 @@ input_normal       = ( params.skip_normal_generation )
 
 input_tumor        = ( params.skip_normal_generation && params.skip_tumor_generation )
                      ? Channel
-                     .fromFilePairs(params.input_tumor + "/*.{bam,bai}", checkIfExists:true, flat:true )
+                     .fromFilePairs(params.input_tumor + "/*.{bam,bai}", flat:true )
                      { sample_name -> sample_name.name.replaceAll(/.tumor|.bam|.bai$/,'') }
                      .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}
                      : Channel.value([])
 
-tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation && input_normal)
+check_mode         = input_normal.ifEmpty('tumor_only')
+
+tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation && check_mode == 'tumor_only')
                      ? (input_normal.join(input_tumor, failOnMismatch: true))
                      : Channel.value([])
 
