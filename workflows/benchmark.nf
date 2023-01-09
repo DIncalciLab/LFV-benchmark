@@ -95,9 +95,7 @@ input_tumor        = ( params.skip_normal_generation && params.skip_tumor_genera
                      .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}
                      : Channel.value([])
 
-if (input_normal.ifEmpty()){println "CIAO"}
-
-tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation && mode)
+tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation && !params.tumor_only)
                      ? (input_normal.join(input_tumor, failOnMismatch: true))
                      : Channel.value([])
 
