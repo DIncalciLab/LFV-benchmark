@@ -63,6 +63,7 @@ workflow VARIANT_CALLING {
 
     if ( params.type == "snv"){
     LOFREQ_SNV(
+        tumor_only,
         paired,
         fasta,
         bed)
