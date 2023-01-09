@@ -207,7 +207,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         )
 
         VARIANT_CALLING(
-            input_tumor,
+            ADJUST_BAM_RG.out.tumor_only_bam,
             ADJUST_BAM_RG.out.paired_bam,
             germline_resource,
             panel_of_normals,
