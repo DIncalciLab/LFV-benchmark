@@ -82,9 +82,9 @@ input_all          = !(params.skip_normal_generation)
 
 input_normal       = ( params.skip_normal_generation )
                      ? Channel
-                     .fromFilePairs(params.input_normal + "/*.{bam,bai}", checkIfExists:true, flat:true )
+                     .fromFilePairs(params.input_normal + "/*.{bam,bai}", flat:true )
                      { sample_name -> sample_name.name.replaceAll(/.normal|.bam|.bai$/,'') }
-                     .map { sample_name, bam, bed -> [[sample_name: sample_name], [normal_bam: bam, normal_bai: bed ]]}
+                     .map { sample_name, bam, bed -> [[sample_name: sample_name], [normal_bam: bam, normal_bai: bed ]]}.view()
                      //.map { it -> [[sample: it.getSimpleName()], it] }.view()
                      : Channel.value([])
 
@@ -95,9 +95,9 @@ input_tumor        = ( params.skip_normal_generation && params.skip_tumor_genera
                      .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}
                      : Channel.value([])
 
-tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation )
+tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation && input_normal)
                      ? (input_normal.join(input_tumor, failOnMismatch: true))
-                     : Channel.value([])
+                     : Channel.value([]).view()
 
 germline_resource  = params.germline_resource
                      ? Channel
