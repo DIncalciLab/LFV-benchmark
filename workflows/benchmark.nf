@@ -94,8 +94,8 @@ input_tumor        = ( params.skip_normal_generation && params.skip_tumor_genera
                      { sample_name -> sample_name.name.replaceAll(/.tumor|.bam|.bai$/,'') }
                      .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}
                      : Channel.value([])
-test = input_normal.ifEmpty('Ciao').view()
-tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation && input_normal.ifEmpty(false))
+
+tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation && input_normal.ifEmpty('false')
                      ? (input_normal.join(input_tumor, failOnMismatch: true))
                      : Channel.value([])
 
