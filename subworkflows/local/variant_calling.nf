@@ -73,6 +73,7 @@ workflow VARIANT_CALLING {
                 bed)
         }
 
+    if ( paired ){
     STRELKA_SOMATIC(
         tumor_only,
         paired,
@@ -80,6 +81,7 @@ workflow VARIANT_CALLING {
         fasta,
         bed
     )
+    }
 
     FREEBAYES(
         tumor_only,
