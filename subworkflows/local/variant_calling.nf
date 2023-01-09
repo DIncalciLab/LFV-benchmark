@@ -68,6 +68,7 @@ workflow VARIANT_CALLING {
         bed)
         } else {
             LOFREQ_INDEL(
+                tumor_only,
                 paired,
                 fasta,
                 bed)
