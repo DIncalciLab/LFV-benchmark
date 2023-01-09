@@ -96,7 +96,7 @@ input_tumor        = ( params.skip_normal_generation && params.skip_tumor_genera
                      : Channel.value([])
 
 
-tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation && input_normal != Channel.value([]))
+tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation && (input_normal != Channel.value([])))
                      ? (input_normal.join(input_tumor, failOnMismatch: true))
                      : Channel.value([])
 
