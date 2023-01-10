@@ -202,11 +202,37 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     if ( !params.skip_variant_calling ){
         ADJUST_BAM_RG(
-            input_samples,
+            input_normal,
+            input_tumor,
             params.picardjar
         )
-        normal_adjusted = ADJUST_BAM_RG.out.normal_bam.ifEmpty([]).view()
+        normal_adjusted = ADJUST_BAM_RG
+                          .out
+                          .normal_bam
+                          .ifEmpty([[][]])
+                          .map { sample_name, bam, bed ->
+                                [
+                                    [sample_name: sample_name],
+                                    [normal_bam: bam, normal_bai: bed ]
+                                ]
+                               }.view()
 
+        tumor_adjusted  = ADJUST_BAM_RG
+                          .out
+                          .tumor_bam
+                          .map{ sample_name, bam, bed ->
+                                [
+                                    [sample_name: sample_name],
+                                    [normal_bam: bam, normal_bai: bed]
+                                ]
+                               }
+
+        input_calling   = ( params.skip_normal_generation && params.skip_tumor_generation && params.tumor_only)
+                     ? input_tumor.map{ it -> [ [sample_name: it[0].sample_name ],
+                                                [normal_bam:   [], normal_bai: [] ],
+                                                [tumor_bam: it[1].tumor_bam, tumor_bai: it[1].tumor_bai ]
+                                               ] }
+                     : (input_normal.join(input_tumor))
         VARIANT_CALLING(
             ADJUST_BAM_RG.out.normal_bam,
             ADJUST_BAM_RG.out.tumor_bam,
