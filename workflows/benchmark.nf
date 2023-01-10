@@ -208,6 +208,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         )
 
         ADJUST_BAM_RG.out.tumor_bam.view()
+        ADJUST_BAM_RG.out.normal_bam.view()
+
         normal_adjusted = ADJUST_BAM_RG
                           .out
                           .normal_bam
