@@ -1,8 +1,6 @@
 process ADJUST_BAM_RG_PAIRED {
-    tag "Adjust read groups for input BAM: ${meta.sample_name}"
+    tag "Adjust read groups for input BAM: ${meta.sample_name}, test: ${normal.normal_bam}"
     label 'process_medium'
-
-    println{"processi is:" ${normal.normal_bam} }
 
     container "aldosr/bamsurgeon:1.3-custom"
 
