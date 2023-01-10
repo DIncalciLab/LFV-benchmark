@@ -197,7 +197,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.picardjar
         )
     }
-
+ch = input_tumor.view()
+ch_2 = tumor_normal_pair.view()
     if ( !params.skip_variant_calling ){
         ADJUST_BAM_RG(
             input_tumor,
