@@ -86,7 +86,7 @@ input_normal       = ( params.skip_normal_generation )
                      .fromFilePairs(params.input_normal + "/*.{bam,bai}", flat:true )
                      { sample_name -> sample_name.name.replaceAll(/.normal|.bam|.bai$/,'') }
                      .map { sample_name, bam, bed -> [[sample_name: sample_name], [normal_bam: bam, normal_bai: bed ]]}
-                     : Channel.value([])
+                     : Channel.value([[][]])
 
 input_tumor        = ( params.skip_normal_generation && params.skip_tumor_generation )
                      ? Channel
@@ -202,11 +202,12 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     if ( !params.skip_variant_calling ){
         ADJUST_BAM_RG(
-            input_normal,
             input_tumor,
+            input_normal,
             params.picardjar
         )
 
+        ADJUST_BAM_RG.out.tumor_bam.view()
         normal_adjusted = ADJUST_BAM_RG
                           .out
                           .normal_bam
