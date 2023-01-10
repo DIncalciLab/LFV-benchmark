@@ -15,7 +15,7 @@ include { STRELKA_SOMATIC }             from '../../modules/nf-core/modules/stre
 include { FREEBAYES }                   from '../../modules/nf-core/modules/freebayes/main.nf'
 
 
-workflow VARIANT_CALLING {
+workflow VARIANT_CALLING_PAIRED {
     take:
     input
     germline_resource
