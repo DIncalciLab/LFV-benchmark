@@ -30,7 +30,7 @@ process ADJUST_BAM_RG {
 
     samtools index ${meta.sample_name}_tumor.bam
     """
-
+/*
     if ( !( normal.normal_bam.isEmpty() ) ) {
 
     """
@@ -48,5 +48,5 @@ process ADJUST_BAM_RG {
     """
     }
 
-
+*/
 }

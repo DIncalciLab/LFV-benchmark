@@ -206,12 +206,12 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             input_tumor,
             params.picardjar
         )
-        ADJUST_BAM_RG.out.tumor_bam.view()
+
         normal_adjusted = ADJUST_BAM_RG
                           .out
                           .normal_bam
                           .ifEmpty('EMPTY')
-        ADJUST_BAM_RG.out.tumor_bam.view()
+
         if ( normal_adjusted.collect{assert it == 'EMPTY'} ){
             normal_adjusted = normal_adjusted
                               .map { it ->
@@ -229,7 +229,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                                 ]
                                }
         }
-        ADJUST_BAM_RG.out.tumor_bam.view()
         tumor_adjusted  = ADJUST_BAM_RG
                           .out
                           .tumor_bam
