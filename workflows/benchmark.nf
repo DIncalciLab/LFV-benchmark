@@ -201,6 +201,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     }
 
     if ( !params.skip_variant_calling ){
+        input_tumor.view()
+        input_normal.view()
         ADJUST_BAM_RG(
             input_tumor,
             input_normal,
