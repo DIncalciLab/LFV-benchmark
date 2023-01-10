@@ -205,8 +205,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             input_samples,
             params.picardjar
         )
+        normal_adjusted = ADJUST_BAM_RG.out.normal_bam.ifEmpty([]).view()
 
-        if ( ADJUST_BAM_RG.out.normal_bam.ifEmpty(false) ){print "TEST"}
         VARIANT_CALLING(
             ADJUST_BAM_RG.out.normal_bam,
             ADJUST_BAM_RG.out.tumor_bam,
