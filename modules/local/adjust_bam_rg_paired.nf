@@ -16,7 +16,8 @@ process ADJUST_BAM_RG_PAIRED {
     task.ext.when == null || task.ext.when
 
     script:
-    ch = ${normal.normal_bam}.isEmpty().view()
+    println{"processi is:" ${normal.normal_bam}.isEmpty() }
+    /*
     if ( !( ${normal.normal_bam.isEmpty()} ) ) {
     """
     java -jar ${picardjar} \\
@@ -45,5 +46,5 @@ process ADJUST_BAM_RG_PAIRED {
         RGSM=${meta.sample_name}_tumor
 
     samtools index ${meta.sample_name}_tumor.bam
-    """
+    """*/
 }
