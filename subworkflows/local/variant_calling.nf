@@ -29,16 +29,15 @@ workflow VARIANT_CALLING {
 
     main:
 
-    ch = tumor_only.view()
+    ch = input.view()
 
      tumor_only = input
             .map{ it -> [
-                [sample_name: it[0].sample_name],
+                [sample_name: it[0].sample_name ],
                 [normal_bam:   [], normal_bai: [] ],
                 [tumor_bam: it[1].tumor_bam, tumor_bai: it[1].tumor_bai ]
                 ]
-                }
-            }.view()
+                }.view()
 
     VARDICTJAVA(
         tumor_only,
@@ -82,16 +81,6 @@ workflow VARIANT_CALLING {
                 fasta,
                 bed)
         }
-
-    if ( paired ){
-    STRELKA_SOMATIC(
-        tumor_only,
-        paired,
-        manta_candidate_small_indels,
-        fasta,
-        bed
-    )
-    }
 
     FREEBAYES(
         tumor_only,
