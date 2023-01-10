@@ -28,7 +28,7 @@ process ADJUST_BAM_RG {
         RGPU=${meta_tumor.sample_name}_tumor \\
         RGSM=${meta_tumor.sample_name}_tumor
 
-    samtools index ${meta.sample_name}_tumor.bam
+    samtools index ${meta_tumor.sample_name}_tumor.bam
     """
 
     if ( !( normal.normal_bam.isEmpty() ) ) {
