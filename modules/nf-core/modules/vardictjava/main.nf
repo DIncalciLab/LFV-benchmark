@@ -9,8 +9,8 @@ process VARDICTJAVA {
         'quay.io/biocontainers/vardict-java:1.8.2--hdfd78af_3' }"
 
     input:
-    //tuple val(meta), val(tumor_only)
-    tuple val(meta), path(normal_bam), path(normal_bai),  path(tumor_bam), path(tumor_bai)
+    tuple val(meta), path(normal_bam)
+    tuple val(meta), path(tumor_bam) //path(normal_bai),  path(tumor_bam), path(tumor_bai)
     
     val   fasta
     path  bed

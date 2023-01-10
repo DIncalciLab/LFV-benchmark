@@ -206,10 +206,9 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.picardjar
         )
 
-        ch = ADJUST_BAM_RG.out.tumor_bam.view()
-       /*
         VARIANT_CALLING(
-            ADJUST_BAM_RG.out.bam,
+            ADJUST_BAM_RG.out.normal_bam,
+            ADJUST_BAM_RG.out.tumor_bam,
             germline_resource,
             panel_of_normals,
             manta_candidate_small_indels,
@@ -219,7 +218,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             dbsnp_vcf,
             params.fasta,
             params.bed
-        )*/
+        )
     }
 /*
         ch_variant_calling = VARIANT_CALLING
