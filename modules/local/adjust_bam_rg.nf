@@ -17,11 +17,25 @@ process ADJUST_BAM_RG {
     task.ext.when == null || task.ext.when
 
     script:
-
-    if ( !( normal.normal_bam.isEmpty() ) ) {
     """
     java -jar ${picardjar} \\
-        AddOrReplaceReadGroups I=${normal.normal_bam} \
+        AddOrReplaceReadGroups I=${tumor.tumor_bam} \\
+        O=${meta.sample_name}_tumor.bam \\
+        VALIDATION_STRINGENCY=LENIENT \\
+        RGID=${meta.sample_name}_tumor \\
+        RGLB=${meta.sample_name}_tumor \\
+        RGPL=${meta.sample_name}_tumor \\
+        RGPU=${meta.sample_name}_tumor \\
+        RGSM=${meta.sample_name}_tumor
+
+    samtools index ${meta.sample_name}_tumor.bam
+    """
+
+    if ( !( normal.normal_bam.isEmpty() ) ) {
+
+    """
+    java -jar ${picardjar} \\
+        AddOrReplaceReadGroups I=${normal.normal_bam} \\
         O=${meta.sample_name}_normal.bam \\
         VALIDATION_STRINGENCY=LENIENT \\
         RGID=${meta.sample_name}_normal \\
@@ -34,17 +48,5 @@ process ADJUST_BAM_RG {
     """
     }
 
-    """
-    java -jar ${picardjar} \\
-        AddOrReplaceReadGroups I=${tumor.tumor_bam} \
-        O=${meta.sample_name}_tumor.bam \\
-        VALIDATION_STRINGENCY=LENIENT \\
-        RGID=${meta.sample_name}_tumor \\
-        RGLB=${meta.sample_name}_tumor \\
-        RGPL=${meta.sample_name}_tumor \\
-        RGPU=${meta.sample_name}_tumor \\
-        RGSM=${meta.sample_name}_tumor
 
-    samtools index ${meta.sample_name}_tumor.bam
-    """
 }
