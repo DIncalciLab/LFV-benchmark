@@ -17,7 +17,7 @@ process ADJUST_BAM_RG_PAIRED {
 
     script:
 
-    if ( ${normal.normal_bam}.ifEmpty(true) ) {
+    if ( ${normal.normal_bam} ) {
     """
     java -jar ${picardjar} \\
         AddOrReplaceReadGroups I=${normal.normal_bam} \
