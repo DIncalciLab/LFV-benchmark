@@ -10,8 +10,8 @@ process ADJUST_BAM_RG {
     path picardjar
 
     output:
-    tuple val(meta),           path("*_tumor.bam"),  path("*_tumor.bam.bai"),                  emit: tumor_bam
-    tuple val(meta),           path("*_normal.bam"), path("*_normal.bam.bai"), optional: true, emit: normal_bam
+    tuple val(meta_tumor),            path("*_tumor.bam"),  path("*_tumor.bam.bai"),                  emit: tumor_bam
+    tuple val(meta_normal),           path("*_normal.bam"), path("*_normal.bam.bai"), optional: true, emit: normal_bam
 
     when:
     task.ext.when == null || task.ext.when
@@ -20,13 +20,13 @@ process ADJUST_BAM_RG {
     """
     java -jar ${picardjar} \\
         AddOrReplaceReadGroups I=${tumor.tumor_bam} \\
-        O=${meta.sample_name}_tumor.bam \\
+        O=${meta_tumor.sample_name}_tumor.bam \\
         VALIDATION_STRINGENCY=LENIENT \\
-        RGID=${meta.sample_name}_tumor \\
-        RGLB=${meta.sample_name}_tumor \\
-        RGPL=${meta.sample_name}_tumor \\
-        RGPU=${meta.sample_name}_tumor \\
-        RGSM=${meta.sample_name}_tumor
+        RGID=${meta_tumor.sample_name}_tumor \\
+        RGLB=${meta_tumor.sample_name}_tumor \\
+        RGPL=${meta_tumor.sample_name}_tumor \\
+        RGPU=${meta_tumor.sample_name}_tumor \\
+        RGSM=${meta_tumor.sample_name}_tumor
 
     samtools index ${meta.sample_name}_tumor.bam
     """
@@ -36,15 +36,15 @@ process ADJUST_BAM_RG {
     """
     java -jar ${picardjar} \\
         AddOrReplaceReadGroups I=${normal.normal_bam} \\
-        O=${meta.sample_name}_normal.bam \\
+        O=${meta_normal.sample_name}_normal.bam \\
         VALIDATION_STRINGENCY=LENIENT \\
-        RGID=${meta.sample_name}_normal \\
-        RGLB=${meta.sample_name}_normal \\
-        RGPL=${meta.sample_name}_normal \\
-        RGPU=${meta.sample_name}_normal \\
-        RGSM=${meta.sample_name}_normal
+        RGID=${meta_normal.sample_name}_normal \\
+        RGLB=${meta_normal.sample_name}_normal \\
+        RGPL=${meta_normal.sample_name}_normal \\
+        RGPU=${meta_normal.sample_name}_normal \\
+        RGSM=${meta_normal.sample_name}_normal
 
-    samtools index ${meta.sample_name}_normal.bam
+    samtools index ${meta_normal.sample_name}_normal.bam
     """
     }
 
