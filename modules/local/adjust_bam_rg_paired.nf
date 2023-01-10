@@ -2,6 +2,8 @@ process ADJUST_BAM_RG_PAIRED {
     tag "Adjust read groups for input BAM: ${meta.sample_name}"
     label 'process_medium'
 
+    println{"processi is:" ${normal.normal_bam} }
+
     container "aldosr/bamsurgeon:1.3-custom"
 
     input:
@@ -16,8 +18,7 @@ process ADJUST_BAM_RG_PAIRED {
     task.ext.when == null || task.ext.when
 
     script:
-    println{"processi is:" ${normal.normal_bam} }
-    /*
+
     if ( !( ${normal.normal_bam.isEmpty()} ) ) {
     """
     java -jar ${picardjar} \\
@@ -46,5 +47,5 @@ process ADJUST_BAM_RG_PAIRED {
         RGSM=${meta.sample_name}_tumor
 
     samtools index ${meta.sample_name}_tumor.bam
-    """*/
+    """
 }
