@@ -1,5 +1,5 @@
 process ADJUST_BAM_RG_PAIRED {
-    tag "Adjust read groups for input BAM: ${meta.sample_name}, test: normal.isEmpty()"
+    tag "Adjust read groups for input BAM: ${meta.sample_name}"
     label 'process_medium'
 
     container "aldosr/bamsurgeon:1.3-custom"
@@ -17,7 +17,7 @@ process ADJUST_BAM_RG_PAIRED {
 
     script:
 
-    if ( !( ${normal.normal_bam.isEmpty()} ) ) {
+    if ( !( normal.normal_bam.isEmpty() ) ) {
     """
     java -jar ${picardjar} \\
         AddOrReplaceReadGroups I=${normal.normal_bam} \
