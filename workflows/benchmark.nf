@@ -270,7 +270,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             mutect_ch.vcf,
             varscan_ch.vcf
         )*/
-    }
+    //}
 
 /*if (params.skip_tumor_generation && !(params.skip_variant_calling)){
 
