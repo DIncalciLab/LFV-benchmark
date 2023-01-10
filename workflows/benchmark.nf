@@ -87,7 +87,7 @@ input_normal       = ( params.skip_normal_generation )
                      .fromFilePairs(params.input_normal + "/*.{bam,bai}", flat:true )
                      { sample_name -> sample_name.name.replaceAll(/.normal|.bam|.bai$/,'') }
                      .map { sample_name, bam, bed -> [[sample_name: sample_name], [normal_bam: bam, normal_bai: bed ]]}
-                     : Channel.empty()
+                     : Channel.value([])
 
 input_tumor        = ( params.skip_normal_generation && params.skip_tumor_generation )
                      ? Channel
