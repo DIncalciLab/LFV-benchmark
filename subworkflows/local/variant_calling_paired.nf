@@ -11,6 +11,7 @@ include { SAMTOOLS_MPILEUP }            from '../../modules/nf-core/modules/samt
 include { VARSCAN2 }                    from '../../modules/nf-core/modules/varscan2/main.nf'
 include { LOFREQ_SNV }                  from '../../modules/nf-core/modules/lofreq/snv/main.nf'
 include { LOFREQ_INDEL }                from '../../modules/nf-core/modules/lofreq/indel/main.nf'
+include { STRELKA_SOMATIC }             from '../../modules/nf-core/modules/strelka/somatic/main.nf'
 include { FREEBAYES }                   from '../../modules/nf-core/modules/freebayes/main.nf'
 
 
@@ -29,19 +30,9 @@ workflow VARIANT_CALLING {
 
     main:
 
-    ch = tumor_only.view()
-
-     tumor_only = input
-            .map{ it -> [
-                [sample_name: it[0].sample_name],
-                [normal_bam:   [], normal_bai: [] ],
-                [tumor_bam: it[1].tumor_bam, tumor_bai: it[1].tumor_bai ]
-                ]
-                }
-            }.view()
-
     VARDICTJAVA(
         tumor_only,
+        paired,
         fasta,
         bed
     )

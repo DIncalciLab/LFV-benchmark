@@ -54,6 +54,7 @@ include { BAMSURGEON }                from '../modules/local/bamsurgeon.nf'
 include { ADJUST_BAM_RG }             from '../modules/local/adjust_bam_rg.nf'
 include { ADJUST_BAM_RG_PAIRED }      from '../modules/local/adjust_bam_rg_paired.nf'
 include { VARIANT_CALLING }           from '../subworkflows/local/variant_calling.nf'
+include { VARIANT_CALLING_PAIRED }    from '../subworkflows/local/variant_calling_paired.nf'
 include { GENERATE_PLOTS  }           from '../modules/local/generate_plots.nf'
 //include { INPUT_CHECK } from '../subworkflows/local/input_check'
 
@@ -209,7 +210,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
             VARIANT_CALLING(
                 ADJUST_BAM_RG.out.bam,
-                Channel.empty(),
                 germline_resource,
                 panel_of_normals,
                 manta_candidate_small_indels,
@@ -226,8 +226,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                     params.picardjar
                 )
 
-                VARIANT_CALLING(
-                    Channel.empty(),
+                VARIANT_CALLING_PAIRED(
                     ADJUST_BAM_RG.out.bam,
                     germline_resource,
                     panel_of_normals,
