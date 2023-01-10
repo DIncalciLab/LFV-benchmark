@@ -87,20 +87,23 @@ input_normal       = ( params.skip_normal_generation )
                      .fromFilePairs(params.input_normal + "/*.{bam,bai}", flat:true )
                      { sample_name -> sample_name.name.replaceAll(/.normal|.bam|.bai$/,'') }
                      .map { sample_name, bam, bed -> [[sample_name: sample_name], [normal_bam: bam, normal_bai: bed ]]}
-                     //.map { it -> [[sample: it.getSimpleName()], it] }.view()
                      : Channel.value([])
 
 input_tumor        = ( params.skip_normal_generation && params.skip_tumor_generation )
                      ? Channel
                      .fromFilePairs(params.input_tumor + "/*.{bam,bai}", flat:true )
                      { sample_name -> sample_name.name.replaceAll(/.tumor|.bam|.bai$/,'') }
-                     .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}
+                     .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}.view()
                      : Channel.value([])
 
-/*tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation && !params.tumor_only)
-                     ? (input_normal.join(input_tumor))
-                     : input_tumor*/
+input_calling      = ( params.skip_normal_generation && params.skip_tumor_generation && params.tumor_only)
+                     ? input_tumor.map{ it -> [ [sample_name: it[0].sample_name ],
+                                                [normal_bam:   [], normal_bai: [] ],
+                                                [tumor_bam: it[1].tumor_bam, tumor_bai: it[1].tumor_bai ]
+                                               ] }
+                     : (input_normal.join(input_tumor))
 
+ch = input_calling.view()
 
 germline_resource  = params.germline_resource
                      ? Channel
@@ -199,7 +202,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.picardjar
         )
     }
-
+/*
     if ( !params.skip_variant_calling ){
 
         if ( params.tumor_only){

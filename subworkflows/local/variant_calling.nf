@@ -31,14 +31,6 @@ workflow VARIANT_CALLING {
 
     ch = input.view()
 
-     tumor_only = input
-            .map{ it -> [
-                [sample_name: it[0].sample_name ],
-                [normal_bam:   [], normal_bai: [] ],
-                [tumor_bam: it[1].tumor_bam, tumor_bai: it[1].tumor_bai ]
-                ]
-                }.view()
-
     VARDICTJAVA(
         tumor_only,
 //       paired,
