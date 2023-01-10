@@ -5,7 +5,6 @@ process ADJUST_BAM_RG {
     container "aldosr/bamsurgeon:1.3-custom"
 
     input:
-    tuple val(meta), val(tumor_only)
     tuple val(meta), val(normal), val(tumor)
     path picardjar
 

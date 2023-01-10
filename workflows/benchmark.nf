@@ -95,9 +95,9 @@ input_tumor        = ( params.skip_normal_generation && params.skip_tumor_genera
                      .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}
                      : Channel.value([])
 
-tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation && !params.tumor_only)
-                     ? (input_normal.join(input_tumor, failOnMismatch: true))
-                     : Channel.value([[][]])
+tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation )
+                     ? (input_normal.join(input_tumor)).view()
+                     : Channel.empty()
 
 
 germline_resource  = params.germline_resource
@@ -197,14 +197,20 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.picardjar
         )
     }
-ch = input_tumor.view()
-ch_2 = tumor_normal_pair.view()
+
     if ( !params.skip_variant_calling ){
+
+        if ( params.tumor_only){
         ADJUST_BAM_RG(
             input_tumor,
+            params.picardjar
+        )
+         } else {
+            ADJUST_BAM_RG(
             tumor_normal_pair,
             params.picardjar
         )
+        }
 
         VARIANT_CALLING(
             ADJUST_BAM_RG.out.tumor_only_bam,
