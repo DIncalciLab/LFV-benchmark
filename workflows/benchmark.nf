@@ -219,7 +219,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             dbsnp_vcf,
             params.fasta,
             params.bed
-        )
+        )*/
     }
 /*
         ch_variant_calling = VARIANT_CALLING
