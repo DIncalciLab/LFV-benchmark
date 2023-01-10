@@ -211,8 +211,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             tumor_adjusted = ADJUST_BAM_RG_TUMOR.out.bam
                   .map { name, bam, bai ->
                     [
-                        [sample_name:  name],
-                        [normal_bam: ['EMPY'], normal_bai: ['EMPTY'] ],
+                        [name],
+                        [normal_bam: ['EMPTY'], normal_bai: ['EMPTY'] ],
                         [tumor_bam: bam, tumor_bam: bai ]
                     ]
                    }
@@ -225,7 +225,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                 params.picardjar
             )
 
-            tumor_adjusted  = ADJUST_BAM_RG
+            tumor_adjusted  = ADJUST_BAM_RG_TUMOR
                               .out
                               .bam
                               .map{ sample_name, bam, bed ->
@@ -240,7 +240,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                 params.picardjar
              )
 
-             normal_adjusted  = ADJUST_BAM_RG
+             normal_adjusted  = ADJUST_BAM_RG_NORMAL
                               .out
                               .bam
                               .map{ sample_name, bam, bed ->
