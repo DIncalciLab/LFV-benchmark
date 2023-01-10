@@ -97,7 +97,7 @@ input_tumor        = ( params.skip_normal_generation && params.skip_tumor_genera
 
 tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation && !params.tumor_only)
                      ? (input_normal.join(input_tumor, failOnMismatch: true))
-                     : Channel.empty()
+                     : Channel.value([][])
 
 
 germline_resource  = params.germline_resource
@@ -199,7 +199,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     }
 
     if ( !params.skip_variant_calling ){
-ch = input_tumor.view()
         ADJUST_BAM_RG(
             input_tumor,
             tumor_normal_pair,
