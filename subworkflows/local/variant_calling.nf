@@ -41,13 +41,14 @@ workflow VARIANT_CALLING {
 
     VARDICTJAVA(
         tumor_only,
+//       paired,
         fasta,
         bed
     )
 
     GATK4_MUTECT2(
         tumor_only,
-        paired,
+       // paired,
         germline_resource,
         panel_of_normals,
         fasta,
@@ -56,13 +57,13 @@ workflow VARIANT_CALLING {
 
     SAMTOOLS_MPILEUP(
         tumor_only,
-        paired,
+        //paired,
         fasta
     )
 
     VARSCAN2(
         tumor_only,
-        paired,
+        //paired,
         SAMTOOLS_MPILEUP.out.mpileup,
         fasta,
         bed
@@ -71,7 +72,7 @@ workflow VARIANT_CALLING {
     if ( params.type == "snv"){
     LOFREQ_SNV(
         tumor_only,
-        paired,
+        //paired,
         fasta,
         bed)
         } else {
@@ -84,7 +85,7 @@ workflow VARIANT_CALLING {
 
     FREEBAYES(
         tumor_only,
-        paired,
+        //paired,
         freebayes_samples,
         freebayes_population,
         freebayes_cnv,

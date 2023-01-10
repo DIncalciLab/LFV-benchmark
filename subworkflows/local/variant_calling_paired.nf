@@ -36,7 +36,7 @@ workflow VARIANT_CALLING_PAIRED {
         fasta,
         bed
     )
-
+/*
     GATK4_MUTECT2(
         tumor_only,
         paired,
