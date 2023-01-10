@@ -33,7 +33,6 @@ workflow VARIANT_CALLING {
     VARDICTJAVA(
         normal_bam,
         tumor_bam,
-        paired,
         fasta,
         bed
     )
