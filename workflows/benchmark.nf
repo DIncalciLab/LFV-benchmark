@@ -209,9 +209,9 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         normal_adjusted = ADJUST_BAM_RG
                           .out
                           .normal_bam
-                          .ifEmpty([])
+                          .ifEmpty('EMPTY')
 
-        if ( normal_adjusted.isEmpty() ){
+        if ( normal_adjustedm == 'EMPTY' ){
             normal_adjusted = normal_adjusted
                               .map { it ->
                                 [
