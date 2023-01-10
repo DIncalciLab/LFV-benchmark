@@ -208,8 +208,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                 input_tumor,
                 params.picardjar
             )
-            ADJUST_BAM_RG_TUMOR.out.bam.view()
-            tumor_adjusted = ADJUST_BAM_RG_TUMOR.out.bam
+            tumor_adjusted = ADJUST_BAM_RG_TUMOR.out.bam.
+
                   .map { name, bam, bai ->
                     [
                         name,
@@ -217,7 +217,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                         tumor_bam: bam, tumor_bam: bai]
                     ]
                    }
-             input_calling = tumor_adjusted
+             input_calling = tumor_adjusted.view()
 
         } else {
 
