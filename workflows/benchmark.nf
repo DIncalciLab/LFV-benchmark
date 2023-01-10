@@ -206,8 +206,9 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             input_tumor,
             params.picardjar
         )
-        tumor_adjusted.view()
-        normal_adjusted.view()
+        ADJUST_BAM_RG
+                          .out
+                          .tumor_bam.view()
         normal_adjusted = ADJUST_BAM_RG
                           .out
                           .normal_bam
