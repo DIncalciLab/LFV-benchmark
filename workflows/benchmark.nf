@@ -206,7 +206,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.picardjar
         )
 
-        if ( ADJUST_BAM_RG.out.normal_bam ){print "TEST"}
+        if ( ADJUST_BAM_RG.out.normal_bam.isEmpty() ){print "TEST"}
        /*
         VARIANT_CALLING(
             ADJUST_BAM_RG.out.bam,
