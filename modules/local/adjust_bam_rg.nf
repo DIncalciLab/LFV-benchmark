@@ -1,12 +1,12 @@
 process ADJUST_BAM_RG {
-    tag "Adjust read groups for input BAM: ${meta.sample_name}"
+    tag "Adjust read groups for input BAM: ${meta_tumor.sample_name}"
     label 'process_medium'
 
     container "aldosr/bamsurgeon:1.3-custom"
 
     input:
-    tuple val(meta), val(tumor)
-    tuple val(meta), val(normal)
+    tuple val(meta_tumor), val(tumor)
+    tuple val(meta_normal), val(normal)
     path picardjar
 
     output:
