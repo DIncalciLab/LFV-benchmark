@@ -10,7 +10,7 @@ process ADJUST_BAM_RG {
 
     output:
     tuple val(meta),           path("*_normal.bam"), path("*_normal.bam.bai"), optional: true, emit: normal_bam
-                               path("*_tumor.bam"),  path("*_tumor.bam.bai"),                  emit: tumor_bam
+    tuple val(meta),           path("*_tumor.bam"),  path("*_tumor.bam.bai"),                  emit: tumor_bam
 
     when:
     task.ext.when == null || task.ext.when
