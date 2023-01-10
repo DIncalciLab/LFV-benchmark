@@ -16,7 +16,7 @@ process ADJUST_BAM_RG_PAIRED {
     task.ext.when == null || task.ext.when
 
     script:
-
+    ch = ${normal.normal_bam}.isEmpty().view()
     if ( !( ${normal.normal_bam.isEmpty()} ) ) {
     """
     java -jar ${picardjar} \\
