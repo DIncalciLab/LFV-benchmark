@@ -10,7 +10,7 @@ process ADJUST_BAM_RG_NORMAL {
     path picardjar
 
     output:
-    tuple val(meta),           path("*_normal.bam"), path("*_normal.bam.bai"), optional: true, emit: bam
+    tuple val(meta),           path("*_normal.bam"), path("*_normal.bam.bai"),  emit: bam
 
     when:
     task.ext.when == null || task.ext.when

@@ -87,7 +87,7 @@ input_normal       = ( params.skip_normal_generation )
                      .fromFilePairs(params.input_normal + "/*.{bam,bai}", flat:true )
                      { sample_name -> sample_name.name.replaceAll(/.normal|.bam|.bai$/,'') }
                      .map { sample_name, bam, bed -> [[sample_name: sample_name], [normal_bam: bam, normal_bai: bed ]]}
-                     : Channel.value([])
+                     : Channel.empty()
 
 input_tumor        = ( params.skip_normal_generation && params.skip_tumor_generation )
                      ? Channel
@@ -203,7 +203,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     if ( !params.skip_variant_calling ){
 
-        if ( input_normal.isEmpty() ){
+        if ( params.tumor_only ){
 
             ADJUST_BAM_RG_TUMOR(
                 input_tumor,
@@ -213,10 +213,11 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                   .map { name, bam, bai ->
                     [
                         [sample_name:  name],
+                        [normal_bam: ['EMPY'], normal_bai: ['EMPTY'] ],
                         [tumor_bam: bam, tumor_bam: bai ]
                     ]
                    }
-             input_calling = tumor_adjusted
+             input_calling = tumor_adjusted.view()
 
         } else {
 
@@ -252,7 +253,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
             input_calling   =  (normal_adjusted.join(tumor_adjusted))
         }
-      input_calling.view()
+
         VARIANT_CALLING(
             input_calling,
             germline_resource,

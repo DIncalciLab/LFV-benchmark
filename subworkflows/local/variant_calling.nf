@@ -11,6 +11,7 @@ include { SAMTOOLS_MPILEUP }            from '../../modules/nf-core/modules/samt
 include { VARSCAN2 }                    from '../../modules/nf-core/modules/varscan2/main.nf'
 include { LOFREQ_SNV }                  from '../../modules/nf-core/modules/lofreq/snv/main.nf'
 include { LOFREQ_INDEL }                from '../../modules/nf-core/modules/lofreq/indel/main.nf'
+include { STRELKA_SOMATIC }             from '../../modules/nf-core/modules/strelka/somatic/main.nf'
 include { FREEBAYES }                   from '../../modules/nf-core/modules/freebayes/main.nf'
 
 
@@ -36,8 +37,7 @@ workflow VARIANT_CALLING {
     )
 /*
     GATK4_MUTECT2(
-        tumor_only,
-       // paired,
+        bam,
         germline_resource,
         panel_of_normals,
         fasta,
@@ -45,14 +45,12 @@ workflow VARIANT_CALLING {
     )
 
     SAMTOOLS_MPILEUP(
-        tumor_only,
-        //paired,
+        bam,
         fasta
     )
 
     VARSCAN2(
-        tumor_only,
-        //paired,
+        bam,
         SAMTOOLS_MPILEUP.out.mpileup,
         fasta,
         bed
@@ -60,21 +58,26 @@ workflow VARIANT_CALLING {
 
     if ( params.type == "snv"){
     LOFREQ_SNV(
-        tumor_only,
-        //paired,
+        bam,
         fasta,
         bed)
         } else {
             LOFREQ_INDEL(
-                tumor_only,
-                paired,
+                bam,
                 fasta,
                 bed)
         }
 
+    if ( !params.tumor_only ){
+    STRELKA_SOMATIC(
+        bam,
+        manta_candidate_small_indels,
+        fasta,
+        bed
+    )
+    }
     FREEBAYES(
-        tumor_only,
-        //paired,
+        bam,
         freebayes_samples,
         freebayes_population,
         freebayes_cnv,
