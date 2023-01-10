@@ -6,7 +6,6 @@ process ADJUST_BAM_RG_TUMOR {
 
     input:
     tuple val(meta), val(tumor)
-    tuple val(meta), val(normal)
     path picardjar
 
     output:
