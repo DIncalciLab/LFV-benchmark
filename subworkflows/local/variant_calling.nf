@@ -16,8 +16,7 @@ include { FREEBAYES }                   from '../../modules/nf-core/modules/free
 
 workflow VARIANT_CALLING {
     take:
-    normal_bam
-    tumor_bam
+    bam
     germline_resource
     panel_of_normals
     manta_candidate_small_indels
@@ -31,8 +30,7 @@ workflow VARIANT_CALLING {
     main:
 
     VARDICTJAVA(
-        normal_bam,
-        tumor_bam,
+        bam,
         fasta,
         bed
     )

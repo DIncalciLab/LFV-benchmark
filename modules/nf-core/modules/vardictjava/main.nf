@@ -9,8 +9,7 @@ process VARDICTJAVA {
         'quay.io/biocontainers/vardict-java:1.8.2--hdfd78af_3' }"
 
     input:
-    tuple val(meta), path(normal_bam)
-    tuple val(meta), path(tumor_bam) //path(normal_bai),  path(tumor_bam), path(tumor_bai)
+    tuple val(meta), path(tumor_bam) path(normal_bai),  path(tumor_bam), path(tumor_bai)
     
     val   fasta
     path  bed
@@ -28,7 +27,7 @@ process VARDICTJAVA {
     def args = task.ext.args ?: ''
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "vardict"
-    def bam     = ( normal_bam.ifEmpty(false) && tumor_bam ) ? "'${tumor_bam}|${normal_bam}'" : "${tumor_only.tumor_bam}"
+    def bam     = ( normal_bam && tumor_bam ) ? "'${tumor_bam}|${normal_bam}'" : "${tumor_only.tumor_bam}"
     def mode = ( normal_bam && tumor_bam ) ?
                 "testsomatic.R | var2vcf_paired.pl -N '${prefix}_tumor|${prefix}_normal'" :
                 "teststrandbias.R | var2vcf_valid.pl -N ${prefix} -E"
