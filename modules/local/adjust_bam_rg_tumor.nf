@@ -9,7 +9,7 @@ process ADJUST_BAM_RG_TUMOR {
     path picardjar
 
     output:
-    tuple val(meta),    path("*_tumor.bam"),  path("*_tumor.bam.bai"),    emit: tumor_bam
+    tuple val(meta),    path("*_tumor.bam"),  path("*_tumor.bam.bai"),    emit: bam
 
     when:
     task.ext.when == null || task.ext.when
