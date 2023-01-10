@@ -31,7 +31,7 @@ process ADJUST_BAM_RG {
     samtools index ${meta_tumor.sample_name}_tumor.bam
     """
 
-    if ( !( normal.normal_bam.isEmpty() ) ) {
+    if ( !( normal.normal_bam.collect{assert it == 'EMPTY'} ) ) {
 
     """
     java -jar ${picardjar} \\
