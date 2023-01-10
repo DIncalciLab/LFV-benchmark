@@ -93,7 +93,7 @@ input_tumor        = ( params.skip_normal_generation && params.skip_tumor_genera
                      ? Channel
                      .fromFilePairs(params.input_tumor + "/*.{bam,bai}", flat:true )
                      { sample_name -> sample_name.name.replaceAll(/.tumor|.bam|.bai$/,'') }
-                     .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}.view()
+                     .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}
                      : Channel.value([])
 
 input_calling      = ( params.skip_normal_generation && params.skip_tumor_generation && params.tumor_only)
@@ -102,8 +102,6 @@ input_calling      = ( params.skip_normal_generation && params.skip_tumor_genera
                                                 [tumor_bam: it[1].tumor_bam, tumor_bai: it[1].tumor_bai ]
                                                ] }
                      : (input_normal.join(input_tumor))
-
-ch = input_calling.view()
 
 germline_resource  = params.germline_resource
                      ? Channel
@@ -202,46 +200,26 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.picardjar
         )
     }
-/*
+
     if ( !params.skip_variant_calling ){
-
-        if ( params.tumor_only){
-            ADJUST_BAM_RG(
-                input_tumor,
-                params.picardjar
-            )
-
-            VARIANT_CALLING(
-                ADJUST_BAM_RG.out.bam,
-                germline_resource,
-                panel_of_normals,
-                manta_candidate_small_indels,
-                freebayes_samples,
-                freebayes_population,
-                freebayes_cnv,
-                dbsnp_vcf,
-                params.fasta,
-                params.bed
+        ADJUST_BAM_RG_PAIRED(
+            input_calling,
+            params.picardjar
         )
-            } else {
-                ADJUST_BAM_RG_PAIRED(
-                    input_normal.join(input_tumor),
-                    params.picardjar
-                )
-
-                VARIANT_CALLING_PAIRED(
-                    ADJUST_BAM_RG.out.bam,
-                    germline_resource,
-                    panel_of_normals,
-                    manta_candidate_small_indels,
-                    freebayes_samples,
-                    freebayes_population,
-                    freebayes_cnv,
-                    dbsnp_vcf,
-                    params.fasta,
-                    params.bed
-        )
-            }
+           /*
+        VARIANT_CALLING(
+            ADJUST_BAM_RG.out.bam,
+            germline_resource,
+            panel_of_normals,
+            manta_candidate_small_indels,
+            freebayes_samples,
+            freebayes_population,
+            freebayes_cnv,
+            dbsnp_vcf,
+            params.fasta,
+            params.bed
+        )     */
+    }
 /*
         ch_variant_calling = VARIANT_CALLING
             .out

@@ -16,6 +16,8 @@ process ADJUST_BAM_RG_PAIRED {
     task.ext.when == null || task.ext.when
 
     script:
+
+    if ( ${normal.normal_bam}.ifEmpty(true) ) {
     """
     java -jar ${picardjar} \\
         AddOrReplaceReadGroups I=${normal.normal_bam} \
@@ -28,7 +30,10 @@ process ADJUST_BAM_RG_PAIRED {
         RGSM=${meta.sample_name}_normal
 
     samtools index ${meta.sample_name}_normal.bam
+    """
+    }
 
+    """
     java -jar ${picardjar} \\
         AddOrReplaceReadGroups I=${tumor.tumor_bam} \
         O=${meta.sample_name}_tumor.bam \\
