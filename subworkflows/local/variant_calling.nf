@@ -29,8 +29,6 @@ workflow VARIANT_CALLING {
 
     main:
 
-    ch = input.view()
-
     VARDICTJAVA(
         tumor_only,
 //       paired,
