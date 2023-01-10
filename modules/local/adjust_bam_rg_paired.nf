@@ -16,7 +16,7 @@ process ADJUST_BAM_RG_PAIRED {
     task.ext.when == null || task.ext.when
 
     script:
-    println{"processi is:" ${normal.normal_bam}.isEmpty() }
+    println{"processi is:" ${normal.normal_bam} }
     /*
     if ( !( ${normal.normal_bam.isEmpty()} ) ) {
     """
