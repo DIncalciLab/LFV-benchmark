@@ -49,11 +49,12 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 */
 
 
-include { NEAT        }        from '../modules/local/neat.nf'
-include { BAMSURGEON }         from '../modules/local/bamsurgeon.nf'
-include { ADJUST_BAM_RG }      from '../modules/local/adjust_bam_rg.nf'
-include { VARIANT_CALLING }    from '../subworkflows/local/variant_calling.nf'
-include { GENERATE_PLOTS  }    from '../modules/local/generate_plots.nf'
+include { NEAT        }               from '../modules/local/neat.nf'
+include { BAMSURGEON }                from '../modules/local/bamsurgeon.nf'
+include { ADJUST_BAM_RG }             from '../modules/local/adjust_bam_rg.nf'
+include { ADJUST_BAM_RG_PAIRED }      from '../modules/local/adjust_bam_rg_paired.nf'
+include { VARIANT_CALLING }           from '../subworkflows/local/variant_calling.nf'
+include { GENERATE_PLOTS  }           from '../modules/local/generate_plots.nf'
 //include { INPUT_CHECK } from '../subworkflows/local/input_check'
 
 /*
@@ -95,9 +96,9 @@ input_tumor        = ( params.skip_normal_generation && params.skip_tumor_genera
                      .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}
                      : Channel.value([])
 
-tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation )
-                     ? (input_normal.join(input_tumor)).view()
-                     : Channel.empty()
+/*tumor_normal_pair  = ( params.skip_normal_generation && params.skip_tumor_generation && !params.tumor_only)
+                     ? (input_normal.join(input_tumor))
+                     : input_tumor*/
 
 
 germline_resource  = params.germline_resource
@@ -201,30 +202,44 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     if ( !params.skip_variant_calling ){
 
         if ( params.tumor_only){
-        ADJUST_BAM_RG(
-            input_tumor,
-            params.picardjar
-        )
-         } else {
             ADJUST_BAM_RG(
-            tumor_normal_pair,
-            params.picardjar
-        )
-        }
+                input_tumor,
+                params.picardjar
+            )
 
-        VARIANT_CALLING(
-            ADJUST_BAM_RG.out.tumor_only_bam,
-            ADJUST_BAM_RG.out.paired_bam,
-            germline_resource,
-            panel_of_normals,
-            manta_candidate_small_indels,
-            freebayes_samples,
-            freebayes_population,
-            freebayes_cnv,
-            dbsnp_vcf,
-            params.fasta,
-            params.bed
+            VARIANT_CALLING(
+                ADJUST_BAM_RG.out.bam,
+                Channel.empty(),
+                germline_resource,
+                panel_of_normals,
+                manta_candidate_small_indels,
+                freebayes_samples,
+                freebayes_population,
+                freebayes_cnv,
+                dbsnp_vcf,
+                params.fasta,
+                params.bed
         )
+            } else {
+                ADJUST_BAM_RG_PAIRED(
+                    input_normal.join(input_tumor),
+                    params.picardjar
+                )
+
+                VARIANT_CALLING(
+                    Channel.empty(),
+                    ADJUST_BAM_RG.out.bam,
+                    germline_resource,
+                    panel_of_normals,
+                    manta_candidate_small_indels,
+                    freebayes_samples,
+                    freebayes_population,
+                    freebayes_cnv,
+                    dbsnp_vcf,
+                    params.fasta,
+                    params.bed
+        )
+            }
 /*
         ch_variant_calling = VARIANT_CALLING
             .out
