@@ -54,7 +54,6 @@ include { BAMSURGEON }                from '../modules/local/bamsurgeon.nf'
 include { ADJUST_BAM_RG_NORMAL }             from '../modules/local/adjust_bam_rg_normal.nf'
 include { ADJUST_BAM_RG_TUMOR }             from '../modules/local/adjust_bam_rg_tumor.nf'
 include { VARIANT_CALLING }           from '../subworkflows/local/variant_calling.nf'
-include { VARIANT_CALLING_PAIRED }    from '../subworkflows/local/variant_calling_paired.nf'
 include { GENERATE_PLOTS  }           from '../modules/local/generate_plots.nf'
 //include { INPUT_CHECK } from '../subworkflows/local/input_check'
 
