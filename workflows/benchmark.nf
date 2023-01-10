@@ -238,8 +238,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                                     [normal_bam: bam, normal_bai: bed]
                                 ]
                                }
-        normal_adjusted.view()
         tumor_adjusted.view()
+        normal_adjusted.view()
         input_calling   =  (normal_adjusted.join(tumor_adjusted))
         input_calling.view()
 
