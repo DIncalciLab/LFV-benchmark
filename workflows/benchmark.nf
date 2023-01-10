@@ -209,13 +209,25 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         normal_adjusted = ADJUST_BAM_RG
                           .out
                           .normal_bam
-                          .ifEmpty([[][]])
-                          .map { sample_name, bam, bed ->
+                          .ifEmpty([])
+
+        if ( normal_adjusted.isEmpty() ){
+            normal_adjusted = normal_adjusted
+                              .map { it ->
                                 [
-                                    [sample_name: sample_name],
-                                    [normal_bam: bam, normal_bai: bed ]
+                                    [sample_name: [] ],
+                                    [normal_bam: [], normal_bai: [] ]
                                 ]
                                }.view()
+        } else {
+            normal_adjusted = normal_adjusted
+                              .map{ sample_name, it ->
+                                [
+                                    [sample_name: sample_name],
+                                    [normal_bam: it[0], normal_bai: it[1]]
+                                ]
+                               }.view()
+        }
 
         tumor_adjusted  = ADJUST_BAM_RG
                           .out
