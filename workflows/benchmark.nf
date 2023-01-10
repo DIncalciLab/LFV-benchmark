@@ -211,7 +211,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                           .normal_bam
                           .ifEmpty('EMPTY')
 
-        if ( normal_adjusted.if('EMPTY') ){
+        if ( $normal_adjusted == 'EMPTY' ){
             normal_adjusted = normal_adjusted
                               .map { it ->
                                 [
