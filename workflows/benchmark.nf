@@ -239,11 +239,10 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                                 ]
                                }
 
-        input_calling   =  (input_normal.join(input_tumor)).view()
+        input_calling   =  (normal_adjusted.join(tumor_adjusted)).view()
 
         VARIANT_CALLING(
-            ADJUST_BAM_RG.out.normal_bam,
-            ADJUST_BAM_RG.out.tumor_bam,
+            input_calling,
             germline_resource,
             panel_of_normals,
             manta_candidate_small_indels,
