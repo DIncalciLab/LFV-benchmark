@@ -95,12 +95,12 @@ input_tumor        = ( params.skip_normal_generation && params.skip_tumor_genera
                      .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}
                      : Channel.value([])
 
-input_samples      = ( params.skip_normal_generation && params.skip_tumor_generation && params.tumor_only)
+/*input_samples      = ( params.skip_normal_generation && params.skip_tumor_generation && params.tumor_only)
                      ? input_tumor.map{ it -> [ [sample_name: it[0].sample_name ],
                                                 [normal_bam:   [], normal_bai: [] ],
                                                 [tumor_bam: it[1].tumor_bam, tumor_bai: it[1].tumor_bai ]
                                                ] }
-                     : (input_normal.join(input_tumor))
+                     : (input_normal.join(input_tumor))*/
 
 germline_resource  = params.germline_resource
                      ? Channel
@@ -218,15 +218,15 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                                     [sample_name: [] ],
                                     [normal_bam: [], normal_bai: [] ]
                                 ]
-                               }.view()
+                               }
         } else {
             normal_adjusted = normal_adjusted
-                              .map{ sample_name, it ->
+                              .map{ sample_name, bad, bed ->
                                 [
                                     [sample_name: sample_name],
-                                    [normal_bam: it[0], normal_bai: it[1]]
+                                    [normal_bam: bam, normal_bai: bed]
                                 ]
-                               }.view()
+                               }
         }
 
         tumor_adjusted  = ADJUST_BAM_RG
@@ -239,12 +239,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                                 ]
                                }
 
-        input_calling   = ( params.skip_normal_generation && params.skip_tumor_generation && params.tumor_only)
-                     ? input_tumor.map{ it -> [ [sample_name: it[0].sample_name ],
-                                                [normal_bam:   [], normal_bai: [] ],
-                                                [tumor_bam: it[1].tumor_bam, tumor_bai: it[1].tumor_bai ]
-                                               ] }
-                     : (input_normal.join(input_tumor))
+        input_calling   =  (input_normal.join(input_tumor)).view()
+
         VARIANT_CALLING(
             ADJUST_BAM_RG.out.normal_bam,
             ADJUST_BAM_RG.out.tumor_bam,
