@@ -17,7 +17,7 @@ process ADJUST_BAM_RG {
     script:
     """
         java -jar ${picardjar} \\
-        AddOrReplaceReadGroups I=${tumor_only.tumor_bam} \
+        AddOrReplaceReadGroups I=${tumor.tumor_bam} \
         O=${meta.sample_name}_tumor.bam \\
         VALIDATION_STRINGENCY=LENIENT \\
         RGID=${meta.sample_name}_tumor \\
@@ -26,6 +26,6 @@ process ADJUST_BAM_RG {
         RGPU=${meta.sample_name}_tumor \\
         RGSM=${meta.sample_name}_tumor
 
-    samtools index ${meta.sample_name}_tumor.only.bam
+    samtools index ${meta.sample_name}_tumor.bam
     """
 }
