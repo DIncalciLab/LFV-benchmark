@@ -51,7 +51,8 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 
 include { NEAT        }               from '../modules/local/neat.nf'
 include { BAMSURGEON }                from '../modules/local/bamsurgeon.nf'
-include { ADJUST_BAM_RG }             from '../modules/local/adjust_bam_rg.nf'
+include { ADJUST_BAM_RG_NORMAL }             from '../modules/local/adjust_bam_rg_normal.nf'
+include { ADJUST_BAM_RG_TUMOR }             from '../modules/local/adjust_bam_rg_tumor.nf'
 include { VARIANT_CALLING }           from '../subworkflows/local/variant_calling.nf'
 include { VARIANT_CALLING_PAIRED }    from '../subworkflows/local/variant_calling_paired.nf'
 include { GENERATE_PLOTS  }           from '../modules/local/generate_plots.nf'
@@ -93,7 +94,7 @@ input_tumor        = ( params.skip_normal_generation && params.skip_tumor_genera
                      .fromFilePairs(params.input_tumor + "/*.{bam,bai}", flat:true )
                      { sample_name -> sample_name.name.replaceAll(/.tumor|.bam|.bai$/,'') }
                      .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}
-                     : Channel.value([])
+                     : Channel.empty()
 
 /*input_samples      = ( params.skip_normal_generation && params.skip_tumor_generation && params.tumor_only)
                      ? input_tumor.map{ it -> [ [sample_name: it[0].sample_name ],
@@ -201,49 +202,57 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     }
 
     if ( !params.skip_variant_calling ){
-        ADJUST_BAM_RG(
-            input_tumor,
-            input_normal.ifEmpty([['EMPTY'],['EMPTY']]),
-            params.picardjar
-        )
 
-        ADJUST_BAM_RG.out.tumor_bam.view()
-        ADJUST_BAM_RG.out.normal_bam.view()
+        if ( input_normal.isEmpty() ){
 
-        normal_adjusted = ADJUST_BAM_RG
-                          .out
-                          .normal_bam
-                          .ifEmpty('EMPTY')
+            ADJUST_BAM_RG_TUMOR(
+                input_tumor,
+                params.picardjar
+            )
+            tumor_adjusted = ADJUST_BAM_RG_TUMOR.out.bam
+                  .map { name, bam, bai ->
+                    [
+                        [sample_name:  name],
+                        [tumor_bam: bam, tumor_bam: bai ]
+                    ]
+                   }
+             input_calling = tumor_adjusted
 
-        if ( normal_adjusted.collect{assert it == 'EMPTY'} ){
-            normal_adjusted = normal_adjusted
-                              .map { it ->
-                                [
-                                    [sample_name: [] ],
-                                    [normal_bam: [], normal_bai: [] ]
-                                ]
-                               }
         } else {
-            normal_adjusted = normal_adjusted
-                              .map{ sample_name, bad, bed ->
-                                [
-                                    [sample_name: sample_name],
-                                    [normal_bam: bam, normal_bai: bed]
-                                ]
-                               }
+
+            ADJUST_BAM_RG_TUMOR(
+                input_tumor,
+                params.picardjar
+            )
+
+            tumor_adjusted  = ADJUST_BAM_RG
+                              .out
+                              .tumor_bam
+                              .map{ sample_name, bam, bed ->
+                                    [
+                                        [sample_name: sample_name],
+                                        [tumor_bam: bam, tumor_bam: bed]
+                                    ]
+                                   }
+
+             ADJUST_BAM_RG_NORMAL(
+                input_normal,
+                params.picardjar
+             )
+
+             normal_adjusted  = ADJUST_BAM_RG
+                              .out
+                              .normal_bam
+                              .map{ sample_name, bam, bed ->
+                                    [
+                                        [sample_name: sample_name],
+                                        [normal_bam: bam, normal_bai: bed]
+                                    ]
+                                   }
+
+            input_calling   =  (normal_adjusted.join(tumor_adjusted))
         }
-        tumor_adjusted  = ADJUST_BAM_RG
-                          .out
-                          .tumor_bam
-                          .map{ sample_name, bam, bed ->
-                                [
-                                    [sample_name: sample_name],
-                                    [normal_bam: bam, normal_bai: bed]
-                                ]
-                               }
-
-        input_calling   =  (normal_adjusted.join(tumor_adjusted))
-
+      input_calling.view()
         VARIANT_CALLING(
             input_calling,
             germline_resource,
