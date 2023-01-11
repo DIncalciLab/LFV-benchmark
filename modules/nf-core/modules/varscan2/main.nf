@@ -61,7 +61,8 @@ process VARSCAN2 {
     if ( !params.high_sensitivity ){
     """
     varscan $mpileup \\
-        --output-vcf
+        --output-vcf \\
+        > ${prefix}.vcf
 
     gzip -c ${prefix}.snp.vcf > ${prefix}.snp.vcf.gz
     gzip -c ${prefix}.indel.vcf > ${prefix}.indel.vcf.gz
