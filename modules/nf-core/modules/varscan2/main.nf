@@ -17,8 +17,9 @@ process VARSCAN2 {
 
     output:
     //tuple val(meta),
-    path("*.snp.vcf.gz")   , emit: vcf_varscan_snp
-    path("*.indel.vcf.gz")   , emit: vcf_varscan_indel
+    path("*.vcf"),          optional:true,       emit:vcf_tumor_only
+    path("*.snp.vcf.gz"),   optional:true,       emit: vcf_varscan_snp
+    path("*.indel.vcf.gz"), optional:true,       emit: vcf_varscan_indel
     //path("*.vcf.tbi")   , emit: vcf_varscan_tbi
     path "versions.yml"              , emit: versions
 
