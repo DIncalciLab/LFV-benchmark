@@ -213,7 +213,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                              .bam
                              .map { name, bam, bai ->
                                 [name, 'EMPTY', 'EMPTY',
-                                       bam,      bai
+                                       bam,     bai
                                 ]
                                     }
              input_calling = tumor_adjusted
