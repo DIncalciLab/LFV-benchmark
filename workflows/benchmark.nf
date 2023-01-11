@@ -250,7 +250,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                                     ]
                                    }
 
-            input_calling   =  (normal_adjusted.join(tumor_adjusted))
+            input_calling   =  (normal_adjusted.join(tumor_adjusted)).view()
         }
 
         VARIANT_CALLING(
