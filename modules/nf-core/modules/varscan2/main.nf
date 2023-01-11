@@ -31,7 +31,7 @@ process VARSCAN2 {
     def prefix = task.ext.prefix ?: "varscan"
     def mpileup = ( !( {assert ${normal.normal_bam} == 'EMPTY'} )  )
                     ? "somatic $mpileup ${prefix} --mpileup 1"
-                    : "mpileup2cns $mpileup --variants"
+                    : "mpileup2cns $mpileup"
     def VERSION = '2.4.4' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
     
     def avail_mem = 3
