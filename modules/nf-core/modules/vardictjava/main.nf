@@ -27,7 +27,7 @@ process VARDICTJAVA {
     def args = task.ext.args ?: ''
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "vardict"
-    def bam     = ( !(${normal.normal_bam} == 'EMPTY')  ) ? "'${tumor_bam}|${normal_bam}'" : "${tumor_only.tumor_bam}"
+    def bam     = ( !(assert ${normal.normal_bam} == 'EMPTY')  ) ? "'${tumor_bam}|${normal_bam}'" : "${tumor_only.tumor_bam}"
     def mode = ( !(${normal.normal_bam} == 'EMPTY')  ) ?
                 "testsomatic.R | var2vcf_paired.pl -N '${prefix}_tumor|${prefix}_normal'" :
                 "teststrandbias.R | var2vcf_valid.pl -N ${prefix} -E"
