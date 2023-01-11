@@ -44,7 +44,7 @@ process VARSCAN2 {
 
     if ( params.high_sensitivity ) {
     """
-    varscan $mpileup \\
+    varscan ${mpileup} \\
         $args
 
     cat <<-END_VERSIONS > versions.yml
@@ -56,8 +56,7 @@ process VARSCAN2 {
 
     if ( !params.high_sensitivity ){
     """
-    varscan $mpileup \\
-        > ${prefix}.vcf
+    varscan ${mpileup}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
