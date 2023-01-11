@@ -36,7 +36,7 @@ process GATK4_MUTECT2 {
     //def inputs = input.collect{ "--input $it"}.join(" ")
     def bam = ( !( {assert ${normal.normal_bam} == 'EMPTY'} )  )
                ? "-I ${tumor.tumor_bam} -I ${normal.normal_bam} -normal ${meta.sample_name}_normal"
-               : "-I {tumor.tumor_bam}"
+               : "-I ${tumor.tumor_bam}"
     //def interval_command = intervals ? "--intervals $intervals" : ""
     def pon_command = panel_of_normals ? "--panel-of-normals $panel_of_normals" : ""
     def gr_command = germline_resource ? "--germline-resource $germline_resource" : ""
