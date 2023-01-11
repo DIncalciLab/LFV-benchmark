@@ -28,6 +28,7 @@ process SAMTOOLS_MPILEUP {
 
     """
     samtools mpileup \\
+        -d 0 \\
         -f $fasta \\
         --output ${prefix}.mpileup \\
         $bam
