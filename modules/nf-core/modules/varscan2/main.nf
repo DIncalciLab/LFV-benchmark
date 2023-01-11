@@ -47,6 +47,8 @@ process VARSCAN2 {
     varscan ${mpileup} \\
         $args
 
+    gzip -c *.vcf > *.vcf.gz
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         varscan2_version: $VERSION
@@ -58,21 +60,12 @@ process VARSCAN2 {
     """
     varscan ${mpileup}
 
+    gzip -c *.vcf > *.vcf.gz
+
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         varscan2_version: $VERSION
     END_VERSIONS
-    """
-    }
-
-    if ( !( {assert ${normal.normal_bam} == 'EMPTY'} ) ){
-    """
-    gzip -c ${prefix}.snp.vcf > ${prefix}.snp.vcf.gz
-    gzip -c ${prefix}.indel.vcf > ${prefix}.indel.vcf.gz
-    """
-    } else{
-    """
-    gzip -c ${prefix}.vcf > ${prefix}.vcf.gz
     """
     }
 
