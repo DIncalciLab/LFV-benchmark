@@ -231,7 +231,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                               .map{ it ->
                                     [
                                         [sample_name: it[0].sample_name ],
-                                        [tumor_bam: it[1].tumor_bam, tumor_bai: it[2].tumor_bai ]
+                                        [tumor_bam: it[1], tumor_bai: it[2] ]
                                     ]
                                    }
 
@@ -246,7 +246,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                               .map{ it ->
                                     [
                                         [sample_name: it[0].sample_name ],
-                                        [normal_bam: it[1].normal_bam, normal_bai: it[2].normal_bai ]
+                                        [normal_bam: it[1], normal_bai: it[2] ]
                                     ]
                                    }
 
