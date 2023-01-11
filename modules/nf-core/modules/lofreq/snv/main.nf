@@ -9,7 +9,7 @@ process LOFREQ_SNV {
         'quay.io/biocontainers/lofreq:2.1.5--py36h5b61e8e_8' }"
 
     input:
-    tuple val(meta), path(normal), path(tumor)
+    tuple val(meta), val(normal), val(tumor)
     val fasta
     val bed
 
