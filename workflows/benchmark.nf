@@ -100,7 +100,7 @@ input_samples      = ( params.skip_normal_generation && params.skip_tumor_genera
                                                 [normal_bam:   [], normal_bai: [] ],
                                                 [tumor_bam: it[1].tumor_bam, tumor_bai: it[1].tumor_bai ]
                                                ] }
-                     : (input_normal.join(input_tumor)).view()
+                     : (input_normal.join(input_tumor))
 
 germline_resource  = params.germline_resource
                      ? Channel
@@ -212,8 +212,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                              .out
                              .bam
                              .map { name, bam, bai ->
-                                [name, [normal_bam: 'EMPTY', normal_bai: 'EMPTY',
-                                       tumor_bam: bam,      tumor_bai: bai]
+                                [name, [normal_bam: 'EMPTY', normal_bai: 'EMPTY'],
+                                       [tumor_bam: bam,      tumor_bai: bai]
                                 ]
                                     }
              input_calling = tumor_adjusted.view()
