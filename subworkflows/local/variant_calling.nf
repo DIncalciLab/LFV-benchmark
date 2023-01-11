@@ -29,7 +29,7 @@ workflow VARIANT_CALLING {
     bed
 
     main:
-    bam.view()
+
     VARDICTJAVA(
         bam,
         fasta,
