@@ -8,7 +8,7 @@ process GATK4_MUTECT2 {
         'quay.io/biocontainers/gatk4:4.2.3.0--hdfd78af_1' }"
 
     input:
-    tuple val(meta), path(normal), path(tumor)
+    tuple val(meta), val(normal), val(tumor)
     path panel_of_normals
     path germline_resource
     val fasta
