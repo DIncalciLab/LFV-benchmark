@@ -213,12 +213,12 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                              .bam
                              .map { it ->
                                 [
-                                  [sample_name: it[0].sample_name],
+                                  [sample_name: it[0]],
                                   [normal_bam: 'EMPTY', normal_bai: 'EMPTY'],
                                   [tumor_bam: it[1],      tumor_bai: it[1]]
                                 ]
                                     }
-             input_calling = tumor_adjusted
+             input_calling = tumor_adjusted.view()
 
         } else {
 
