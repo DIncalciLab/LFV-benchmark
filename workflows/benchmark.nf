@@ -94,13 +94,13 @@ input_tumor        = ( params.skip_normal_generation && params.skip_tumor_genera
                      { sample_name -> sample_name.name.replaceAll(/.tumor|.bam|.bai$/,'') }
                      .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}
                      : Channel.empty()
-
+/*
 input_samples      = ( params.skip_normal_generation && params.skip_tumor_generation && params.tumor_only)
                      ? input_tumor.map{ it -> [ [sample_name: it[0].sample_name ],
                                                 [normal_bam:   [], normal_bai: [] ],
                                                 [tumor_bam: it[1].tumor_bam, tumor_bai: it[1].tumor_bai ]
                                                ] }
-                     : (input_normal.join(input_tumor))
+                     : (input_normal.join(input_tumor))*/
 
 germline_resource  = params.germline_resource
                      ? Channel
@@ -250,7 +250,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                                     ]
                                    }
 
-            input_calling   =  (normal_adjusted.join(tumor_adjusted))
+            input_calling   =  (normal_adjusted.join(tumor_adjusted)).view()
         }
         VARIANT_CALLING(
             input_calling,
