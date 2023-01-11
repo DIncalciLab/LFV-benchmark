@@ -243,10 +243,10 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
              normal_adjusted  = ADJUST_BAM_RG_NORMAL
                               .out
                               .bam
-                              .map{ sample_name, bam, bed ->
+                              .map{ sample_name, bam, bai ->
                                     [
-                                        [sample_name: sample_name[0],
-                                        [normal_bam: bam[0], normal_bai: bed[0] ]
+                                        [sample_name: sample_name[0] ],
+                                        [normal_bam: bam[0], normal_bai: bai[0] ]
                                     ]
                                    }
 
