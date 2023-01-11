@@ -101,7 +101,7 @@ input_tumor        = ( params.skip_normal_generation && params.skip_tumor_genera
                                                 [tumor_bam: it[1].tumor_bam, tumor_bai: it[1].tumor_bai ]
                                                ] }
                      : (input_normal.join(input_tumor))*/
-
+test = (input_normal.join(input_tumor).view()
 germline_resource  = params.germline_resource
                      ? Channel
                      .fromPath(params.germline_resource)
