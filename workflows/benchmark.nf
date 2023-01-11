@@ -95,13 +95,13 @@ input_tumor        = ( params.skip_normal_generation && params.skip_tumor_genera
                      .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}
                      : Channel.empty()
 
-/*input_samples      = ( params.skip_normal_generation && params.skip_tumor_generation && params.tumor_only)
+input_samples      = ( params.skip_normal_generation && params.skip_tumor_generation && params.tumor_only)
                      ? input_tumor.map{ it -> [ [sample_name: it[0].sample_name ],
                                                 [normal_bam:   [], normal_bai: [] ],
                                                 [tumor_bam: it[1].tumor_bam, tumor_bai: it[1].tumor_bai ]
                                                ] }
-                     : (input_normal.join(input_tumor))*/
-test = (input_normal.join(input_tumor).view()
+                     : (input_normal.join(input_tumor)).view()
+
 germline_resource  = params.germline_resource
                      ? Channel
                      .fromPath(params.germline_resource)
