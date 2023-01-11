@@ -29,7 +29,7 @@ process LOFREQ_INDEL {
     def prefix = task.ext.prefix ?: "lofreq"
     def mode = ( !( {assert ${normal.normal_bam} == 'EMPTY'} )  ) ? "somatic" : 'call'
     def bam = ( !( {assert ${normal.normal_bam} == 'EMPTY'} )  )
-              ? "-n indel_processed_normal.bam \\ -t indel_processed_tumor.bam \\ -o ${prefix}_"
+              ? "-n indel_processed_normal.bam  -t indel_processed_tumor.bam  -o ${prefix}_"
               : '-o ${prefix}.vcf indel_processed_tumor.bam'
     def VERSION = '2.1.5'
 
