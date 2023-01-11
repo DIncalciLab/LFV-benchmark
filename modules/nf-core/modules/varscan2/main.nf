@@ -17,7 +17,7 @@ process VARSCAN2 {
 
     output:
     //tuple val(meta),
-    path("*.vcf"),          optional:true,       emit:vcf_tumor_only
+    path("*.vcf"),          optional:true,       emit: vcf_tumor_only
     path("*.snp.vcf.gz"),   optional:true,       emit: vcf_varscan_snp
     path("*.indel.vcf.gz"), optional:true,       emit: vcf_varscan_indel
     //path("*.vcf.tbi")   , emit: vcf_varscan_tbi
@@ -65,7 +65,7 @@ process VARSCAN2 {
     END_VERSIONS
     """
     }
-
+/*
     if ( !( {assert ${normal.normal_bam} == 'EMPTY'} ) ){
     """
     gzip -c ${prefix}.snp.vcf > ${prefix}.snp.vcf.gz
@@ -75,6 +75,6 @@ process VARSCAN2 {
     """
     gzip -c ${prefix}.vcf > ${prefix}.vcf.gz
     """
-    }
+    }*/
 
 }
