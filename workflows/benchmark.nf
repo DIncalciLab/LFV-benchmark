@@ -216,7 +216,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                                        [tumor_bam: bam,      tumor_bai: bai]
                                 ]
                                     }
-             input_calling = tumor_adjusted.view()
+             input_calling = tumor_adjusted
 
         } else {
 
