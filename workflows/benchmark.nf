@@ -212,7 +212,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                              .out
                              .bam
                              .map { name, bam, bai ->
-                                [name, normal_bam: 'EMPTY', normal_bai: 'EMPTY',
+                                [[name], normal_bam: 'EMPTY', normal_bai: 'EMPTY',
                                        tumor_bam: bam,      tumor_bai: bai
                                 ]
                                     }
