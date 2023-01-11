@@ -47,8 +47,6 @@ process VARSCAN2 {
     varscan ${mpileup} \\
         $args
 
-    gzip -c *.vcf
-
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         varscan2_version: $VERSION
