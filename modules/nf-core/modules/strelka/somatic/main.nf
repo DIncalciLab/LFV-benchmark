@@ -8,8 +8,7 @@ process STRELKA_SOMATIC {
         'quay.io/biocontainers/strelka:2.9.10--h9ee0642_1' }"
 
     input:
-    tuple val(meta), val(tumor_only)
-    tuple val(meta), path(normal_bam), path(normal_bai),       path(tumor_bam), path(tumor_bai)
+    tuple val(meta), path(normal),   path(tumor)
     path(manta_candidate_small_indels)//, path(manta_candidate_small_indels_tbi),
           //path(target_bed),              path(target_bed_index)
     val fasta
@@ -39,8 +38,8 @@ process STRELKA_SOMATIC {
     if ( !params.high_sensitivity ){
     """
     configureStrelkaSomaticWorkflow.py \\
-        --tumorBam ${tumor_bam} \\
-        --normalBam ${normal_bam} \\
+        --tumorBam ${tumor.tumor_bam} \\
+        --normalBam ${normal.normal_bam} \\
         --referenceFasta $fasta \\
         ${options_manta} \\
         $args \\

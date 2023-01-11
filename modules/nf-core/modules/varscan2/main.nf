@@ -9,10 +9,8 @@ process VARSCAN2 {
         'quay.io/biocontainers/varscan:2.4.4--0' }"
 
     input:
-    tuple val(meta), val(tumor_only)
-    tuple val(meta), path(normal_bam), path(normal_bai),  path(tumor_bam), path(tumor_bai)
-    tuple val(meta), path(mpileup)
-    //tuple val(meta), path(bai)
+    tuple val(meta), val(normal), val(tumor)
+    tuple val(meta), val(mpileup)
 
     val   fasta
     path  bed
@@ -31,7 +29,7 @@ process VARSCAN2 {
     def args = task.ext.args ?: ''
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "varscan"
-    def mpileup = ( normal_bam && tumor_bam )
+    def mpileup = ( !( {assert ${normal.normal_bam} == 'EMPTY'} )  )
                     ? "somatic $mpileup ${prefix} --mpileup 1"
                     : "mpileup2cns $mpileup --variants"
     def VERSION = '2.4.4' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.

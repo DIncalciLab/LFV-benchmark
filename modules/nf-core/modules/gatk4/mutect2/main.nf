@@ -8,8 +8,7 @@ process GATK4_MUTECT2 {
         'quay.io/biocontainers/gatk4:4.2.3.0--hdfd78af_1' }"
 
     input:
-    tuple val(meta), val(tumor_only)
-    tuple val(meta), path(normal_bam), path(normal_bai), path(tumor_bam), path(tumor_bai)
+    tuple val(meta), path(normal), path(tumor)
     path panel_of_normals
     path germline_resource
     val fasta
@@ -35,9 +34,9 @@ process GATK4_MUTECT2 {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "mutect2"
     //def inputs = input.collect{ "--input $it"}.join(" ")
-    def bam = (normal_bam && tumor_bam)
-               ? "-I ${tumor_bam} -I ${normal_bam} -normal ${meta.sample_name}_normal"
-               : "-I {tumor_only.tumor_bam}"
+    def bam = ( !( {assert ${normal.normal_bam} == 'EMPTY'} )  )
+               ? "-I ${tumor.tumor_bam} -I ${normal.normal_bam} -normal ${meta.sample_name}_normal"
+               : "-I {tumor.tumor_bam}"
     //def interval_command = intervals ? "--intervals $intervals" : ""
     def pon_command = panel_of_normals ? "--panel-of-normals $panel_of_normals" : ""
     def gr_command = germline_resource ? "--germline-resource $germline_resource" : ""

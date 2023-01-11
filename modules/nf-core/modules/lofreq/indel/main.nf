@@ -9,7 +9,7 @@ process LOFREQ_INDEL {
         'quay.io/biocontainers/lofreq:2.1.5--py36h5b61e8e_8' }"
 
     input:
-    tuple val(meta), path(normal_bam), path(normal_bai), path(tumor_bam), path(tumor_bai)
+    tuple val(meta), val(normal), val(tumor)
     val fasta
     val bed
 
@@ -27,7 +27,10 @@ process LOFREQ_INDEL {
 
     script:
     def prefix = task.ext.prefix ?: "lofreq"
-    //def bam = (normal_bam && tumor_bam) ? "somatic -n ${normal_bam} -t ${tumor_bam} --threads ${task.cpus}" : ''
+    def mode = ( !( {assert ${normal.normal_bam} == 'EMPTY'} )  ) ? "somatic" : 'call'
+    def bam = ( !( {assert ${normal.normal_bam} == 'EMPTY'} )  )
+              ? "-n indel_processed_normal.bam \\ -t indel_processed_tumor.bam \\ -o ${prefix}_"
+              : '-o ${prefix}.vcf indel_processed_tumor.bam'
     def VERSION = '2.1.5'
 
     def avail_mem = 3
@@ -37,26 +40,29 @@ process LOFREQ_INDEL {
         avail_mem = task.memory.giga
     }
 
-    if ( !params.high_sensitivity ) {
+    if (( !( {assert ${normal.normal_bam} == 'EMPTY'} )  )){
     """
     lofreq indelqual \\
         --dindel \\
         -f ${fasta} \\
         -o indel_processed_normal.bam \\
-        ${normal_bam}
+        ${normal.normal_bam}
+    samtools index indel_processed_normal.bam
+    """
+    }
 
+    if ( !params.high_sensitivity ) {
+
+    """
     lofreq indelqual \\
         --dindel \\
         -f ${fasta} \\
         -o indel_processed_tumor.bam \\
-        ${tumor_bam}
+        ${tumor.tumor_bam}
 
-    samtools index indel_processed_normal.bam
     samtools index indel_processed_tumor.bam
 
-    lofreq somatic \\
-        -n indel_processed_normal.bam \\
-        -t indel_processed_tumor.bam \\
+    lofreq ${mode} \\
         --call-indels \\
         -f ${fasta} \\
         -l ${bed} \\

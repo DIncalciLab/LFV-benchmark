@@ -9,8 +9,7 @@ process LOFREQ_SNV {
         'quay.io/biocontainers/lofreq:2.1.5--py36h5b61e8e_8' }"
 
     input:
-    tuple val(meta), path(tumor_only)
-    tuple val(meta), path(normal_bam), path(normal_bai), path(tumor_bam), path(tumor_bai)
+    tuple val(meta), path(normal), path(tumor)
     val fasta
     val bed
 
@@ -27,9 +26,9 @@ process LOFREQ_SNV {
 
     script:
     def prefix = task.ext.prefix ?: "lofreq"
-    def bam = (normal_bam && tumor_bam)
-                ? "somatic -n ${normal_bam} -t ${tumor_bam} --threads ${task.cpus} -f ${fasta} -l ${bed} -o ${prefix}_"
-                : "call -f ${fasta} -o ${prefix}.vcf ${tumor_only}"
+    def bam = ( !( {assert ${normal.normal_bam} == 'EMPTY'} )  )
+                ? "somatic \\ -n ${normal.normal_bam} \\ -t ${tumor.tumor_bam} \\ -f ${fasta} \\ -l ${bed} \\ -o ${prefix}_"
+                : "call \\ -f ${fasta} \\ -l ${bed} \\ -o ${prefix}.vcf \\ ${tumor.tumor_bam}"
     def VERSION = '2.1.5'
 
     def avail_mem = 3

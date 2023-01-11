@@ -8,8 +8,7 @@ process FREEBAYES {
         'quay.io/biocontainers/freebayes:1.3.6--hbfe0e7f_2' }"
 
     input:
-    tuple val(meta), val(tumor_only)
-    tuple val(meta), path(normal_bam), path(normal_bai), path(tumor_bam), path(tumor_bai)
+    tuple val(meta), val(normal), val(tumor)
     path samples
     path populations
     path cnv
@@ -30,7 +29,9 @@ process FREEBAYES {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.sample_name}"
-    def input            = ( tumor_bam && normal_bam )       ? "${tumor_bam} ${normal_bam}"        : "${tumor_only.tumor_bam}"
+    def input            = ( !( {assert ${normal.normal_bam} == 'EMPTY'} )  )
+                            ? "${tumor.tumor_bam} ${normal.normal_bam}"
+                            : "${tumor.tumor_bam}"
     def targets_file     = target_bed     ? "--target ${target_bed}"       : ""
     def samples_file     = samples        ? "--samples ${samples}"         : ""
     def populations_file = populations    ? "--populations ${populations}" : ""
