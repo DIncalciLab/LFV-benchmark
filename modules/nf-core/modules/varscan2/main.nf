@@ -64,7 +64,7 @@ process VARSCAN2 {
     END_VERSIONS
     """
     }
-/*
+
     if ( !( {assert ${normal.normal_bam} == 'EMPTY'} ) ){
     """
     gzip -c ${prefix}.snp.vcf > ${prefix}.snp.vcf.gz
@@ -74,6 +74,6 @@ process VARSCAN2 {
     """
     gzip -c ${prefix}.vcf > ${prefix}.vcf.gz
     """
-    }*/
+    }
 
 }
