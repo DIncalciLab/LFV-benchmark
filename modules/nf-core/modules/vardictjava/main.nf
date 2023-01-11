@@ -9,7 +9,7 @@ process VARDICTJAVA {
         'quay.io/biocontainers/vardict-java:1.8.2--hdfd78af_3' }"
 
     input:
-    tuple val(meta), path(bam)
+    tuple val(meta), path(normal), path(tumor)
     
     val   fasta
     path  bed
@@ -27,8 +27,8 @@ process VARDICTJAVA {
     def args = task.ext.args ?: ''
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "vardict"
-    def bam     = ( !(${bam.normal_bam} == 'EMPTY')  ) ? "'${tumor_bam}|${normal_bam}'" : "${tumor_only.tumor_bam}"
-    def mode = ( !(${bam.normal_bam} == 'EMPTY')  ) ?
+    def bam     = ( !(${normal.normal_bam} == 'EMPTY')  ) ? "'${tumor_bam}|${normal_bam}'" : "${tumor_only.tumor_bam}"
+    def mode = ( !(${normal.normal_bam} == 'EMPTY')  ) ?
                 "testsomatic.R | var2vcf_paired.pl -N '${prefix}_tumor|${prefix}_normal'" :
                 "teststrandbias.R | var2vcf_valid.pl -N ${prefix} -E"
     def VERSION = '1.8.2' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
