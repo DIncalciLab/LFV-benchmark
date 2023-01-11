@@ -207,7 +207,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             ADJUST_BAM_RG_TUMOR(
                 input_tumor,
                 params.picardjar
-            )
+            )/*
             tumor_adjusted = ADJUST_BAM_RG_TUMOR
                              .out
                              .bam
@@ -215,7 +215,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                                 [[name], normal_bam: 'EMPTY', normal_bai: 'EMPTY',
                                        tumor_bam: bam,      tumor_bai: bai
                                 ]
-                                    }
+                                    }*/
              input_calling = tumor_adjusted.view()
 
         } else {
@@ -267,24 +267,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
         )
     }
 /*
-        ch_variant_calling = VARIANT_CALLING
-            .out
-            .vcf
-            .collect()
-
-        vardict_ch = VARIANT_CALLING
-            .out
-            .vcf_vardict
-            .map{ it -> [
-                sample: it[0].sample,
-                vcf:    it[1]
-                ]
-                }
-            .collect()
-            .map{ it -> [
-                sample: it.sample,
-                vcf: it.vcf
-            ]}
 
         GENERATE_PLOTS(
             neat_ch.vcf,
@@ -293,8 +275,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             vardict_ch.vcf,
             mutect_ch.vcf,
             varscan_ch.vcf
-        )*/
-    //}
+        )
+    }
 
 /*if (params.skip_tumor_generation && !(params.skip_variant_calling)){
 
@@ -303,76 +285,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.fasta,
             params.bed
         )
-
-        neat_ch = NEAT
-            .out
-            .vcf
-            .map{ it -> [
-                sample: it[0].sample,
-                vcf:    it[1]
-                ]
-                }
-            .collect()
-            .map{ it -> [
-                sample: it.sample,
-                vcf: it.vcf
-            ]}
-
-        bamsurgeon_ch = BAMSURGEON
-            .out
-            .vcf
-            .map{ it -> [
-                sample: it[0].sample,
-                vcf:    it[1]
-                ]
-                }
-            .collect()
-            .map{ it -> [
-                sample: it.sample,
-                vcf: it.vcf
-            ]}
-
-        vardict_ch = VARIANT_CALLING
-            .out
-            .vcf_vardict
-            .map{ it -> [
-                sample: it[0].sample,
-                vcf:    it[1]
-                ]
-                }
-            .collect()
-            .map{ it -> [
-                sample: it.sample,
-                vcf: it.vcf
-            ]}
-
-        mutect_ch  = VARIANT_CALLING
-            .out
-            .vcf_mutect
-            .map{ it -> [
-                sample: it[0].sample,
-                vcf:   it[1]
-                ]
-                }
-            .collect()
-            .map{ it -> [
-                sample: it.sample,
-                vcf: it.vcf
-            ]}
-
-        varscan_ch = VARIANT_CALLING
-            .out
-            .vcf_varscan
-            .map{ it -> [
-                sample: it[0].sample,
-                vcf:    it[1]
-                ]
-                }
-            .collect()
-            .map{ it -> [
-                sample: it.sample,
-                vcf: it.vcf
-            ]}
 
         GENERATE_PLOTS(
             neat_ch.vcf,
