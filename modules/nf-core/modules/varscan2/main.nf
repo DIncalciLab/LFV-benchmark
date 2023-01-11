@@ -31,8 +31,8 @@ process VARSCAN2 {
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "varscan"
     def mpileup = ( !( {assert ${normal.normal_bam} == 'EMPTY'} )  )
-                    ? "somatic $mpileup ${prefix} --mpileup 1"
-                    : "mpileup2cns $mpileup"
+                    ? "somatic $mpileup ${prefix} --output-vcf --mpileup 1"
+                    : "mpileup2cns $mpileup --output-vcf > ${prefix}.vcf"
     def VERSION = '2.4.4' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
     
     def avail_mem = 3
@@ -45,11 +45,7 @@ process VARSCAN2 {
     if ( params.high_sensitivity ) {
     """
     varscan $mpileup \\
-        --output-vcf \\
         $args
-
-    gzip -c ${prefix}.snp.vcf > ${prefix}.snp.vcf.gz
-    gzip -c ${prefix}.indel.vcf > ${prefix}.indel.vcf.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -61,11 +57,7 @@ process VARSCAN2 {
     if ( !params.high_sensitivity ){
     """
     varscan $mpileup \\
-        --output-vcf \\
         > ${prefix}.vcf
-
-    gzip -c ${prefix}.snp.vcf > ${prefix}.snp.vcf.gz
-    gzip -c ${prefix}.indel.vcf > ${prefix}.indel.vcf.gz
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
@@ -73,4 +65,16 @@ process VARSCAN2 {
     END_VERSIONS
     """
     }
+
+    if ( !( {assert ${normal.normal_bam} == 'EMPTY'} ) ){
+    """
+    gzip -c ${prefix}.snp.vcf > ${prefix}.snp.vcf.gz
+    gzip -c ${prefix}.indel.vcf > ${prefix}.indel.vcf.gz
+    """
+    } else{
+    """
+    gzip -c ${prefix}.vcf > ${prefix}.vcf.gz
+    """
+    }
+
 }
