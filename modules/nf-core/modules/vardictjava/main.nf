@@ -1,5 +1,5 @@
 process VARDICTJAVA {
-    tag "Variant calling using VarDict on BAMSurgeon spiked-in sample: $meta"
+    tag "Variant calling using VarDict on BAMSurgeon spiked-in sample: ${meta.sample_name}"
     label 'process_medium'
 
     // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
