@@ -228,10 +228,10 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             tumor_adjusted  = ADJUST_BAM_RG_TUMOR
                               .out
                               .bam
-                              .map{ sample_name, bam, bai ->
+                              .map{ it ->
                                     [
-                                        [sample_name: sample_name[0] ],
-                                        [tumor_bam: bam[0], tumor_bai: bai[0] ]
+                                        [sample_name: it[0].sample_name ],
+                                        [tumor_bam: it[0], tumor_bai: it[0] ]
                                     ]
                                    }
 
@@ -243,10 +243,10 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
              normal_adjusted  = ADJUST_BAM_RG_NORMAL
                               .out
                               .bam
-                              .map{ sample_name, bam, bai ->
+                              .map{ it ->
                                     [
-                                        [sample_name: sample_name[0] ],
-                                        [normal_bam: bam[0], normal_bai: bai[0] ]
+                                        [sample_name: it[0].sample_name ],
+                                        [normal_bam: it[0], normal_bai: it[0] ]
                                     ]
                                    }
 
