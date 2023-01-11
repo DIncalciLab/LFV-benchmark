@@ -1,5 +1,5 @@
 process VARDICTJAVA {
-    tag "Variant calling using VarDict on BAMSurgeon spiked-in sample: ${meta}"
+    tag "Variant calling using VarDict on BAMSurgeon spiked-in sample: $meta"
     label 'process_medium'
 
     // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
@@ -9,7 +9,7 @@ process VARDICTJAVA {
         'quay.io/biocontainers/vardict-java:1.8.2--hdfd78af_3' }"
 
     input:
-    tuple val(meta), path(normal), path(tumor)
+    tuple val(meta), val(normal), val(tumor)
     
     val   fasta
     path  bed
