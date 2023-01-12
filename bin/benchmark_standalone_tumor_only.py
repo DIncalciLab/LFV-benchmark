@@ -148,7 +148,6 @@ def load_callers(vcf_path):
         elif 'varscan2' in name:
             samplename = file.stem.replace('varscan2_', '').split('.')[0]
             for variant in VCF(file):
-                # Jump germline variants
                 tmp = pd.DataFrame(data=
                 [
                     [samplename, variant.CHROM,
@@ -186,33 +185,18 @@ def load_callers(vcf_path):
 
 
         elif 'lofreq' in name:
-            if 'snvs' in name:
-                samplename = file.stem.replace('lofreq_', '').replace('_somatic_final', '').split('.')[0]
-                for variant in VCF(file):
-                    if variant.is_snp:
-                        tmp = pd.DataFrame(data=
-                        [
-                            [samplename, variant.CHROM,
-                             variant.POS, variant.REF,
-                             variant.ALT[0], variant.INFO['AF']
-                             ]
-                        ], columns=df_cols
-                        )
-                        df_lofreq_snv = pd.concat([df_lofreq_snv, tmp])
-
-            elif 'indels' in name:
-                samplename = file.stem.replace('lofreq_', '').split('.')[0].replace('_somatic_final', '')
-                for variant in VCF(file):
-                    if variant.is_indel:
-                        tmp = pd.DataFrame(data=
-                        [
-                            [samplename, variant.CHROM,
-                             variant.POS, variant.REF,
-                             variant.ALT[0], variant.INFO['AF']
-                             ]
-                        ], columns=df_cols
-                        )
-                        df_lofreq_indel = pd.concat([df_lofreq_indel, tmp])
+            samplename = file.stem.replace('lofreq_', '').split('.')[0]
+            for variant in VCF(file):
+                if variant.is_snp:
+                    tmp = pd.DataFrame(data=
+                    [
+                        [samplename, variant.CHROM,
+                         variant.POS, variant.REF,
+                         variant.ALT[0], variant.INFO['AF']
+                         ]
+                    ], columns=df_cols
+                    )
+                    df_lofreq_snv = pd.concat([df_lofreq_snv, tmp])
 
     df_vardict_snv.set_index('sample')
     df_vardict_indel.set_index('sample')
