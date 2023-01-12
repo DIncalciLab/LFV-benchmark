@@ -28,8 +28,8 @@ process LOFREQ_INDEL {
     script:
     def prefix = task.ext.prefix ?: "lofreq"
     def bam = ( !( {assert ${normal.normal_bam} == 'EMPTY'} )  )
-                ? "somatic  -n ${prefix}_indel_processed_normal.bam  -t ${prefix}_indel_processed_tumor.bam
-                    --call-indels -f ${fasta}  -l ${bed}  -o ${prefix}_"
+                ? "somatic  -n ${prefix}_indel_processed_normal.bam  -t ${prefix}_indel_processed_tumor.bam"
+                    "--call-indels -f ${fasta}  -l ${bed}  -o ${prefix}_"
                 : "call  --call-indels -f ${fasta}  -l ${bed}  -o ${prefix}.vcf  ${prefix}_indel_processed_tumor.bam"
     def VERSION = '2.1.5'
 
