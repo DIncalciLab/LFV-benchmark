@@ -14,7 +14,7 @@ process LOFREQ_SNV {
     val bed
 
     output:
-    path("${prefix}.vcf"),                             optional:true,   emit: vcf_tumor_only
+    path("*.vcf"),                                     optional:true,   emit: vcf_tumor_only
     path("*_somatic_final.snvs.vcf.gz"),               optional:true,   emit: vcf_lofreq_snvs
     path("*_somatic_final_minus-dbsnp.snvs.vcf.gz"),   optional: true,  emit: vcf_lofreq_snvs_minus_dbsnp
     path ("versions.yml"),                                              emit: versions
