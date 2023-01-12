@@ -32,7 +32,7 @@ process VARSCAN2 {
     def prefix = task.ext.prefix ?: "varscan"
     def mpileup = ( !( {assert ${normal.normal_bam} == 'EMPTY'} )  )
                     ? "somatic $mpileup ${prefix} --output-vcf --mpileup 1"
-                    : "mpileup2cns $mpileup --output-vcf > ${prefix}.vcf"
+                    : "mpileup2cns $mpileup --variants --output-vcf > ${prefix}.vcf"
     def VERSION = '2.4.4' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
     
     def avail_mem = 3
@@ -57,8 +57,6 @@ process VARSCAN2 {
     if ( !params.high_sensitivity ){
     """
     varscan ${mpileup}
-
-    gzip -c *.vcf
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

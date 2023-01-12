@@ -152,7 +152,7 @@ def load_callers(vcf_path):
                 [
                     [samplename, variant.CHROM,
                      variant.POS, variant.REF,
-                     variant.ALT[0], variant.format('FREQ')[0]
+                     variant.ALT[0], variant.format('FREQ')
                      ]
                 ], columns=df_cols
                 )
