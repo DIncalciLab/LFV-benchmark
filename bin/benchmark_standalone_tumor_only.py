@@ -32,6 +32,19 @@ def load_germinal(vcf):
     return df_neat
 
 
+def filter_germline(all_called_variants):
+    """
+    Filter germline variants based on VAF (tumor_only mode only)
+    """
+
+    dict = {}
+
+    for key, val in all_called_variants.items():
+        df = val.loc[val['VAF'].astype(float) < 0.3]
+        dict[key] = df
+    return dict
+
+
 def load_somatic(vcf_path):
     """
     Create somatic dataframes from BAMSurgeon VCF files (spike-in variants)
@@ -152,7 +165,7 @@ def load_callers(vcf_path):
                 [
                     [samplename, variant.CHROM,
                      variant.POS, variant.REF,
-                     variant.ALT[0], variant.format('FREQ')
+                     variant.ALT[0], float(variant.format('FREQ')[0].strip('%')) / 100
                      ]
                 ], columns=df_cols
                 )
@@ -243,7 +256,11 @@ def load_callers(vcf_path):
     return variants
 
 
-def calculate_spikein(called, spiked_snv, spiked_indel=None):
+def calculate_spikein(called, spiked_snv,
+                      spiked_indel=pd.DataFrame(
+                          columns=['sample', 'chrom', 'pos', 'REF', 'ALT']
+                      )
+                      ):
     """
     Calculate the number of spiked-in variants called in the input variant caller
     """
@@ -266,7 +283,7 @@ def calculate_spikein(called, spiked_snv, spiked_indel=None):
     return dict
 
 
-def calculate_performance(true_called, all_called, spiked_snv, spiked_indel=None):
+def calculate_performance(true_called, all_called, spiked_snv, spiked_indel=pd.DataFrame()):
     """
     Calculate performance metrics for input the variant caller
     """
@@ -323,6 +340,8 @@ def plot_performance(performance, output, type):
                 if 'snv' in key:
                     if 'freebayes' in key:
                         continue
+                    if 'varscan' in key:
+                        continue
                     ax.plot(df['PPV'], df['TPR'], markersize=15, label=key.split('_')[0])
         elif type == 'indel':
             for key, df in performance.items():
@@ -367,17 +386,23 @@ def plot_performance(performance, output, type):
             if 'snv' in key:
                 if 'freebayes' in key:
                     continue
+                if 'varscan' in key:
+                    continue
                 ax1.plot(df['PPV'], df['TPR'], markersize=15, label=key)
 
         for key, df in performance.items():
             if 'indel' in key:
                 if 'freebayes' in key:
                     continue
+                if 'varscan' in key:
+                    continue
                 ax2.plot(df['PPV'], df['TPR'], markersize=15, label=key)
 
         for key, df in performance.items():
             if 'all' in key:
                 if 'freebayes' in key:
+                    continue
+                if 'varscan' in key:
                     continue
                 ax3.plot(df['PPV'], df['TPR'], markersize=15, label=key)
 
@@ -440,7 +465,7 @@ def main():
     parser.add_argument('-n', '--normal', help='Normal samples')
 
     parser.add_argument('-t', '--mut_type', default='snv', help='Type of mutation spiked-in the samples.'
-                                                            'Can be: snv, indel, both')
+                                                                'Can be: snv, indel, both')
 
     parser.add_argument('-s', '--snv',
                         help='Folder with VCF files with spiked in somatic snv')
@@ -480,8 +505,11 @@ def main():
     # Load variants from variant callers vcfs
     all_called_variants = load_callers(args.variant_calling)
 
+    # Filter germline variants in tumor_only mode
+    all_called_variants_f = filter_germline(all_called_variants)
+
     # Save variants for each caller in txt files
-    for key, val in all_called_variants.items():
+    for key, val in all_called_variants_f.items():
         val.to_csv(args.output + "/all_called_variants/" + key + ".txt", sep="\t")
         val.to_excel(args.output + "/all_called_variants/" + key + ".xlsx")
 

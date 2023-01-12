@@ -27,10 +27,10 @@ process LOFREQ_INDEL {
 
     script:
     def prefix = task.ext.prefix ?: "lofreq"
-    def mode = ( !( {assert ${normal.normal_bam} == 'EMPTY'} )  ) ? "somatic" : 'call'
     def bam = ( !( {assert ${normal.normal_bam} == 'EMPTY'} )  )
-              ? "-n indel_processed_normal.bam  -t indel_processed_tumor.bam  -o ${prefix}_"
-              : '-o ${prefix}.vcf indel_processed_tumor.bam'
+                ? "somatic  -n ${prefix}_indel_processed_normal.bam  -t ${prefix}_indel_processed_tumor.bam
+                    --call-indels -f ${fasta}  -l ${bed}  -o ${prefix}_"
+                : "call  --call-indels -f ${fasta}  -l ${bed}  -o ${prefix}.vcf  ${prefix}_indel_processed_tumor.bam"
     def VERSION = '2.1.5'
 
     def avail_mem = 3
@@ -45,9 +45,9 @@ process LOFREQ_INDEL {
     lofreq indelqual \\
         --dindel \\
         -f ${fasta} \\
-        -o indel_processed_normal.bam \\
+        -o ${prefix}_indel_processed_normal.bam \\
         ${normal.normal_bam}
-    samtools index indel_processed_normal.bam
+    samtools index ${prefix}_indel_processed_normal.bam
     """
     }
 
@@ -57,16 +57,12 @@ process LOFREQ_INDEL {
     lofreq indelqual \\
         --dindel \\
         -f ${fasta} \\
-        -o indel_processed_tumor.bam \\
+        -o ${prefix}_indel_processed_tumor.bam \\
         ${tumor.tumor_bam}
 
-    samtools index indel_processed_tumor.bam
+    samtools index ${prefix}_indel_processed_tumor.bam
 
-    lofreq ${mode} \\
-        --call-indels \\
-        -f ${fasta} \\
-        -l ${bed} \\
-        -o ${prefix}_
+    lofreq ${bam}
 
 
     cat <<-END_VERSIONS > versions.yml
