@@ -38,7 +38,7 @@ workflow VARIANT_CALLING {
     )
     }
 
-    if ( !params.skip-mutect ){
+    if ( !params.skip_mutect ){
     GATK4_MUTECT2(
         bam,
         germline_resource,
