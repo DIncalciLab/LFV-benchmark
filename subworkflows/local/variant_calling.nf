@@ -30,12 +30,15 @@ workflow VARIANT_CALLING {
 
     main:
 
+    if ( !params.skip_vardict){
     VARDICTJAVA(
         bam,
         fasta,
         bed
     )
+    }
 
+    if ( !params.skip-mutect ){
     GATK4_MUTECT2(
         bam,
         germline_resource,
@@ -43,7 +46,9 @@ workflow VARIANT_CALLING {
         fasta,
         bed
     )
+    }
 
+    if ( !params.skip_varscan){
     SAMTOOLS_MPILEUP(
         bam,
         fasta
@@ -55,27 +60,34 @@ workflow VARIANT_CALLING {
         fasta,
         bed
     )
-
-    if ( params.type == "snv"){
-    LOFREQ_SNV(
-        bam,
-        fasta,
-        bed)
-        } else {
-            LOFREQ_INDEL(
-                bam,
-                fasta,
-                bed)
-        }
-
-    if ( !params.tumor_only ){
-    STRELKA_SOMATIC(
-        bam,
-        manta_candidate_small_indels,
-        fasta,
-        bed
-    )
     }
+
+    if ( !params.skip_lofreq ){
+        if ( params.type == "snv"){
+        LOFREQ_SNV(
+            bam,
+            fasta,
+            bed)
+            } else {
+                LOFREQ_INDEL(
+                    bam,
+                    fasta,
+                    bed)
+            }
+    }
+
+    if ( !params.skip_strelka ){
+        if ( !params.tumor_only ){
+        STRELKA_SOMATIC(
+            bam,
+            manta_candidate_small_indels,
+            fasta,
+            bed
+        )
+        }
+    }
+
+    if ( !params.skip_freebayes ){
     FREEBAYES(
         bam,
         freebayes_samples,
@@ -84,6 +96,7 @@ workflow VARIANT_CALLING {
         fasta,
         bed
     )
+    }
 /*
     ch_output = Channel.empty()
                 .mix(   //VARDICTJAVA.out.vcf_vardict
