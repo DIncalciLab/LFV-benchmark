@@ -210,6 +210,17 @@ def load_callers(vcf_path):
                     ], columns=df_cols
                     )
                     df_lofreq_snv = pd.concat([df_lofreq_snv, tmp])
+                if variant.is_indel:
+                    tmp = pd.DataFrame(data=
+                    [
+                        [samplename, variant.CHROM,
+                         variant.POS, variant.REF,
+                         variant.ALT[0], variant.INFO['AF']
+                         ]
+                    ], columns=df_cols
+                    )
+                    df_lofreq_indel = pd.concat([df_lofreq_indel, tmp])
+
 
     df_vardict_snv.set_index('sample')
     df_vardict_indel.set_index('sample')
@@ -388,7 +399,7 @@ def plot_performance(performance, output, type):
                     continue
                 if 'varscan' in key:
                     continue
-                ax1.plot(df['PPV'], df['TPR'], markersize=15, label=key)
+                ax1.plot(df['PPV'], df['TPR'], markersize=15, label=key.split('_')[0])
 
         for key, df in performance.items():
             if 'indel' in key:
@@ -396,7 +407,7 @@ def plot_performance(performance, output, type):
                     continue
                 if 'varscan' in key:
                     continue
-                ax2.plot(df['PPV'], df['TPR'], markersize=15, label=key)
+                ax2.plot(df['PPV'], df['TPR'], markersize=15, label=key.split('_')[0])
 
         for key, df in performance.items():
             if 'all' in key:
@@ -404,7 +415,7 @@ def plot_performance(performance, output, type):
                     continue
                 if 'varscan' in key:
                     continue
-                ax3.plot(df['PPV'], df['TPR'], markersize=15, label=key)
+                ax3.plot(df['PPV'], df['TPR'], markersize=15, label=key.split('_')[0])
 
         # Edit the major and minor tick locations of x and y axes
         # ax.xaxis.set_major_locator(mpl.ticker.MultipleLocator(10))

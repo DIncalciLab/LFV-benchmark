@@ -35,6 +35,19 @@ process STRELKA_SOMATIC {
     def options_target_bed = target_bed ? "--callRegions ${target_bed}" : "" //disabled due to bug in strelka2
     def options_manta = manta_candidate_small_indels ? "--indelCandidates ${manta_candidate_small_indels}" : ""
 
+    if ( params.high_sensitivity ){
+    """
+    awk  'BEGIN{FS=OFS="="}/maxIndelSize/{$2=90}1' /usr/local/share/strelka-2.9.10-1/bin/configureStrelkaSomaticWorkflow.py.ini
+
+    configureStrelkaSomaticWorkflow.py \\
+        --tumorBam ${tumor.tumor_bam} \\
+        --normalBam ${normal.normal_bam} \\
+        --referenceFasta $fasta \\
+        ${options_manta} \\
+        $args \\
+        --runDir strelka
+    """
+    }
     if ( !params.high_sensitivity ){
     """
     configureStrelkaSomaticWorkflow.py \\
