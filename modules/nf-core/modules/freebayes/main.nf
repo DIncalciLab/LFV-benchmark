@@ -14,11 +14,9 @@ process FREEBAYES {
     path cnv
     val fasta
     path target_bed
-    //path fasta_fai
 
 
     output:
-    //tuple val(meta),
     path("*.vcf.gz"), emit: vcf_freebayes
     path("*.vcf.gz.tbi"), emit: vcf_freebayes_tbi
     path  "versions.yml"             , emit: versions
@@ -29,7 +27,7 @@ process FREEBAYES {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.sample_name}"
-    def input            = ( !params.tumor_only  )
+    def input            =  !params.tumor_only
                             ? "${tumor.tumor_bam} ${normal.normal_bam}"
                             : "${tumor.tumor_bam}"
     def targets_file     = target_bed     ? "--target ${target_bed}"       : ""
