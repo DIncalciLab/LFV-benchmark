@@ -232,7 +232,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                                         [tumor_bam: it[3], tumor_bai: it[4]]
                                     ]
                                    }
-            VARIANT_CALLING(
+        }
+        VARIANT_CALLING(
             input_calling,
             germline_resource,
             panel_of_normals,
@@ -244,7 +245,6 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.fasta,
             params.bed
         )
-        }
     }
 /*
 

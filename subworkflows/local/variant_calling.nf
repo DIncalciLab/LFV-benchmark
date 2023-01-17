@@ -29,7 +29,6 @@ workflow VARIANT_CALLING {
     bed
 
     main:
-    bam.view()
 
     if ( !params.skip_vardict){
     VARDICTJAVA(
