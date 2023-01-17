@@ -16,16 +16,11 @@ process GATK4_MUTECT2 {
 
 
     output:
-    //tuple val(meta),
-    path("*.vcf.gz")        , emit: vcf_mutect
-    //path("*.vcf.gz.tbi")        , emit: vcf_mutect_tbi
-    //tuple val(meta),
-    path("*.vcf.gz.tbi")        , emit: vcf_mutect_tbi
-    //tuple val(meta),
-    path("*.stats")      , emit: stats_mutect
-    //tuple val(meta),
+    path("*.vcf.gz"),                     emit: vcf_mutect
+    path("*.vcf.gz.tbi"),                 emit: vcf_mutect_tbi
+    path("*.stats"),                      emit: stats_mutect
     path("*.f1r2.tar.gz"), optional:true, emit: f1r2
-    path "versions.yml"                   , emit: versions
+    path ("versions.yml"),                emit: versions
 
     when:
     task.ext.when == null || task.ext.when
@@ -34,7 +29,7 @@ process GATK4_MUTECT2 {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "mutect2"
     //def inputs = input.collect{ "--input $it"}.join(" ")
-    def bam = ( !( params.tumor_only )  )
+    def bam = ( !params.tumor_only  )
                ? "-I ${tumor.tumor_bam} -I ${normal.normal_bam} -normal ${meta.sample_name}_normal"
                : "-I ${tumor.tumor_bam}"
     //def interval_command = intervals ? "--intervals $intervals" : ""

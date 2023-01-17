@@ -30,7 +30,7 @@ process VARSCAN2 {
     def args = task.ext.args ?: ''
     def args2 = task.ext.args2 ?: ''
     def prefix = task.ext.prefix ?: "varscan"
-    def mpileup = ( !( params.tumor_only )  )
+    def mpileup = ( !params.tumor_only  )
                     ? "somatic $mpileup ${prefix} --output-vcf --mpileup 1"
                     : "mpileup2cns $mpileup --variants --output-vcf > ${prefix}.vcf"
     def VERSION = '2.4.4' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
