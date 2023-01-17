@@ -23,15 +23,15 @@ process GATK4_MUTECT2 {
     path ("versions.yml"),                emit: versions
 
     when:
-    task.ext.when == null || task.ext.when
+    //task.ext.when == null || task.ext.when
 
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "mutect2"
     //def inputs = input.collect{ "--input $it"}.join(" ")
-    //def bam =  !params.tumor_only
-      //         ? "-I ${tumor.tumor_bam} -I ${normal.normal_bam} -normal ${meta.sample_name}_normal"
-        //       : "-I ${tumor.tumor_bam}"
+    def bam =  !params.tumor_only
+               ? "-I ${tumor.tumor_bam} -I ${normal.normal_bam} -normal ${meta.sample_name}_normal"
+               : "-I ${tumor.tumor_bam}"
     //def interval_command = intervals ? "--intervals $intervals" : ""
     def pon_command = panel_of_normals ? "--panel-of-normals $panel_of_normals" : ""
     def gr_command = germline_resource ? "--germline-resource $germline_resource" : ""
@@ -46,7 +46,7 @@ process GATK4_MUTECT2 {
     if (params.high_sensitivity){
     """
     gatk --java-options "-Xmx${avail_mem}g" Mutect2 \\
-        test \\
+        $bam \\
         --reference $fasta \\
         $pon_command \\
         $gr_command \\
