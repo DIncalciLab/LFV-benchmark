@@ -1,4 +1,4 @@
-process ADJUST_BAM_RG_NORMAL_PAIRED {
+process ADJUST_BAM_RG_PAIRED {
     tag "Adjust read groups for input BAM: ${meta.sample_name}"
     label 'process_medium'
 
