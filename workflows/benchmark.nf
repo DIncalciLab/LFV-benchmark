@@ -215,7 +215,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
         } else {
 
-            input_paired = (input_normal.join(input_tumor)).view()
+            input_paired = (input_normal.join(input_tumor))
 
             ADJUST_BAM_RG_PAIRED(
                 input_paired,
@@ -231,10 +231,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                                         [normal_bam: it[1], normal_bai: it[2]],
                                         [tumor_bam: it[3], tumor_bai: it[4]]
                                     ]
-                                   }.view()
-        }
-
-        VARIANT_CALLING(
+                                   }
+            VARIANT_CALLING(
             input_calling,
             germline_resource,
             panel_of_normals,
@@ -246,6 +244,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.fasta,
             params.bed
         )
+        }
     }
 /*
 
