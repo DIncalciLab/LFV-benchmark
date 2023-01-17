@@ -215,7 +215,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
         } else {
 
-            input_paired = (input_normal.join(input_tumor))
+            input_paired = (input_normal.join(input_tumor)).view()
 
             ADJUST_BAM_RG_PAIRED(
                 input_paired,
