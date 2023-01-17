@@ -30,6 +30,7 @@ workflow VARIANT_CALLING {
 
     main:
 
+    bam.view()
     if ( !params.skip_vardict){
     VARDICTJAVA(
         bam,

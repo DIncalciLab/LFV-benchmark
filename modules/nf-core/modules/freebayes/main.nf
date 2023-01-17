@@ -40,14 +40,14 @@ process FREEBAYES {
     if ( params.high_sensitivity ) {
     """
     freebayes \\
-        -f $fasta \\
-        $args \\
-        $targets_file \\
-        $samples_file \\
-        $populations_file \\
-        $cnv_file \\
-        $args \\
-        $input > ${prefix}.vcf
+        -f ${fasta} \\
+        ${args} \\
+        ${targets_file} \\
+        ${samples_file} \\
+        ${populations_file} \\
+        ${cnv_file} \\
+        ${args} \\
+        ${input} > ${prefix}.vcf
 
     bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
     tabix -p vcf ${prefix}.vcf.gz
