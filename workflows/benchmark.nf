@@ -51,8 +51,8 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 
 include { NEAT        }               from '../modules/local/neat.nf'
 include { BAMSURGEON }                from '../modules/local/bamsurgeon.nf'
-include { ADJUST_BAM_RG_NORMAL }             from '../modules/local/adjust_bam_rg_normal.nf'
-include { ADJUST_BAM_RG_TUMOR }             from '../modules/local/adjust_bam_rg_tumor.nf'
+include { ADJUST_BAM_RG_PAIRED }      from '../modules/local/adjust_bam_rg_normal.nf'
+include { ADJUST_BAM_RG_TUMOR_ONLY }  from '../modules/local/adjust_bam_rg_tumor.nf'
 include { VARIANT_CALLING }           from '../subworkflows/local/variant_calling.nf'
 include { GENERATE_PLOTS  }           from '../modules/local/generate_plots.nf'
 //include { INPUT_CHECK } from '../subworkflows/local/input_check'
@@ -94,13 +94,6 @@ input_tumor        = ( params.skip_normal_generation && params.skip_tumor_genera
                      { sample_name -> sample_name.name.replaceAll(/.tumor|.bam|.bai$/,'') }
                      .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}
                      : Channel.empty()
-/*
-input_samples      = ( params.skip_normal_generation && params.skip_tumor_generation && params.tumor_only)
-                     ? input_tumor.map{ it -> [ [sample_name: it[0].sample_name ],
-                                                [normal_bam:   [], normal_bai: [] ],
-                                                [tumor_bam: it[1].tumor_bam, tumor_bai: it[1].tumor_bai ]
-                                               ] }
-                     : (input_normal.join(input_tumor))*/
 
 germline_resource  = params.germline_resource
                      ? Channel
@@ -204,13 +197,13 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
         if ( params.tumor_only ){
 
-            ADJUST_BAM_RG_TUMOR(
+            ADJUST_BAM_RG_TUMOR_ONLY(
                 input_tumor,
                 params.picardjar
             )
-            tumor_adjusted = ADJUST_BAM_RG_TUMOR
+            tumor_adjusted = ADJUST_BAM_RG_TUMOR_ONLY
                              .out
-                             .bam
+                             .tumor_only
                              .map { it ->
                                 [
                                   [sample_name: it[0].sample_name],
@@ -222,37 +215,23 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
         } else {
 
-            ADJUST_BAM_RG_TUMOR(
-                input_tumor,
+            input_paired = (input_normal.join(input_tumor))
+
+            ADJUST_BAM_RG_PAIRED(
+                input_paired,
                 params.picardjar
             )
 
-            tumor_adjusted  = ADJUST_BAM_RG_TUMOR
+            input_calling  = ADJUST_BAM_RG_PAIRED
                               .out
-                              .bam
+                              .paired
                               .map{ it ->
                                     [
                                         [sample_name: it[0].sample_name],
-                                        [tumor_bam: it[1], tumor_bai: it[2] ]
+                                        [normal_bam: it[1], normal_bai: it[2] ]
+                                        [tumor_bam: it[3], tumor_bai: it[4] ]
                                     ]
                                    }
-
-             ADJUST_BAM_RG_NORMAL(
-                input_normal,
-                params.picardjar
-             )
-
-             normal_adjusted  = ADJUST_BAM_RG_NORMAL
-                              .out
-                              .bam
-                              .map{ it ->
-                                    [
-                                        [sample_name: it[0].sample_name],
-                                        [normal_bam: it[1], normal_bai: it[2]]
-                                    ]
-                                   }
-
-            input_calling   =  (normal_adjusted.join(tumor_adjusted, failOnMismatch:true))
         }
         VARIANT_CALLING(
             input_calling,
