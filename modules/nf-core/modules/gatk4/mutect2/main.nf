@@ -43,24 +43,6 @@ process GATK4_MUTECT2 {
         avail_mem = task.memory.giga
     }
 
-    if (params.high_sensitivity){
-    """
-    gatk --java-options "-Xmx${avail_mem}g" Mutect2 \\
-        $bam \\
-        --reference $fasta \\
-        $pon_command \\
-        $gr_command \\
-        -L $bed \\
-        $args \\
-        -O ${prefix}.vcf.gz
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        gatk4: \$(echo \$(gatk --version 2>&1) | sed 's/^.*(GATK) v//; s/ .*\$//')
-    END_VERSIONS
-    """
-    }
-
     if (!params.high_sensitivity){
     """
         gatk --java-options "-Xmx${avail_mem}g" Mutect2 \\
@@ -76,6 +58,24 @@ process GATK4_MUTECT2 {
         gatk4: \$(echo \$(gatk --version 2>&1) | sed 's/^.*(GATK) v//; s/ .*\$//')
     END_VERSIONS
 
+    """
+    }
+
+    if (params.high_sensitivity){
+    """
+    gatk --java-options "-Xmx${avail_mem}g" Mutect2 \\
+        $bam \\
+        --reference $fasta \\
+        $pon_command \\
+        $gr_command \\
+        -L $bed \\
+        $args \\
+        -O ${prefix}.vcf.gz
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        gatk4: \$(echo \$(gatk --version 2>&1) | sed 's/^.*(GATK) v//; s/ .*\$//')
+    END_VERSIONS
     """
     }
 

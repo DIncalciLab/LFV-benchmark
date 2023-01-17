@@ -40,8 +40,6 @@ process VARDICTJAVA {
         avail_mem = task.memory.giga
     }
 
-
-
    if ( params.high_sensitivity ){
    """
    vardict-java \
