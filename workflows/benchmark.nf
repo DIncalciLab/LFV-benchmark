@@ -85,14 +85,14 @@ input_normal       = ( params.skip_normal_generation )
                      ? Channel
                      .fromFilePairs(params.input_normal + "/*.{bam,bai}", flat:true )
                      { sample_name -> sample_name.name.replaceAll(/.normal|.bam|.bai$/,'') }
-                     .map { sample_name, bam, bed -> [[sample_name: sample_name], [normal_bam: bam, normal_bai: bed ]]}.view()
+                     .map { sample_name, bam, bed -> [[sample_name: sample_name], [normal_bam: bam, normal_bai: bed ]]}
                      : Channel.empty()
 
 input_tumor        = ( params.skip_normal_generation && params.skip_tumor_generation )
                      ? Channel
                      .fromFilePairs(params.input_tumor + "/*.{bam,bai}", flat:true )
                      { sample_name -> sample_name.name.replaceAll(/.tumor|.bam|.bai$/,'') }
-                     .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}.view()
+                     .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}
                      : Channel.empty()
 /*
 input_samples      = ( params.skip_normal_generation && params.skip_tumor_generation && params.tumor_only)
@@ -230,6 +230,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             tumor_adjusted  = ADJUST_BAM_RG_TUMOR
                               .out
                               .bam
+                              .collect()
                               .map{ it ->
                                     [
                                         [ sample_name: it[0].sample_name ],
@@ -245,6 +246,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
              normal_adjusted  = ADJUST_BAM_RG_NORMAL
                               .out
                               .bam
+                              .collect()
                               .map{ it ->
                                     [
                                         [sample_name: it[0].sample_name ],
