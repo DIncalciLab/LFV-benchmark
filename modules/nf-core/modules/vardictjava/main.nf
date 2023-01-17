@@ -40,26 +40,6 @@ process VARDICTJAVA {
         avail_mem = task.memory.giga
     }
 
-   if ( params.high_sensitivity ){
-   """
-   vardict-java \
-       -G ${fasta} \
-       -f 0.0001 \
-       -N ${prefix} \
-       -b $bam \
-       $args \
-       $bed \
-           | $mode  -f 0.0001 | gzip -c > ${prefix}.vcf.gz
-
-   cat <<-END_VERSIONS > versions.yml
-   "${task.process}":
-       vardict-java: $VERSION
-       var2vcf_valid.pl: \$(echo \$(var2vcf_valid.pl -h | sed -n 2p | awk '{ print \$2 }'))
-       var2vcf_paired.pl: \$(echo \$(var2vcf_paired.pl -h | sed -n 2p | awk '{ print \$2 }'))
-   END_VERSIONS
-   """
-   }
-
    if ( !params.high_sensitivity ) {
    """
    vardict-java \
@@ -70,6 +50,26 @@ process VARDICTJAVA {
        $args \
        $bed \
            | $mode  -f 0.01 | gzip -c > ${prefix}.vcf.gz
+
+   cat <<-END_VERSIONS > versions.yml
+   "${task.process}":
+       vardict-java: $VERSION
+       var2vcf_valid.pl: \$(echo \$(var2vcf_valid.pl -h | sed -n 2p | awk '{ print \$2 }'))
+       var2vcf_paired.pl: \$(echo \$(var2vcf_paired.pl -h | sed -n 2p | awk '{ print \$2 }'))
+   END_VERSIONS
+   """
+   }
+
+   if ( params.high_sensitivity ){
+   """
+   vardict-java \
+       -G ${fasta} \
+       -f 0.0001 \
+       -N ${prefix} \
+       -b $bam \
+       $args \
+       $bed \
+           | $mode  -f 0.0001 | gzip -c > ${prefix}.vcf.gz
 
    cat <<-END_VERSIONS > versions.yml
    "${task.process}":

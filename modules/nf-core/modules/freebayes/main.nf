@@ -35,17 +35,16 @@ process FREEBAYES {
     def populations_file = populations    ? "--populations ${populations}" : ""
     def cnv_file         = cnv            ? "--cnv-map ${cnv}"             : ""
 
-    if (params.high_sensitivity) {
+    if ( !params.high_sensitivity ) {
     """
     freebayes \\
-        -f ${fasta} \\
-        ${args} \\
-        ${targets_file} \\
-        ${samples_file} \\
-        ${populations_file} \\
-        ${cnv_file} \\
-        ${args} \\
-        ${input} > ${prefix}.vcf
+        -f $fasta \\
+        $targets_file \\
+        $samples_file \\
+        $populations_file \\
+        $cnv_file \\
+        $args \\
+        $input > ${prefix}.vcf
 
     bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
     tabix -p vcf ${prefix}.vcf.gz
@@ -57,16 +56,18 @@ process FREEBAYES {
     """
     }
 
-    if ( !params.high_sensitivity ) {
+
+    if (params.high_sensitivity) {
     """
     freebayes \\
-        -f $fasta \\
-        $targets_file \\
-        $samples_file \\
-        $populations_file \\
-        $cnv_file \\
-        $args \\
-        $input > ${prefix}.vcf
+        -f ${fasta} \\
+        ${args} \\
+        ${targets_file} \\
+        ${samples_file} \\
+        ${populations_file} \\
+        ${cnv_file} \\
+        ${args} \\
+        ${input} > ${prefix}.vcf
 
     bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
     tabix -p vcf ${prefix}.vcf.gz

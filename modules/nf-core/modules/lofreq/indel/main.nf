@@ -40,17 +40,6 @@ process LOFREQ_INDEL {
         avail_mem = task.memory.giga
     }
 
-    if (( !( {assert ${normal.normal_bam} == 'EMPTY'} )  )){
-    """
-    lofreq indelqual \\
-        --dindel \\
-        -f ${fasta} \\
-        -o ${prefix}_indel_processed_normal.bam \\
-        ${normal.normal_bam}
-    samtools index ${prefix}_indel_processed_normal.bam
-    """
-    }
-
     if ( !params.high_sensitivity ) {
 
     """
@@ -69,6 +58,17 @@ process LOFREQ_INDEL {
     "${task.process}":
         lofreq_version: $VERSION
     END_VERSIONS
+    """
+    }
+
+    if (params.high_sensitivity){
+    """
+    lofreq indelqual \\
+        --dindel \\
+        -f ${fasta} \\
+        -o ${prefix}_indel_processed_normal.bam \\
+        ${normal.normal_bam}
+    samtools index ${prefix}_indel_processed_normal.bam
     """
     }
 
