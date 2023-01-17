@@ -233,6 +233,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                                     ]
                                    }
         }
+        input_calling.view()
         VARIANT_CALLING(
             input_calling,
             germline_resource,
