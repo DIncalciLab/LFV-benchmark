@@ -212,8 +212,8 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                                 ]
                                     }
              input_calling = tumor_adjusted
-
-        } else {
+        }
+        if (!params.tumor_only) {
 
             input_paired = (input_normal.join(input_tumor))
 

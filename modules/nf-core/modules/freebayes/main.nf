@@ -35,7 +35,7 @@ process FREEBAYES {
     def populations_file = populations    ? "--populations ${populations}" : ""
     def cnv_file         = cnv            ? "--cnv-map ${cnv}"             : ""
 
-    if ( params.high_sensitivity ) {
+    if (params.high_sensitivity) {
     """
     freebayes \\
         -f ${fasta} \\
