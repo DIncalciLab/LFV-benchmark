@@ -34,7 +34,7 @@ process GATK4_MUTECT2 {
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "mutect2"
     //def inputs = input.collect{ "--input $it"}.join(" ")
-    def bam = ( !( {assert ${normal.normal_bam} == 'EMPTY'} )  )
+    def bam = ( !( params.tumor_only )  )
                ? "-I ${tumor.tumor_bam} -I ${normal.normal_bam} -normal ${meta.sample_name}_normal"
                : "-I ${tumor.tumor_bam}"
     //def interval_command = intervals ? "--intervals $intervals" : ""

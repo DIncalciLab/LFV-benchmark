@@ -25,7 +25,7 @@ process LOFREQ_SNV {
 
     script:
     def prefix = task.ext.prefix ?: "lofreq"
-    def bam = ( !( {assert ${normal.normal_bam} == 'EMPTY'} )  )
+    def bam = ( !( params.tumor_only )  )
                 ? "somatic  -n ${normal.normal_bam}  -t ${tumor.tumor_bam}  -f ${fasta}  -l ${bed}  -o ${prefix}_"
                 : "call  -f ${fasta}  -l ${bed}  -o ${prefix}.vcf  ${tumor.tumor_bam}"
     def VERSION = '2.1.5'

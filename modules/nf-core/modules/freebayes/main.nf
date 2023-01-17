@@ -29,7 +29,7 @@ process FREEBAYES {
     script:
     def args = task.ext.args ?: ''
     def prefix = task.ext.prefix ?: "${meta.sample_name}"
-    def input            = ( !( {assert ${normal.normal_bam} == 'EMPTY'} )  )
+    def input            = ( !( params.tumor_only )  )
                             ? "${tumor.tumor_bam} ${normal.normal_bam}"
                             : "${tumor.tumor_bam}"
     def targets_file     = target_bed     ? "--target ${target_bed}"       : ""
