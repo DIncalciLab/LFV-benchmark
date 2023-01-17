@@ -230,13 +230,12 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             tumor_adjusted  = ADJUST_BAM_RG_TUMOR
                               .out
                               .bam
-                              .collect()
                               .map{ it ->
                                     [
-                                        [ sample_name: it[0].sample_name ],
-                                        [ tumor_bam: it[1], tumor_bai: it[2] ]
+                                        [sample_name: it[0].sample_name],
+                                        [tumor_bam: it[1], tumor_bai: it[2] ]
                                     ]
-                                   }.view()
+                                   }
 
              ADJUST_BAM_RG_NORMAL(
                 input_normal,
@@ -246,13 +245,12 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
              normal_adjusted  = ADJUST_BAM_RG_NORMAL
                               .out
                               .bam
-                              .collect()
                               .map{ it ->
                                     [
-                                        [sample_name: it[0].sample_name ],
-                                        [normal_bam: it[1], normal_bai: it[2] ]
+                                        [sample_name: it[0].sample_name],
+                                        [normal_bam: it[1], normal_bai: it[2]]
                                     ]
-                                   }.view()
+                                   }
 
             input_calling   =  (normal_adjusted.join(tumor_adjusted, failOnMismatch:true))
         }
