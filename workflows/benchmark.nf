@@ -231,9 +231,9 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                                         [normal_bam: it[1], normal_bai: it[2]],
                                         [tumor_bam: it[3], tumor_bai: it[4]]
                                     ]
-                                   }
+                                   }.view()
         }
-        input_calling.view()
+
         VARIANT_CALLING(
             input_calling,
             germline_resource,
