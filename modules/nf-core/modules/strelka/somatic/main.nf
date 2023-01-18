@@ -59,7 +59,7 @@ process STRELKA_SOMATIC {
     """
     } else {
     """
-    awk "BEGIN{FS=OFS="="}/maxIndelSize/{${2}=90}1" /usr/local/share/strelka-2.9.10-1/bin/configureStrelkaSomaticWorkflow.py.ini
+    awk 'BEGIN{FS=OFS="="}/maxIndelSize/{${2}=90}1' /usr/local/share/strelka-2.9.10-1/bin/configureStrelkaSomaticWorkflow.py.ini
 
     configureStrelkaSomaticWorkflow.py \\
         --tumorBam ${tumor.tumor_bam} \\
