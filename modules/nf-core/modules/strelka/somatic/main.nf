@@ -57,9 +57,7 @@ process STRELKA_SOMATIC {
         strelka: \$( configureStrelkaSomaticWorkflow.py --version )
     END_VERSIONS
     """
-    }
-
-    if ( params.high_sensitivity ){
+    } else {
     """
     awk  "BEGIN{FS=OFS="="}/maxIndelSize/{${2}=90}1" /usr/local/share/strelka-2.9.10-1/bin/configureStrelkaSomaticWorkflow.py.ini
 

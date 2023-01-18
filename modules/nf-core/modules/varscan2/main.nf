@@ -42,21 +42,19 @@ process VARSCAN2 {
         avail_mem = task.memory.giga
     }
 
-    if ( params.high_sensitivity ) {
+    if ( !params.high_sensitivity ) {
     """
-    varscan ${mpileup} \\
-        $args
+    varscan ${mpileup}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
         varscan2_version: $VERSION
     END_VERSIONS
     """
-    }
-
-    if ( !params.high_sensitivity ){
+    } else {
     """
-    varscan ${mpileup}
+    varscan ${mpileup} \\
+        $args
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":

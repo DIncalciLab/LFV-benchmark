@@ -59,9 +59,7 @@ process GATK4_MUTECT2 {
     END_VERSIONS
 
     """
-    }
-
-    if (params.high_sensitivity){
+    } else {
     """
     gatk --java-options "-Xmx${avail_mem}g" Mutect2 \\
         $bam \\

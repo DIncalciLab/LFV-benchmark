@@ -43,7 +43,6 @@ process FREEBAYES {
         $samples_file \\
         $populations_file \\
         $cnv_file \\
-        $args \\
         $input > ${prefix}.vcf
 
     bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz
@@ -54,14 +53,10 @@ process FREEBAYES {
         freebayes: \$(echo \$(freebayes --version 2>&1) | sed 's/version:\s*v//g' )
     END_VERSIONS
     """
-    }
-
-
-    if (params.high_sensitivity) {
+    } else {
     """
     freebayes \\
         -f ${fasta} \\
-        ${args} \\
         ${targets_file} \\
         ${samples_file} \\
         ${populations_file} \\
