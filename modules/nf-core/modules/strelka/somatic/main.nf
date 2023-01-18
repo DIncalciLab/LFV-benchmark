@@ -59,8 +59,8 @@ process STRELKA_SOMATIC {
     """
     } else {
     """
-    chmod +w /usr/local/share/strelka-2.9.10-1/bin/
-    sed -i -r '/maxIndelSize/ s/(^.*)(=.*)/\1= 90/g' /usr/local/share/strelka-2.9.10-1/bin/configureStrelkaSomaticWorkflow.py.ini
+    sed -i -r '/maxIndelSize/ s/(^.*)(=.*)/\1= 90/g' /usr/local/share/strelka-2.9.10-1/bin/configureStrelkaSomaticWorkflow.py.ini > /usr/local/share/strelka-2.9.10-1/bin/configureStrelkaSomaticWorkflow.py.ini.test
+    mv /usr/local/share/strelka-2.9.10-1/bin/configureStrelkaSomaticWorkflow.py.ini.test /usr/local/share/strelka-2.9.10-1/bin/configureStrelkaSomaticWorkflow.py.ini
 
     configureStrelkaSomaticWorkflow.py \\
         --tumorBam ${tumor.tumor_bam} \\
