@@ -15,9 +15,7 @@ process VARDICTJAVA {
     path  bed
 
     output:
-    //tuple val(meta),
     path("*.vcf.gz"),                  emit: vcf_vardict
-    //path("*.vcf.gz.tbi"),              emit: vcf_vardict_tbi
     path "versions.yml"              , emit: versions
 
     when:
@@ -58,9 +56,7 @@ process VARDICTJAVA {
        var2vcf_paired.pl: \$(echo \$(var2vcf_paired.pl -h | sed -n 2p | awk '{ print \$2 }'))
    END_VERSIONS
    """
-   }
-
-   if ( params.high_sensitivity ){
+   } else {
    """
    vardict-java \
        -G ${fasta} \
