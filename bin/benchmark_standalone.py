@@ -164,7 +164,7 @@ def load_callers(vcf_path):
                     [
                         [samplename, variant.CHROM,
                          variant.POS, variant.REF,
-                         variant.ALT[0], variant.format('FREQ')[0]
+                         variant.ALT[0], float(variant.format('FREQ')[0].strip('%')) / 100
                          ]
                     ], columns=df_cols
                     )
@@ -178,7 +178,7 @@ def load_callers(vcf_path):
                     [
                         [samplename, variant.CHROM,
                          variant.POS, variant.REF,
-                         variant.ALT[0], variant.format('FREQ')[0]
+                         variant.ALT[0], float(variant.format('FREQ')[0].strip('%')) / 100
                          ]
                     ], columns=df_cols
                     )
@@ -338,16 +338,19 @@ def calculate_spikein(called, spiked_snv, spiked_indel=None):
     dict = {}
 
     for key, val in called.items():
-        if 'snv' in key:
-            df = val.merge(spiked_snv, on=['sample', 'chrom', 'pos', 'REF', 'ALT'], how="inner")
-            dict[key] = df
-        if 'indel' in key:
-            df = val.merge(spiked_indel, on=['sample', 'chrom', 'pos', 'REF', 'ALT'], how="inner")
-            dict[key] = df
-        if 'all' in key:
-            df = val.merge(pd.concat([spiked_snv, spiked_indel]),
-                           on=['sample', 'chrom', 'pos', 'REF', 'ALT'], how="inner")
-            dict[key] = df
+        try:
+            if 'snv' in key:
+                df = val.merge(spiked_snv, on=['sample', 'chrom', 'pos', 'REF', 'ALT'], how="inner")
+                dict[key] = df
+            if 'indel' in key:
+                df = val.merge(spiked_indel, on=['sample', 'chrom', 'pos', 'REF', 'ALT'], how="inner")
+                dict[key] = df
+            if 'all' in key:
+                df = val.merge(pd.concat([spiked_snv, spiked_indel]),
+                               on=['sample', 'chrom', 'pos', 'REF', 'ALT'], how="inner")
+                dict[key] = df
+        except TypeError:
+            continue
     # if germinal is not None:
     # df_spiked_germinal = df.merge(df_neat, on=['sample', 'chrom', 'pos', 'REF', 'ALT'], how="inner")
 
@@ -361,23 +364,26 @@ def calculate_performance(true_called, all_called, spiked_snv, spiked_indel=None
     cols = ['TP', 'FP', 'FN', 'TPR', 'PPV', 'FDR']
     dict = {}
     for key, val in true_called.items():
-        tp = len(val)
-        fp = len(all_called[key]) - tp
-        if 'snv' in key:
-            fn = len(spiked_snv) - tp
-        if 'indel' in key:
-            fn = len(spiked_indel) - tp
-        if 'all' in key:
-            fn = len(spiked_indel) + len(spiked_snv) - tp
         try:
-            tmp = pd.DataFrame(data=
-            [
-                [tp, fp, fn,
-                 tp / (tp + fn), tp / (tp + fp), fp / (fp + tp)]
-            ], columns=cols
-            )
-            dict[key] = tmp
-        except ZeroDivisionError:
+            tp = len(val)
+            fp = len(all_called[key]) - tp
+            if 'snv' in key:
+                fn = len(spiked_snv) - tp
+            if 'indel' in key:
+                fn = len(spiked_indel) - tp
+            if 'all' in key:
+                fn = len(spiked_indel) + len(spiked_snv) - tp
+            try:
+                tmp = pd.DataFrame(data=
+                [
+                    [tp, fp, fn,
+                     tp / (tp + fn), tp / (tp + fp), fp / (fp + tp)]
+                ], columns=cols
+                )
+                dict[key] = tmp
+            except ZeroDivisionError:
+                continue
+        except TypeError:
             continue
     return dict
 
@@ -409,14 +415,10 @@ def plot_performance(performance, output, type):
         if type == 'snv':
             for key, df in performance.items():
                 if 'snv' in key:
-                    if 'freebayes' in key:
-                        continue
                     ax.plot(df['PPV'], df['TPR'], markersize=15, label=key.split('_')[0])
         elif type == 'indel':
             for key, df in performance.items():
                 if 'indel' in key:
-                    if 'freebayes' in key:
-                        continue
                     ax.plot(df['PPV'], df['TPR'], markersize=15, label=key.split('_')[0])
 
         # Add the x and y-axis labels
@@ -453,21 +455,15 @@ def plot_performance(performance, output, type):
         # Plot the sample
         for key, df in performance.items():
             if 'snv' in key:
-                if 'freebayes' in key:
-                    continue
-                ax1.plot(df['PPV'], df['TPR'], markersize=15, label=key)
+                ax1.plot(df['PPV'], df['TPR'], markersize=15, label=key.split('_')[0])
 
         for key, df in performance.items():
             if 'indel' in key:
-                if 'freebayes' in key:
-                    continue
-                ax2.plot(df['PPV'], df['TPR'], markersize=15, label=key)
+                ax2.plot(df['PPV'], df['TPR'], markersize=15, label=key.split('_')[0])
 
         for key, df in performance.items():
             if 'all' in key:
-                if 'freebayes' in key:
-                    continue
-                ax3.plot(df['PPV'], df['TPR'], markersize=15, label=key)
+                ax3.plot(df['PPV'], df['TPR'], markersize=15, label=key.split('_')[0])
 
         # Edit the major and minor tick locations of x and y axes
         # ax.xaxis.set_major_locator(mpl.ticker.MultipleLocator(10))
