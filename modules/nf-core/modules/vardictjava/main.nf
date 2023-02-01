@@ -23,7 +23,7 @@ process VARDICTJAVA {
 
     script:
     def args = task.ext.args ?: ''
-    def args2 = task.ext.args2 ?: ''
+    def opt = task.ext.opt ?: ''
     def prefix = task.ext.prefix ?: "vardict"
     def bam     = !params.tumor_only ? "'${tumor.tumor_bam}|${normal.normal_bam}'" : "${tumor.tumor_bam}"
     def mode =  !params.tumor_only ?
@@ -64,6 +64,7 @@ process VARDICTJAVA {
        -N ${prefix} \
        -b $bam \
        $args \
+       $opt \
        $bed \
            | $mode  -f 0.0001 | gzip -c > ${prefix}.vcf.gz
 

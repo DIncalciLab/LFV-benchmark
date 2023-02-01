@@ -26,7 +26,7 @@ process GATK4_MUTECT2 {
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: ''
+    def opt = task.ext.opt ?: ''
     def prefix = task.ext.prefix ?: "mutect2"
     //def inputs = input.collect{ "--input $it"}.join(" ")
     def bam =  !params.tumor_only
@@ -66,7 +66,7 @@ process GATK4_MUTECT2 {
         $pon_command \\
         $gr_command \\
         -L $bed \\
-        $args \\
+        $opt \\
         -O ${prefix}.vcf.gz
 
     cat <<-END_VERSIONS > versions.yml

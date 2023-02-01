@@ -25,7 +25,7 @@ process FREEBAYES {
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: ''
+    def opt = task.ext.opt ?: ''
     def prefix = task.ext.prefix ?: "${meta.sample_name}"
     def input            =  !params.tumor_only
                             ? "${tumor.tumor_bam} ${normal.normal_bam}"
@@ -61,7 +61,7 @@ process FREEBAYES {
         ${samples_file} \\
         ${populations_file} \\
         ${cnv_file} \\
-        ${args} \\
+        ${opt} \\
         ${input} > ${prefix}.vcf
 
     bgzip -c ${prefix}.vcf > ${prefix}.vcf.gz

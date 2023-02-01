@@ -59,16 +59,17 @@ process LOFREQ_INDEL {
         lofreq_version: $VERSION
     END_VERSIONS
     """
-    }
-
-    if (params.high_sensitivity){
+    } else {
     """
     lofreq indelqual \\
         --dindel \\
         -f ${fasta} \\
         -o ${prefix}_indel_processed_normal.bam \\
         ${normal.normal_bam}
+
     samtools index ${prefix}_indel_processed_normal.bam
+
+    lofreq ${bam} ${opt}
     """
     }
 

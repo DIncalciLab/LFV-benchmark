@@ -27,12 +27,12 @@ process VARSCAN2 {
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: ''
-    def args2 = task.ext.args2 ?: ''
+    def opt = !params.high_sensitivity ? '' : task.ext.opt
+    def opt2 = !params.high_sensitivity ? '' : task.ext.opt2
     def prefix = task.ext.prefix ?: "varscan"
     def mpileup =   !params.tumor_only
-                    ? "somatic $mpileup ${prefix} --output-vcf --mpileup 1"
-                    : "mpileup2cns $mpileup --variants --output-vcf > ${prefix}.vcf"
+                    ? "somatic $mpileup ${prefix} ${opt} --output-vcf --mpileup 1"
+                    : "mpileup2cns $mpileup --variants ${opt2} --output-vcf > ${prefix}.vcf"
     def VERSION = '2.4.4' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
     
     def avail_mem = 3
@@ -42,7 +42,6 @@ process VARSCAN2 {
         avail_mem = task.memory.giga
     }
 
-    if ( !params.high_sensitivity ) {
     """
     varscan ${mpileup}
 
@@ -51,16 +50,5 @@ process VARSCAN2 {
         varscan2_version: $VERSION
     END_VERSIONS
     """
-    } else {
-    """
-    varscan ${mpileup} \\
-        $args
-
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        varscan2_version: $VERSION
-    END_VERSIONS
-    """
-    }
 
 }

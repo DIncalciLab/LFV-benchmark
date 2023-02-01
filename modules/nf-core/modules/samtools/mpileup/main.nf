@@ -20,15 +20,15 @@ process SAMTOOLS_MPILEUP {
     task.ext.when == null || task.ext.when
 
     script:
-    def args = task.ext.args ?: ''
+    def opt = task.ext.opt ?: ''
     def prefix = task.ext.prefix ?: "mpileup"
     def bam = ( !params.tumor_only )
                 ? "${normal.normal_bam} ${tumor.tumor_bam}"
                 : "${tumor.tumor_bam}"
 
+    if ( !params.high_sensitivity ) {
     """
     samtools mpileup \\
-        -d 0 \\
         -f $fasta \\
         --output ${prefix}.mpileup \\
         $bam
@@ -38,4 +38,19 @@ process SAMTOOLS_MPILEUP {
         samtools: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')
     END_VERSIONS
     """
+    } else {
+    """
+    samtools mpileup \\
+        $opt \\
+        -f $fasta \\
+        --output ${prefix}.mpileup \\
+        $bam
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        samtools: \$(echo \$(samtools --version 2>&1) | sed 's/^.*samtools //; s/Using.*\$//')
+    END_VERSIONS
+    """
+
+    }
 }

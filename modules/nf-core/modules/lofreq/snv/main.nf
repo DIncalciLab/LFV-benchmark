@@ -25,9 +25,10 @@ process LOFREQ_SNV {
 
     script:
     def prefix = task.ext.prefix ?: "lofreq"
-    def bam = ( !( params.tumor_only )  )
-                ? "somatic  -n ${normal.normal_bam}  -t ${tumor.tumor_bam}  -f ${fasta}  -l ${bed}  -o ${prefix}_"
-                : "call  -f ${fasta}  -l ${bed}  -o ${prefix}.vcf  ${tumor.tumor_bam}"
+    def opt = ( !params.high_sensitivity ) ? '' : task.ext.opt
+    def bam = ( !params.tumor_only )
+                ? "somatic  -n ${normal.normal_bam}  -t ${tumor.tumor_bam}  -f ${fasta}  -l ${bed} ${opt}  -o ${prefix}_"
+                : "call  -f ${fasta}  -l ${bed} ${opt}  -o ${prefix}.vcf  ${tumor.tumor_bam}"
     def VERSION = '2.1.5'
 
     def avail_mem = 3
@@ -37,7 +38,6 @@ process LOFREQ_SNV {
         avail_mem = task.memory.giga
     }
 
-    if ( !params.high_sensitivity ) {
     """
     lofreq ${bam}
 
@@ -46,6 +46,4 @@ process LOFREQ_SNV {
         lofreq_version: $VERSION
     END_VERSIONS
     """
-    }
-
     }
