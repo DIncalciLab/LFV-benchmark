@@ -30,9 +30,12 @@ process LOFREQ_INDEL {
     def opt = ( !params.high_sensitivity ) ? '' : task.ext.opt
     def indel = ( !params.tumor_only)
                 ? """lofreq indelqual --dindel -f ${fasta} -o ${prefix}_indel_processed_tumor.bam ${tumor.tumor_bam}
+                     lofreq indelqual --dindel -f ${fasta} -o ${prefix}_indel_processed_normal.bam ${normal.normal_bam}
+
+                     samtools index ${prefix}_indel_processed_normal.bam
                      samtools index ${prefix}_indel_processed_tumor.bam"""
                 : """lofreq indelqual --dindel -f ${fasta} -o ${prefix}_indel_processed_tumor.bam ${tumor.tumor_bam}
-                     lofreq indelqual --dindel -f ${fasta} -o ${prefix}_indel_processed_normal.bam ${normal.normal_bam}
+
                      samtools index ${prefix}_indel_processed_normal.bam"""
     def bam = ( !( params.tumor_only )  )
                 ? "somatic  -n ${prefix}_indel_processed_normal.bam ${opt}  -t ${prefix}_indel_processed_tumor.bam --call-indels -f ${fasta}  -l ${bed}  -o ${prefix}_"
