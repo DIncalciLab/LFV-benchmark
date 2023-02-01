@@ -29,8 +29,7 @@ process LOFREQ_INDEL {
     def prefix = task.ext.prefix ?: "lofreq"
     def opt = ( !params.high_sensitivity ) ? '' : task.ext.opt
     def bam = ( !( params.tumor_only )  )
-                ? """somatic  -n ${prefix}_indel_processed_normal.bam ${opt}  -t ${prefix}_indel_processed_tumor.bam
-                    --call-indels -f ${fasta}  -l ${bed}  -o ${prefix}_"""
+                ? "somatic  -n ${prefix}_indel_processed_normal.bam ${opt}  -t ${prefix}_indel_processed_tumor.bam --call-indels -f ${fasta}  -l ${bed}  -o ${prefix}_"
                 : "call  --call-indels -f ${fasta}  -l ${bed} ${opt}  -o ${prefix}.vcf  ${prefix}_indel_processed_tumor.bam"
     def VERSION = '2.1.5'
 
