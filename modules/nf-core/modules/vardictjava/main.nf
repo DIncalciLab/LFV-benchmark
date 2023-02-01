@@ -61,10 +61,10 @@ process VARDICTJAVA {
    vardict-java \
        -G ${fasta} \
        -f 0.0001 \
+       $opt \
        -N ${prefix} \
        -b $bam \
        $args \
-       $opt \
        $bed \
            | $mode  -f 0.0001 | gzip -c > ${prefix}.vcf.gz
 
