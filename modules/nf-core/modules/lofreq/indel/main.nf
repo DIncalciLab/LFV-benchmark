@@ -49,6 +49,8 @@ process LOFREQ_INDEL {
     if ( !params.high_sensitivity ) {
 
     """
+    ${indel}
+
     lofreq ${bam}
 
     cat <<-END_VERSIONS > versions.yml
@@ -58,6 +60,7 @@ process LOFREQ_INDEL {
     """
     } else {
     """
+    ${indel}
 
     lofreq ${bam} ${opt}
     """
