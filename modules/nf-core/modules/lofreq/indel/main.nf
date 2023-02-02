@@ -66,7 +66,7 @@ process LOFREQ_INDEL {
     """
     ${indel}
 
-    lofreq ${bam} ${opt}
+    lofreq ${bam}
 
     cat <<-END_VERSIONS > versions.yml
     "${task.process}":
