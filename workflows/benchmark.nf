@@ -233,6 +233,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
                                     ]
                                    }
         }
+
         VARIANT_CALLING(
             input_calling,
             germline_resource,
@@ -276,6 +277,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     }*/
 
     /*
+
     if (params.skip_normal_generation && params.skip_tumor_generation && params.skip_variant_calling){
         log.error "You need to specify an option for the pipeline. See the README for help."
         exit 1
