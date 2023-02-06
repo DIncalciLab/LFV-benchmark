@@ -1,6 +1,6 @@
 process VARDICTJAVA {
-    tag "Variant calling using VarDict on BAMSurgeon spiked-in sample: ${meta.sample}"
-    label 'process_low'
+    tag "Variant calling using VarDict on BAMSurgeon spiked-in sample: ${meta.sample_name}"
+    label 'process_medium'
 
     // WARN: Version information not provided by tool on CLI. Please update version string below when bumping container versions.
     conda (params.enable_conda ? "bioconda::vardict-java=1.8.2" : null)
@@ -9,14 +9,13 @@ process VARDICTJAVA {
         'quay.io/biocontainers/vardict-java:1.8.2--hdfd78af_3' }"
 
     input:
-    tuple val(meta), path(bam), path(bai)
-    //tuple val(meta), path(bai)
+    tuple val(meta), val(normal), val(tumor)
     
     val   fasta
     path  bed
 
     output:
-    tuple val(meta), path("*.vcf")   , emit: vcf_vardict
+    path("*.vcf.gz"),                  emit: vcf_vardict
     path "versions.yml"              , emit: versions
 
     when:
@@ -24,8 +23,12 @@ process VARDICTJAVA {
 
     script:
     def args = task.ext.args ?: ''
-    def args2 = task.ext.args2 ?: ''
+    def opt = task.ext.opt ?: ''
     def prefix = task.ext.prefix ?: "vardict"
+    def bam     = !params.tumor_only ? "'${tumor.tumor_bam}|${normal.normal_bam}'" : "${tumor.tumor_bam}"
+    def mode =  !params.tumor_only ?
+                "testsomatic.R | var2vcf_paired.pl -N '${prefix}_tumor|${prefix}_normal'" :
+                "teststrandbias.R | var2vcf_valid.pl -N ${prefix} -E"
     def VERSION = '1.8.2' // WARN: Version information not provided by tool on CLI. Please update this string when bumping container versions.
 
     def avail_mem = 3
@@ -35,41 +38,43 @@ process VARDICTJAVA {
         avail_mem = task.memory.giga
     }
 
-    if (params.mode == 'high-sensitivity') {
-    """
-    vardict-java \
-        -G ${fasta} \
-        -N ${prefix} \
-        -f 0.0001 \
-        -b $bam \
-        $args \
-        $bed \
-            | teststrandbias.R \
-                | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
-    
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        vardict-java: $VERSION
-        var2vcf_valid.pl: \$(echo \$(var2vcf_valid.pl -h | sed -n 2p | awk '{ print \$2 }'))
-    END_VERSIONS
-    """
-    } else {
-    """
-    vardict-java \
-        -G ${fasta} \
-        -N ${prefix} \
-        -f 0.01 \
-        -b $bam \
-        $args \
-        $bed \
-            | teststrandbias.R \
-                | var2vcf_valid.pl -N ${prefix} -E > ${prefix}.vcf
-    
-    cat <<-END_VERSIONS > versions.yml
-    "${task.process}":
-        vardict-java: $VERSION
-        var2vcf_valid.pl: \$(echo \$(var2vcf_valid.pl -h | sed -n 2p | awk '{ print \$2 }'))
-    END_VERSIONS
-    """
-    }
+   if ( !params.high_sensitivity ) {
+   """
+   vardict-java \
+       -G ${fasta} \
+       -f 0.01 \
+       -N ${prefix} \
+       -b $bam \
+       $args \
+       $bed \
+           | $mode  -f 0.01 | gzip -c > ${prefix}.vcf.gz
+
+   cat <<-END_VERSIONS > versions.yml
+   "${task.process}":
+       vardict-java: $VERSION
+       var2vcf_valid.pl: \$(echo \$(var2vcf_valid.pl -h | sed -n 2p | awk '{ print \$2 }'))
+       var2vcf_paired.pl: \$(echo \$(var2vcf_paired.pl -h | sed -n 2p | awk '{ print \$2 }'))
+   END_VERSIONS
+   """
+   } else {
+   """
+   vardict-java \
+       -G ${fasta} \
+       -f 0.0001 \
+       ${opt} \
+       -N ${prefix} \
+       -b $bam \
+       $args \
+       $bed \
+           | $mode  -f 0.0001 | gzip -c > ${prefix}.vcf.gz
+
+   cat <<-END_VERSIONS > versions.yml
+   "${task.process}":
+       vardict-java: $VERSION
+       var2vcf_valid.pl: \$(echo \$(var2vcf_valid.pl -h | sed -n 2p | awk '{ print \$2 }'))
+       var2vcf_paired.pl: \$(echo \$(var2vcf_paired.pl -h | sed -n 2p | awk '{ print \$2 }'))
+   END_VERSIONS
+   """
+   }
+
 }

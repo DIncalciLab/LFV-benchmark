@@ -49,10 +49,12 @@ ch_multiqc_custom_config = params.multiqc_config ? Channel.fromPath(params.multi
 */
 
 
-include { NEAT        } from '../modules/local/neat.nf'
-include { BAMSURGEON } from '../modules/local/bamsurgeon.nf'
-include { VARIANT_CALLING } from '../subworkflows/local/variant_calling.nf'
-include { GENERATE_PLOTS  }  from '../modules/local/generate_plots.nf'
+include { NEAT        }               from '../modules/local/neat.nf'
+include { BAMSURGEON }                from '../modules/local/bamsurgeon.nf'
+include { ADJUST_BAM_RG_PAIRED }      from '../modules/local/adjust_bam_rg_paired.nf'
+include { ADJUST_BAM_RG_TUMOR_ONLY }  from '../modules/local/adjust_bam_rg_tumor_only.nf'
+include { VARIANT_CALLING }           from '../subworkflows/local/variant_calling.nf'
+include { GENERATE_PLOTS  }           from '../modules/local/generate_plots.nf'
 //include { INPUT_CHECK } from '../subworkflows/local/input_check'
 
 /*
@@ -69,6 +71,71 @@ include { MULTIQC }                     from '../modules/nf-core/modules/multiqc
 
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    INITIALIZE CHANNELS BASED ON PARAMS
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*/
+input_all          = !(params.skip_normal_generation)
+                     ? Channel
+                     .fromPath(params.input_all)
+                     .splitCsv(header:true, quote:'\"', sep: ",")
+                     .map { row -> [sample: row.sample, info: row.info] }
+                     : Channel.value([])
+
+input_normal       = ( params.skip_normal_generation )
+                     ? Channel
+                     .fromFilePairs(params.input_normal + "/*.{bam,bai}", flat:true )
+                     { sample_name -> sample_name.name.replaceAll(/.normal|.bam|.bai$/,'') }
+                     .map { sample_name, bam, bed -> [[sample_name: sample_name], [normal_bam: bam, normal_bai: bed ]]}
+                     : Channel.empty()
+
+input_tumor        = ( params.skip_normal_generation && params.skip_tumor_generation )
+                     ? Channel
+                     .fromFilePairs(params.input_tumor + "/*.{bam,bai}", flat:true )
+                     { sample_name -> sample_name.name.replaceAll(/.tumor|.bam|.bai$/,'') }
+                     .map { sample_name, bam, bed -> [[sample_name: sample_name], [tumor_bam: bam, tumor_bai: bed ]]}
+                     : Channel.empty()
+
+germline_resource  = params.germline_resource
+                     ? Channel
+                     .fromPath(params.germline_resource)
+                     .collect()
+                     : Channel.value([])
+
+panel_of_normals   = params.panel_of_normals
+                     ? Channel
+                     .fromPath(params.panel_of_normals)
+                     .collect()
+                     : Channel.value([])
+
+dbsnp_vcf          = params.dbsnp_vcf          ?: Channel.value([])
+
+manta_candidate_small_indels  = params.manta_candidate_small_indels
+                     ? Channel
+                     .fromPath(params.manta_candidate_small_indels)
+                     .collect()
+                     : Channel.value([])
+
+freebayes_samples = params.freebayes_samples
+                     ? Channel
+                     .fromPath(params.freebayes_samples)
+                     .collect()
+                     : Channel.value([])
+
+freebayes_population = params.freebayes_population
+                     ? Channel
+                     .fromPath(params.freebayes_population)
+                     .collect()
+                     : Channel.value([])
+
+freebayes_cnv = params.freebayes_cnv
+                     ? Channel
+                     .fromPath(params.freebayes_cnv)
+                     .collect()
+                     : Channel.value([])
+
+
+/*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     RUN MAIN WORKFLOW
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
@@ -80,15 +147,10 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     ch_versions = Channel.empty()
 
-    if (!(params.skip_normal_generation)){
-        ch_input = Channel
-        .fromPath(params.input)
-        .splitCsv(header:true, quote:'\"', sep: ",")
-        .map { row -> [sample: row.sample, info: row.info]
-                    }
+    if ( !(params.skip_normal_generation) ){
 
         NEAT(
-            ch_input,
+            input_all,
             params.readlen,
             params.coverage,
             params.bed,
@@ -102,7 +164,7 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
      }
     //ch_versions = ch_versions.mix(NEAT.out.versions)
 
-    if (!(params.skip_normal_generation) && !(params.skip_tumor_generation)){
+    if ( !(params.skip_normal_generation) && !(params.skip_tumor_generation) ){
 
         BAMSURGEON(
             NEAT.out.bam,
@@ -117,16 +179,10 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     }
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
 
-    if (params.skip_normal_generation && !(params.skip_tumor_generation)){
-
-        ch_bam = Channel
-        .fromPath(params.input + "/*.bam")
-        .map { it -> [[sample: it.getSimpleName()], it]
-                    }.view()
-
+    if ( params.skip_normal_generation && !(params.skip_tumor_generation )){
 
         BAMSURGEON(
-            ch_bam,
+            input_normal,
             params.mut_number,
             params.min_fraction,
             params.max_fraction,
@@ -135,86 +191,81 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.bed,
             params.picardjar
         )
-
     }
 
-    if (!(params.skip_variant_calling)){
+    if ( !params.skip_variant_calling ){
+
+        if ( params.tumor_only ){
+
+            ADJUST_BAM_RG_TUMOR_ONLY(
+                input_tumor,
+                params.picardjar
+            )
+            tumor_adjusted = ADJUST_BAM_RG_TUMOR_ONLY
+                             .out
+                             .tumor_only
+                             .map { it ->
+                                [
+                                  [sample_name: it[0].sample_name],
+                                  [normal_bam: 'EMPTY', normal_bai: 'EMPTY'],
+                                  [tumor_bam: it[1],      tumor_bai: it[1]]
+                                ]
+                                    }
+             input_calling = tumor_adjusted
+        }
+        if (!params.tumor_only) {
+
+            input_paired = (input_normal.join(input_tumor))
+
+            ADJUST_BAM_RG_PAIRED(
+                input_paired,
+                params.picardjar
+            )
+
+            input_calling  = ADJUST_BAM_RG_PAIRED
+                              .out
+                              .paired
+                              .map{ it ->
+                                    [
+                                        [sample_name: it[0].sample_name],
+                                        [normal_bam: it[1], normal_bai: it[2]],
+                                        [tumor_bam: it[3], tumor_bai: it[4]]
+                                    ]
+                                   }
+        }
 
         VARIANT_CALLING(
-            BAMSURGEON.out.bam,
+            input_calling,
+            germline_resource,
+            panel_of_normals,
+            manta_candidate_small_indels,
+            freebayes_samples,
+            freebayes_population,
+            freebayes_cnv,
+            dbsnp_vcf,
             params.fasta,
             params.bed
         )
+    }
+/*
 
-        neat_ch = NEAT
-            .out
-            .vcf
-            .map{ it -> [
-                sample: it[0].sample,
-                vcf:    it[1]
-                ]
-                }
-            .collect()
-            .map{ it -> [
-                sample: it.sample,
-                vcf: it.vcf
-            ]}
+        GENERATE_PLOTS(
+            neat_ch.vcf,
+            bamsurgeon_ch.vcf,
 
-        bamsurgeon_ch = BAMSURGEON
-            .out
-            .vcf
-            .map{ it -> [
-                sample: it[0].sample,
-                vcf:    it[1]
-                ]
-                }
-            .collect()
-            .map{ it -> [
-                sample: it.sample,
-                vcf: it.vcf
-            ]}
+            vardict_ch.vcf,
+            mutect_ch.vcf,
+            varscan_ch.vcf
+        )
+    }
 
-        vardict_ch = VARIANT_CALLING
-            .out
-            .vcf_vardict
-            .map{ it -> [
-                sample: it[0].sample,
-                vcf:    it[1]
-                ]
-                }
-            .collect()
-            .map{ it -> [
-                sample: it.sample,
-                vcf: it.vcf
-            ]}
+/*if (params.skip_tumor_generation && !(params.skip_variant_calling)){
 
-        mutect_ch  = VARIANT_CALLING
-            .out
-            .vcf_mutect
-            .map{ it -> [
-                sample: it[0].sample,
-                vcf:   it[1]
-                ]
-                }
-            .collect()
-            .map{ it -> [
-                sample: it.sample,
-                vcf: it.vcf
-            ]}
-
-        varscan_ch = VARIANT_CALLING
-            .out
-            .vcf_varscan
-            .map{ it -> [
-                sample: it[0].sample,
-                vcf:    it[1]
-                ]
-                }
-            .collect()
-            .map{ it -> [
-                sample: it.sample,
-                vcf: it.vcf
-            ]}
+        VARIANT_CALLING(
+            ch_tumor_bam,
+            params.fasta,
+            params.bed
+        )
 
         GENERATE_PLOTS(
             neat_ch.vcf,
@@ -223,7 +274,10 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             mutect_ch.vcf,
             varscan_ch.vcf
         )
-    }
+    }*/
+
+    /*
+
     if (params.skip_normal_generation && params.skip_tumor_generation && params.skip_variant_calling){
         log.error "You need to specify an option for the pipeline. See the README for help."
         exit 1
@@ -264,14 +318,14 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
     COMPLETION EMAIL AND SUMMARY
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
-
+/*
 workflow.onComplete {
     if (params.email || params.email_on_fail) {
         NfcoreTemplate.email(workflow, params, summary_params, projectDir, log, multiqc_report)
     }
     NfcoreTemplate.summary(workflow, params, log)
 }
-
+*/
 /*
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     THE END
