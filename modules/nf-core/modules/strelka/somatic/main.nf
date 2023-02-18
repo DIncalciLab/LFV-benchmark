@@ -67,6 +67,18 @@ process STRELKA_SOMATIC {
         ${options_manta} \\
         $args \\
         --runDir strelka
+
+    python strelka/runWorkflow.py -m local -j $task.cpus
+
+    mv strelka/results/variants/somatic.indels.vcf.gz     ${prefix}.somatic_indels.vcf.gz
+    mv strelka/results/variants/somatic.indels.vcf.gz.tbi ${prefix}.somatic_indels.vcf.gz.tbi
+    mv strelka/results/variants/somatic.snvs.vcf.gz       ${prefix}.somatic_snvs.vcf.gz
+    mv strelka/results/variants/somatic.snvs.vcf.gz.tbi   ${prefix}.somatic_snvs.vcf.gz.tbi
+
+    cat <<-END_VERSIONS > versions.yml
+    "${task.process}":
+        strelka: \$( configureStrelkaSomaticWorkflow.py --version )
+    END_VERSIONS
     """
     }
 
