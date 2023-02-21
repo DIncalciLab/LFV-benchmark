@@ -10,7 +10,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 2. Generate random variant sites (SNP and indels) with [`BAMsurgeon`](https://github.com/adamewing/bamsurgeon)
 3. Spike-in the random variants in the artificial BAM files and generate a ground truth VCF ([`BAMsurgeon`](https://github.com/adamewing/bamsurgeon))
 4. Benchmark three variant callers against the ground truth:
-  - [`MuTect 2`](https://gatk.broadinstitute.org/hc/en-us/articles/360037593851-Mutect2)
+  - [`MuTect2`](https://gatk.broadinstitute.org/hc/en-us/articles/360037593851-Mutect2)
   - [`VarDict`](https://github.com/AstraZeneca-NGS/VarDictJava)
   - [`VarScan2`](https://dkoboldt.github.io/varscan/)
   - [`LoFreq`](https://github.com/CSB5/lofreq)
