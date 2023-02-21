@@ -115,7 +115,9 @@ The benchmark step can be skipped using the following command:
 
 Moreover, each variant caller can be skipped independently, using the commands `--skip_vardict`, `--skip_mutect` and so on...
 
-### 
+### High-sensitivity mode
+
+To run the variant caller using the optimized set of parameters (see the related paper for details), just add the command `--high-sensitivity` to the pipeline.
 
 ## Credits
 
