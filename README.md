@@ -94,8 +94,8 @@ To spike-in variants in existing normal/tumor samples, just skip the NEAT step (
 To run only the variant calling benchmark on existant normal/tumor BAM files, the spike-in step (operated by BAMsurgeon) can be skipped, using the following command:
 
 ```console
-[--input_normal]                                  path to the folder containing the normal BAM samples to be used in the tumor-normal paired mode 
---input_tumor                                     path to the folder containing the BAM samples to benchmark
+[--input_normal]          path to the folder containing the normal BAM samples to be used in the tumor-normal paired mode 
+--input_tumor             path to the folder containing the BAM samples to benchmark
 --skip_normal_generation
 --skip_tumor_generation
 ```
