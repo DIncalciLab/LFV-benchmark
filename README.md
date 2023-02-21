@@ -1,6 +1,6 @@
 ## Introduction
 
-**dincalcilab/lowfrac-variant-benchmark** is a bioinformatics pipeline to generate syntethic data sets to benchmark low-fraction somatic variant callers.
+**dincalcilab/LFV-benchmark** is a bioinformatics pipeline to generate syntethic data sets to benchmark low-fraction somatic variant callers.
 
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple compute infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes have installed from the [nf-core/modules](https://github.com/nf-core/modules) repository.
 
@@ -13,6 +13,9 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
   - [`MuTect 2`](https://gatk.broadinstitute.org/hc/en-us/articles/360037593851-Mutect2)
   - [`VarDict`](https://github.com/AstraZeneca-NGS/VarDictJava)
   - [`VarScan2`](https://dkoboldt.github.io/varscan/)
+  - [`LoFreq`](https://github.com/CSB5/lofreq)
+  - [`FreeBayes`](https://github.com/freebayes/freebayes)
+  - [`Strelka2`](https://github.com/Illumina/strelka)
 
 ## Quick Start
 
@@ -20,7 +23,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 2. Download the pipeline and test it on a minimal dataset with a single command:
 
    ```console
-   nextflow run dincalcilab/lowfrac-variant-benchmark -profile test,YOURPROFILE --outdir <OUTDIR>
+   nextflow run dincalcilab/LFV-benchmark -profile test,YOURPROFILE --outdir <OUTDIR>
    ```
 
    Note that some form of configuration will be needed so that Nextflow knows how to fetch the required software. This is usually done in the form of a config profile (`YOURPROFILE` in the example command above). You can chain multiple config profiles in a comma-separated string.
@@ -34,7 +37,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
    Example:
 
    ```console
-   nextflow run dincalcilab/lowfrac-variant-benchmark --input samplesheet.csv --outdir <OUTDIR> --genome GRCh37 -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
+   nextflow run dincalcilab/LFV-benchmark --input samplesheet.csv --outdir <OUTDIR> --genome GRCh37 -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
    ```
 
 ## Credits
