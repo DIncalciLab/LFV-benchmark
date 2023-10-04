@@ -34,15 +34,15 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
    > - If you are using `conda`, it is highly recommended to use the [`NXF_CONDA_CACHEDIR` or `conda.cacheDir`](https://www.nextflow.io/docs/latest/conda.html) settings to store the environments in a central location for future pipeline runs.
 
 4. Test the pipeline:
-   
-  4.1 To test the entire pipeline run:
+
+   To test the entire pipeline run:
   
    ```console
    nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --picardjar <PICARDJAR> --samples 2 --coverage 100
    ```
   setting the path for the output folder to OUTDIR, the path of the fasta file (e.g. hg19/38) to FASTA and the path of the picard jar file (generally in `build/libs/picard.jar`, see the [`Picard repo`](https://github.com/broadinstitute/picard)) to PICARDJAR.
 
-  4.2 To skip the normal/tumor BAM file and run the benchmark (recommended to reduce computational time) on a tumor/normal pair run:
+  To skip the normal/tumor BAM file and run the benchmark (recommended to reduce computational time) on a tumor/normal pair run:
     
    ```console
    nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --picardjar <PICARDJAR> --input_normal <NORMALBAM> --input_tumor <TUMORBAM> --skip_normal_generation --skip_tumor_generation
