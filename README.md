@@ -9,7 +9,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 1. Generate artificial BAM files with [`NEAT`](https://github.com/ncsa/NEAT)
 2. Generate random variant sites (SNV and indels) with [`BAMsurgeon`](https://github.com/adamewing/bamsurgeon)
 3. Spike-in the random variants in the artificial BAM files and generate a ground truth VCF ([`BAMsurgeon`](https://github.com/adamewing/bamsurgeon))
-4. Benchmark variant callers against the ground truth:
+4. Benchmark the following variant callers against the ground truth:
   - [`MuTect2`](https://gatk.broadinstitute.org/hc/en-us/articles/360037593851-Mutect2)
   - [`VarDict`](https://github.com/AstraZeneca-NGS/VarDictJava)
   - [`VarScan2`](https://dkoboldt.github.io/varscan/)
@@ -21,10 +21,10 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 
 1. Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#installation) (`>=21.10.3`)
 2. Install [`Picard`](https://github.com/broadinstitute/picard), mandatory for running BAMsurgeon
-3. Download the pipeline and test it on a minimal dataset with a single command:
+3. Download the pipeline:
 
    ```console
-   nextflow run dincalcilab/LFV-benchmark -profile test,YOURPROFILE --outdir <OUTDIR>
+   nextflow pull https://github.com/DIncalciLab/LFV-benchmark
    ```
 
    Note that some form of configuration will be needed so that Nextflow knows how to fetch the required software. This is usually done in the form of a config profile (`YOURPROFILE` in the example command above). You can chain multiple config profiles in a comma-separated string.
@@ -33,13 +33,22 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
    > - If you are using `singularity`, please use the [`nf-core download`](https://nf-co.re/tools/#downloading-pipelines-for-offline-use) command to download images first, before running the pipeline. Setting the [`NXF_SINGULARITY_CACHEDIR` or `singularity.cacheDir`](https://www.nextflow.io/docs/latest/singularity.html?#singularity-docker-hub) Nextflow options enables you to store and re-use the images from a central location for future pipeline runs.
    > - If you are using `conda`, it is highly recommended to use the [`NXF_CONDA_CACHEDIR` or `conda.cacheDir`](https://www.nextflow.io/docs/latest/conda.html) settings to store the environments in a central location for future pipeline runs.
 
-4. Start running your own analysis!
-
-   Example:
-
+4. Test the pipeline:
+   
+  4.1 To test the entire pipeline run:
+  
    ```console
-   nextflow run dincalcilab/LFV-benchmark --input samplesheet.csv --outdir <OUTDIR> --genome GRCh37 -profile <docker/singularity/podman/shifter/charliecloud/conda/institute>
+   nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --picardjar <PICARDJAR> --samples 2 --coverage 100
    ```
+  setting the path for the output folder to OUTDIR, the path of the fasta file (e.g. hg19/38) to FASTA and the path of the picard jar file (generally in `build/libs/picard.jar`, see the [`Picard repo`](https://github.com/broadinstitute/picard)) to PICARDJAR.
+
+  4.2 To skip the normal/tumor BAM file and run the benchmark (recommended to reduce computational time) on a tumor/normal pair run:
+    
+   ```console
+   nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --picardjar <PICARDJAR> --input_normal <NORMALBAM> --input_tumor <TUMORBAM> --skip_normal_generation --skip_tumor_generation
+   ```
+   and give to `--input_normal` and `--input_tumor` the path of the test BAM files, normal and tumor respectively (can be found in the `test` folder of this repo).
+   
 ## Usage
 
 The pipeline steps can be run either together or separately. To run the entire workflow (e.g. generate artificial datasets, spike-in somatic variants and benchmark the variant callers), run:
@@ -121,12 +130,12 @@ To run the variant callers using the optimized set of parameters (see the relate
 
 ## Credits
 
-dincalcilab/LFV-benchmark was originally written by Aldo Sergi and Luca Beltrame.
+DIncalciLab/LFV-benchmark was originally written by Aldo Sergi and Luca Beltrame.
 
 ## Citations
 
 <!-- TODO nf-core: Add citation for pipeline after first release. Uncomment lines below and update Zenodo doi and badge at the top of this file. -->
-<!-- If you use  dincalcilab/LFV-benchmark for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
+<!-- If you use  DIncalciLab/LFV-benchmark for your analysis, please cite it using the following doi: [10.5281/zenodo.XXXXXX](https://doi.org/10.5281/zenodo.XXXXXX) -->
 
 An extensive list of references for the tools used by the pipeline can be found in the [`CITATIONS.md`](CITATIONS.md) file.
 
