@@ -386,7 +386,7 @@ def calculate_performance(true_called, all_called, spiked_snv, spiked_indel=None
             continue
     return dict
 
-
+"""
 def plot_performance(performance, output, type):
     """
     Plot performance for the variant callers
@@ -516,7 +516,7 @@ def plot_performance(performance, output, type):
         plt.savefig(output + '/benchmark_' + type + '.png', dpi=350, transparent=False,
                     bbox_inches='tight')
 
-
+"""
 def main():
     parser = argparse.ArgumentParser(description='Generate plots for artificial mutation benchmark')
 
@@ -593,7 +593,7 @@ def main():
     p_.to_excel(args.output + "/performance" + ".xlsx")
 
     # Plot performance
-    plot_performance(performance, args.output, args.mut_type)
+    #plot_performance(performance, args.output, args.mut_type)
 
 
 if __name__ == '__main__':
