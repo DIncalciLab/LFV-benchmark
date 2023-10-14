@@ -33,21 +33,24 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
    > - If you are using `singularity`, please use the [`nf-core download`](https://nf-co.re/tools/#downloading-pipelines-for-offline-use) command to download images first, before running the pipeline. Setting the [`NXF_SINGULARITY_CACHEDIR` or `singularity.cacheDir`](https://www.nextflow.io/docs/latest/singularity.html?#singularity-docker-hub) Nextflow options enables you to store and re-use the images from a central location for future pipeline runs.
    > - If you are using `conda`, it is highly recommended to use the [`NXF_CONDA_CACHEDIR` or `conda.cacheDir`](https://www.nextflow.io/docs/latest/conda.html) settings to store the environments in a central location for future pipeline runs.
 
-4. Test the pipeline:
+4. Test the pipeline. Different use cases are given below.
 
-   To test the entire pipeline run:
+
+## Use cases
+
+### Generate 2 tumor/normal pair with a coverage of 100x with random SNV/INDEL
   
    ```console
    nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --picardjar <PICARDJAR> --samples 2 --coverage 100
    ```
   setting the path for the output folder to OUTDIR, the path of the fasta file (e.g. hg19/38) to FASTA and the path of the picard jar file (generally in `build/libs/picard.jar`, see the [`Picard repo`](https://github.com/broadinstitute/picard)) to PICARDJAR.
 
-  To skip the normal/tumor BAM file and run the benchmark (recommended to reduce computational time) on a tumor/normal pair run:
+### Perform the benchmark on N tumor/normal pair given in input to the pipeline:
     
    ```console
    nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --picardjar <PICARDJAR> --input_normal <NORMALBAM> --input_tumor <TUMORBAM> --skip_normal_generation --skip_tumor_generation
    ```
-   and give to `--input_normal` and `--input_tumor` the path of the test BAM files, normal and tumor respectively (can be found in the `test` folder of this repo).
+   and give to `--input_normal` and `--input_tumor` the path of the folder with the test BAM files, normal and tumor respectively (can be found in the `test` folder of this repo).
    
 ## Usage
 
