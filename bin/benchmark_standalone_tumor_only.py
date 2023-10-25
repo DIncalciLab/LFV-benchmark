@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from cyvcf2 import VCF
 from pathlib import Path
 import csv
-
+import os
 
 def load_germinal(vcf):
     """
@@ -40,8 +40,11 @@ def filter_germline(all_called_variants):
     dict = {}
 
     for key, val in all_called_variants.items():
-        df = val.loc[val['VAF'].astype(float) < 0.3]
-        dict[key] = df
+        try:
+            df = val.loc[val['VAF'].astype(float) < 0.3]
+            dict[key] = df
+        except ValueError:
+            continue
     return dict
 
 
@@ -349,16 +352,10 @@ def plot_performance(performance, output, type):
         if type == 'snv':
             for key, df in performance.items():
                 if 'snv' in key:
-                    if 'freebayes' in key:
-                        continue
-                    if 'varscan' in key:
-                        continue
                     ax.plot(df['PPV'], df['TPR'], markersize=15, label=key.split('_')[0])
         elif type == 'indel':
             for key, df in performance.items():
                 if 'indel' in key:
-                    if 'freebayes' in key:
-                        continue
                     ax.plot(df['PPV'], df['TPR'], markersize=15, label=key.split('_')[0])
 
         # Add the x and y-axis labels
@@ -376,7 +373,7 @@ def plot_performance(performance, output, type):
 
         plt.grid(axis='both', linestyle='--')
 
-        plt.savefig(output + '/benchmark_' + type + '.png', dpi=350, transparent=False,
+        plt.savefig(output + '/plots/benchmark_' + type + '.png', dpi=350, transparent=False,
                     bbox_inches='tight')
 
     elif type == 'both':
@@ -395,26 +392,14 @@ def plot_performance(performance, output, type):
         # Plot the sample
         for key, df in performance.items():
             if 'snv' in key:
-                if 'freebayes' in key:
-                    continue
-                if 'varscan' in key:
-                    continue
                 ax1.plot(df['PPV'], df['TPR'], markersize=15, label=key.split('_')[0])
 
         for key, df in performance.items():
             if 'indel' in key:
-                if 'freebayes' in key:
-                    continue
-                if 'varscan' in key:
-                    continue
                 ax2.plot(df['PPV'], df['TPR'], markersize=15, label=key.split('_')[0])
 
         for key, df in performance.items():
             if 'all' in key:
-                if 'freebayes' in key:
-                    continue
-                if 'varscan' in key:
-                    continue
                 ax3.plot(df['PPV'], df['TPR'], markersize=15, label=key.split('_')[0])
 
         # Edit the major and minor tick locations of x and y axes
@@ -466,7 +451,7 @@ def plot_performance(performance, output, type):
         ax3.set_title('Performance for SNVs and INDELs', fontsize=20)
 
         # Save figure
-        plt.savefig(output + '/benchmark_' + type + '.png', dpi=350, transparent=False,
+        plt.savefig(output + '/plots/benchmark_' + type + '.png', dpi=350, transparent=False,
                     bbox_inches='tight')
 
 
@@ -489,6 +474,12 @@ def main():
                         help='Output folder')
 
     args = parser.parse_args()
+
+    if not os.path.exists(args.output + "/spiked_variants"):
+        os.makedirs(args.output + "/spiked_variants")
+        os.makedirs(args.output + "/all_called_variants")
+        os.makedirs(args.output + "/true_called_variants")
+        os.makedirs(args.output + "/plots")
 
     if args.normal:
         # Load pseudo-germinal variants (generated from NEAT)
