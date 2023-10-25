@@ -1,6 +1,6 @@
 ## Introduction
 
-**DIncalciLab/LFV-benchmark** is a bioinformatics pipeline to generate syntethic data sets to benchmark low-fraction somatic variant callers (in case, variants with higher fractions can be benchmarked).
+**dincalcilab/LFV-benchmark** is a bioinformatics pipeline to generate syntethic data sets to benchmark low-fraction somatic variant callers (in case, variants with higher fractions can be benchmarked).
 
 The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool to run tasks across multiple computing infrastructures in a very portable manner. It uses Docker/Singularity containers making installation trivial and results highly reproducible. The [Nextflow DSL2](https://www.nextflow.io/docs/latest/dsl2.html) implementation of this pipeline uses one container per process which makes it much easier to maintain and update software dependencies. Where possible, these processes should be installed from the [nf-core/modules](https://github.com/nf-core/modules) repository.
 
@@ -34,24 +34,50 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
    > - If you are using `conda`, it is highly recommended to use the [`NXF_CONDA_CACHEDIR` or `conda.cacheDir`](https://www.nextflow.io/docs/latest/conda.html) settings to store the environments in a central location for future pipeline runs.
 
 4. Test the pipeline. Different use cases are given below.
+5. NB: Due to a bug in [`Pandas/Numpy old versions `]([https://nf-co.re/tools/#downloading-pipelines-for-offline-use](https://github.com/pandas-dev/pandas/issues/39520)) it is advised to run the script to calculate variant calling performance separately from the pipeline, as described in the "Use cases" section.
 
 
 ## Use cases
 
-### Generate 2 tumor/normal pair with a coverage of 100x with random SNV/INDEL
+### Generate 2 tumor/normal pair with a coverage of 100x with random SNV
   
    ```console
-   nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --picardjar <PICARDJAR> --samples 2 --coverage 100
+   nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --picardjar <PICARDJAR> --samples 2 --coverage 100 --type snv --high-sensitivity
    ```
   setting the path for the output folder to OUTDIR, the path of the fasta file (e.g. hg19/38) to FASTA and the path of the picard jar file (generally in `build/libs/picard.jar`, see the [`Picard repo`](https://github.com/broadinstitute/picard)) to PICARDJAR.
 
-### Perform the benchmark on N tumor/normal pair given in input to the pipeline:
+  Then calculate the performance of the callers by launching the script `benchmark_standalone.py` located in the `/bin` folder, using the following command:
+
+   ```console
+   ./benchmark_standalone.py -t snv -s <BAMSURGEON_VCF> -v <VARIANT_CALLING_FOLDER> --o <OUTDIR> 
+   ```
+  where:
+  --t              type of variants inserted from BAMSURGEON
+  --s              directory with VCF files generated from BAMSURGEON with the random SNVs inserted in the generated normal samples
+  --v              output folder generated from the pipeline with the variant calling outputs (normally `outdir/variant_calling`
+  --o              output folder
+
+
+### Perform the benchmark on 2 tumor/normal pair with a coverage of 100X, given in input to the pipeline:
     
    ```console
-   nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --picardjar <PICARDJAR> --input_normal <NORMALBAM> --input_tumor <TUMORBAM> --skip_normal_generation --skip_tumor_generation
+   nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --picardjar <PICARDJAR> --input_normal <NORMALBAM> --input_tumor <TUMORBAM> --skip_normal_generation --skip_tumor_generation --high-sensitivity
    ```
-   and give to `--input_normal` and `--input_tumor` the path of the folder with the test BAM files, normal and tumor respectively (can be found in the `test` folder of this repo).
-   
+   and give to `--input_normal` and `--input_tumor` the path of the folder with the test BAM files, normal and tumor respectively (can be found in the `test_files` folder of this repo).
+
+   Then calculate the performance as described previously. The VCF files generated from BAMSURGEON with the inserted variants can be found in `test_files/spiked_vcf`
+
+### Perform the benchmark on a single tumor sample with a coverage of 30.000X with spiked SNVs/INDELs from BAMSURGEON
+   ```console
+   nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --picardjar <PICARDJAR> --input_tumor <TUMORBAM> --skip_normal_generation --skip_tumor_generation --high-sensitivity --tumor_only
+   ```
+Then calculate the performance of the callers by launching the script `benchmark_standalone_tumor_only.py` located in the `/bin` folder, using the following command:
+
+   ```console
+   ./benchmark_standalone_tumor_only.py -t both -s <BAMSURGEON_VCF> -i <BAMSURGEON_VCF_INDEL> -v <VARIANT_CALLING_FOLDER> --o <OUTDIR> 
+   ```
+   where `--i` is the directory with VCF files generated from BAMSURGEON with the random INDELs inserted in the generated samples
+
 ## Usage
 
 The pipeline steps can be run either together or separately. To run the entire workflow (e.g. generate artificial datasets, spike-in somatic variants and benchmark the variant callers), run:
