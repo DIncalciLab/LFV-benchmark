@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 from cyvcf2 import VCF
 from pathlib import Path
 import csv
-
+import os
 
 def load_germinal(vcf):
     """
@@ -386,7 +386,6 @@ def calculate_performance(true_called, all_called, spiked_snv, spiked_indel=None
             continue
     return dict
 
-"""
 def plot_performance(performance, output, type):
     """
     Plot performance for the variant callers
@@ -435,7 +434,7 @@ def plot_performance(performance, output, type):
 
         plt.grid(axis='both', linestyle='--')
 
-        plt.savefig(output + '/benchmark_' + type + '.png', dpi=350, transparent=False,
+        plt.savefig(output + '/plots/benchmark_' + type + '.png', dpi=350, transparent=False,
                     bbox_inches='tight')
 
     elif type == 'both':
@@ -513,10 +512,9 @@ def plot_performance(performance, output, type):
         ax3.set_title('Performance for SNVs and INDELs', fontsize=20)
 
         # Save figure
-        plt.savefig(output + '/benchmark_' + type + '.png', dpi=350, transparent=False,
+        plt.savefig(output + '/plots/benchmark_' + type + '.png', dpi=350, transparent=False,
                     bbox_inches='tight')
 
-"""
 def main():
     parser = argparse.ArgumentParser(description='Generate plots for artificial mutation benchmark')
 
@@ -536,6 +534,12 @@ def main():
                         help='Output folder')
 
     args = parser.parse_args()
+
+    if not os.path.exists(args.output + "/spiked_variants"):
+        os.makedirs(args.output + "/spiked_variants")
+        os.makedirs(args.output + "/all_called_variants")
+        os.makedirs(args.output + "/true_called_variants")
+        os.makedirs(args.output + "/plots")
 
     if args.normal:
         # Load pseudo-germinal variants (generated from NEAT)
@@ -593,7 +597,7 @@ def main():
     p_.to_excel(args.output + "/performance" + ".xlsx")
 
     # Plot performance
-    #plot_performance(performance, args.output, args.mut_type)
+    plot_performance(performance, args.output, args.mut_type)
 
 
 if __name__ == '__main__':
