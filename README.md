@@ -71,6 +71,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
    ```console
    nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --picardjar <PICARDJAR> --input_tumor <TUMORBAM> --skip_normal_generation --skip_tumor_generation --high-sensitivity --tumor_only
    ```
+Input tumor can be found in `test_files/tumor_bam/high_coverage`
 Then calculate the performance of the callers by launching the script `benchmark_standalone_tumor_only.py` located in the `/bin` folder, using the following command:
 
    ```console
