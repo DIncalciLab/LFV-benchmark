@@ -58,14 +58,14 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
   --o              output folder
 
 
-### Perform the benchmark on 2 tumor/normal pair with a coverage of 100X, given in input to the pipeline:
+### Perform the benchmark on 2 existant tumor/normal pair with a coverage of 100X and with random SNVs inserted:
     
    ```console
    nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --picardjar <PICARDJAR> --input_normal <NORMALBAM> --input_tumor <TUMORBAM> --skip_normal_generation --skip_tumor_generation --high-sensitivity
    ```
    and give to `--input_normal` and `--input_tumor` the path of the folder with the test BAM files, normal and tumor respectively (can be found in the `test_files` folder of this repo).
 
-   Then calculate the performance as described previously. The VCF files generated from BAMSURGEON with the inserted variants can be found in `test_files/spiked_vcf`
+   Then calculate the performance as described previously. The VCF files generated from BAMSURGEON with the inserted SNVs can be found in `test_files/spiked_vcf/SNV/100X`
 
 ### Perform the benchmark on a single tumor sample with a coverage of 30.000X with spiked SNVs/INDELs from BAMSURGEON
    ```console
@@ -76,7 +76,7 @@ Then calculate the performance of the callers by launching the script `benchmark
    ```console
    ./benchmark_standalone_tumor_only.py -t both -s <BAMSURGEON_VCF> -i <BAMSURGEON_VCF_INDEL> -v <VARIANT_CALLING_FOLDER> --o <OUTDIR> 
    ```
-   where `--i` is the directory with VCF files generated from BAMSURGEON with the random INDELs inserted in the generated samples
+   where `--i` is the directory with VCF files generated from BAMSURGEON with the random INDELs inserted in the generated samples. The VCF files generated from BAMSURGEON with the inserted SNVs/INDELs can be found in `test_files/spiked_vcf/SNV/high_coverage` and `test_files/spiked_vcf/INDEL/high_coverage`
 
 ## Usage
 
