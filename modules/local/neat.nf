@@ -44,12 +44,12 @@ process NEAT {
         $args \
         -r $fasta \
         -R ${params.readlen} \
-        --pe-model $fraglenmodel \
+        --pe-model $fraglen_model \
         -c ${params.coverage} \
-        -e $seqerrormodel \
-        --gc-model $gcbiasmodel \
+        -e $error_model \
+        --gc-model $gc_model \
         -tr $bed \
-        -m $mutmodel \
+        -m $mut_model \
         -o $prefix
 
     samtools index ${prefix}_golden.bam
@@ -57,13 +57,13 @@ process NEAT {
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
         ncsa/NEAT: 'Version $version'
-        GC bias model: $gcbiasmodel
+        GC bias model: $gc_model
         Bed used: $bed
-        Mutational model: $mutmodel
+        Mutational model: $mut_model
         FASTA: $fasta
-        Sequencing error model: $seqerrormodel
-        Frag length model: $fraglenmodel
-        Coverage: $coverage
+        Sequencing error model: $error_model
+        Frag length model: $fraglen_model
+        Coverage: ${params.coverage}
         Read length: ${params.readlen}
         Meta: $meta
     END_VERSIONS
@@ -79,14 +79,14 @@ process NEAT {
     cat <<-END_VERSIONS > "${prefix}.versions.yml"
     "${task.process}":
         ncsa/NEAT: 'Version $version'
-        GC bias model: $gcbiasmodel
+        GC bias model: $gc_model
         Bed used: $bed
-        Mutational model: $mutmodel
+        Mutational model: $mut_model
         FASTA: $fasta
-        Sequencing error model: $seqerrormodel
-        Frag length model: $fraglenmodel
-        Coverage: $coverage
-        Read length: $readlen
+        Sequencing error model: $error_model
+        Frag length model: $fraglen_model
+        Coverage: ${params.coverage}
+        Read length: ${params.readlen}
     END_VERSIONS
     """
 }
