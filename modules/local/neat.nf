@@ -6,7 +6,6 @@ process NEAT {
 
     input:
     val meta
-    val coverage
     path bed
     path fasta
 
@@ -44,9 +43,9 @@ process NEAT {
     gen_reads.py \
         $args \
         -r $fasta \
-        -R $readlen \
+        -R ${params.readlen} \
         --pe-model $fraglenmodel \
-        -c $coverage \
+        -c ${params.coverage} \
         -e $seqerrormodel \
         --gc-model $gcbiasmodel \
         -tr $bed \
@@ -65,7 +64,7 @@ process NEAT {
         Sequencing error model: $seqerrormodel
         Frag length model: $fraglenmodel
         Coverage: $coverage
-        Read length: $readlen
+        Read length: ${params.readlen}
         Meta: $meta
     END_VERSIONS
      """
