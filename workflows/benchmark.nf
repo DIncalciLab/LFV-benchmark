@@ -78,7 +78,7 @@ input_all          = !(params.skip_normal_generation)
                      ? Channel
                      .fromPath(params.input_all)
                      .splitCsv(header:true, quote:'\"', sep: ",")
-                     .map { row -> [sample: row.sample, info: row.info] }
+                     .map { row -> [sample_name: row.sample, info: row.info] }
                      : Channel.value([])
 
 input_normal       = ( params.skip_normal_generation )

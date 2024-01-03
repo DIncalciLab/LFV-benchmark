@@ -11,17 +11,11 @@
             "fa_icon": "fas fa-terminal",
             "description": "Define where the pipeline should find input data and save output data.",
             "properties": {
-                "input": {
-                    "type": "string",
-                    "default": "None",
-                    "description": "The input samplesheet containing information about the samples to be created"
-                },
                 "outdir": {
                     "type": "string",
                     "format": "directory-path",
                     "description": "The output directory where the results will be saved. You have to use absolute paths to storage on Cloud infrastructure.",
-                    "fa_icon": "fas fa-folder-open",
-                    "default": "None"
+                    "fa_icon": "fas fa-folder-open"
                 },
                 "email": {
                     "type": "string",
@@ -31,10 +25,7 @@
                     "pattern": "^([a-zA-Z0-9_\\-\\.]+)@([a-zA-Z0-9_\\-\\.]+)\\.([a-zA-Z]{2,5})$"
                 }
             },
-            "required": [
-                "input",
-                "outdir"
-            ]
+            "required": ["outdir"]
         },
         "institutional_config_options": {
             "title": "Institutional config options",
@@ -94,7 +85,7 @@
                 "max_cpus": {
                     "type": "integer",
                     "description": "Maximum number of CPUs that can be requested for any single job.",
-                    "default": 16,
+                    "default": 60,
                     "fa_icon": "fas fa-microchip",
                     "hidden": true,
                     "help_text": "Use to set an upper-limit for the CPU requirement for each process. Should be an integer e.g. `--max_cpus 1`"
@@ -138,14 +129,7 @@
                     "description": "Method used to save pipeline results to output directory.",
                     "help_text": "The Nextflow `publishDir` option specifies which intermediate files should be saved to the output directory. This option tells the pipeline what method should be used to move these files. See [Nextflow docs](https://www.nextflow.io/docs/latest/process.html#publishdir) for details.",
                     "fa_icon": "fas fa-copy",
-                    "enum": [
-                        "symlink",
-                        "rellink",
-                        "link",
-                        "copy",
-                        "copyNoFollow",
-                        "move"
-                    ],
+                    "enum": ["symlink", "rellink", "link", "copy", "copyNoFollow", "move"],
                     "hidden": true
                 },
                 "email_on_fail": {
@@ -171,14 +155,13 @@
                 "tracedir": {
                     "type": "string",
                     "description": "Directory to keep pipeline Nextflow logs and reports.",
-                    "default": "${params.outdir}/pipeline_info",
+                    "default": "null/pipeline_info",
                     "fa_icon": "fas fa-cogs",
                     "hidden": true
                 },
                 "validate_params": {
                     "type": "boolean",
                     "description": "Boolean whether to validate parameters against the schema at runtime",
-                    "default": true,
                     "fa_icon": "fas fa-check-square",
                     "hidden": true
                 },
@@ -204,37 +187,31 @@
             "default": "",
             "properties": {
                 "neat_path": {
-                    "type": "string",
-                    "default": "None"
+                    "type": "string"
                 },
                 "coverage": {
                     "type": "integer",
-                    "default": 1000,
                     "description": "Coverage (e.g. 100X) of the artificial samples"
                 },
                 "readlen": {
                     "type": "integer",
-                    "default": 151,
-                    "description": "Reads length of the model"
+                    "description": "Reads length of the model",
+                    "default": 151
                 },
                 "error_model": {
                     "type": "string",
-                    "default": "None",
                     "description": "Path to the error model"
                 },
                 "mutation_model": {
                     "type": "string",
-                    "default": "None",
                     "description": "Path to the mutational model"
                 },
                 "gc_model": {
                     "type": "string",
-                    "default": "None",
                     "description": "Path to the GC model"
                 },
                 "fraglen_model": {
                     "type": "string",
-                    "default": "None",
                     "description": "Path to the fragment length model"
                 }
             },
@@ -256,13 +233,10 @@
             "properties": {
                 "picardjar": {
                     "type": "string",
-                    "default": "None",
                     "description": "Path to the picard JAR file"
                 }
             },
-            "required": [
-                "picardjar"
-            ]
+            "required": ["picardjar"]
         },
         "bamsurgeon_random_sites_py_options": {
             "title": "BAMSurgeon/random_sites.py options",
@@ -287,7 +261,7 @@
                 },
                 "min_fraction": {
                     "type": "number",
-                    "default": 0.001,
+                    "default": 0.0001,
                     "description": "Minimum fraction of simulated mutations"
                 },
                 "type": {
@@ -305,12 +279,10 @@
             "properties": {
                 "fasta": {
                     "type": "string",
-                    "default": "None",
                     "description": "Path to the reference FASTA file"
                 },
                 "bed": {
                     "type": "string",
-                    "default": "None",
                     "description": "Path to the BED files containing the regions to be simulated"
                 },
                 "samples": {
@@ -320,25 +292,18 @@
                 },
                 "skip_normal_generation": {
                     "type": "string",
-                    "default": "None",
                     "description": "Skip generation of normal artificial samples"
                 },
                 "skip_tumor_generation": {
                     "type": "string",
-                    "default": "None",
-                    "description": "Skip generation of tumor artificial samples",
-                    "help_text": ""
+                    "description": "Skip generation of tumor artificial samples"
                 },
                 "skip_variant_calling": {
                     "type": "string",
-                    "default": "None",
                     "description": "Skip variant calling"
                 }
             },
-            "required": [
-                "fasta",
-                "bed"
-            ]
+            "required": ["fasta", "bed"]
         }
     },
     "allOf": [
@@ -369,12 +334,10 @@
     ],
     "properties": {
         "multiqc_config": {
-            "type": "string",
-            "default": "None"
+            "type": "string"
         },
         "multiqc_title": {
-            "type": "string",
-            "default": "None"
+            "type": "string"
         },
         "max_multiqc_email_size": {
             "type": "string",
@@ -384,9 +347,63 @@
             "type": "string",
             "default": "random"
         },
-        "mode": {
+        "input_all": {
+            "type": "string"
+        },
+        "input_normal": {
+            "type": "string"
+        },
+        "input_tumor": {
+            "type": "string"
+        },
+        "fasta_fai": {
+            "type": "string"
+        },
+        "tumor_only": {
+            "type": "string"
+        },
+        "paired_mode": {
+            "type": "string"
+        },
+        "pon_mode": {
+            "type": "string"
+        },
+        "high_sensitivity": {
+            "type": "string"
+        },
+        "skip_vardict": {
+            "type": "string"
+        },
+        "skip_mutect": {
+            "type": "string"
+        },
+        "skip_varscan": {
+            "type": "string"
+        },
+        "skip_lofreq": {
+            "type": "string"
+        },
+        "skip_strelka": {
+            "type": "string"
+        },
+        "skip_freebayes": {
+            "type": "string"
+        },
+        "germline_resource": {
+            "type": "string"
+        },
+        "panel_of_normals": {
+            "type": "string"
+        },
+        "dbsnp_vcf": {
+            "type": "string"
+        },
+        "manta_candidate_small_indels": {
+            "type": "string"
+        },
+        "schema_ignore_params": {
             "type": "string",
-            "default": "None"
+            "default": "genomes"
         }
     }
 }

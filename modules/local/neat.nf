@@ -1,20 +1,15 @@
 process NEAT {
-    tag "Create artificial normal datasets for sample: ${meta.sample}"
+    tag "Create artificial normal datasets for sample: ${meta.sample_name}"
     label 'process_high'
 
     container "aldosr/neat:3.2"
 
     input:
     val meta
-    val readlen
     val coverage
     path bed
     path fasta
     path neat_path
-    path fraglenmodel
-    path seqerrormodel
-    path mutmodel
-    path gcbiasmodel
 
     output:
     tuple val(meta), path("*.vcf.gz")                    , emit: vcf
@@ -31,8 +26,13 @@ process NEAT {
 
     script:
     def args = task.ext.args ?: ''
+    def error_model = params.error_model ? "-e $params.error_model" : ''
+    def mut_model = params.mut_model ? "-m $params.mut_model" : ''
+    def gc_model = params.gb_model ? "--gc-model $params.gc_model" : ''
+    def fraglen_model = params.fraglen_model ? "--pe-model $params.fraglen_model" : ''
     def prefix = task.ext.prefix ?: ''
     def version = '3.2' //VERSION IS HARDCODED
+
 
     def avail_mem = 3
     if (!task.memory) {
