@@ -25,7 +25,7 @@ process NEAT {
     script:
     def args = task.ext.args ?: ''
     def error_model = params.error_model ?: ''
-    def mut_model = params.mut_model ?: ''
+    def mut_model = params.mutation_model ?: ''
     def gc_model = params.gc_model ?: ''
     def fraglen_model = params.fraglen_model ?: ''
     def prefix = task.ext.prefix ?: ''
