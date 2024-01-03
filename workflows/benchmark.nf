@@ -151,15 +151,9 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
         NEAT(
             input_all,
-            params.readlen,
             params.coverage,
             params.bed,
-            params.fasta,
-            params.neat_path,
-            params.fraglen_model,
-            params.error_model,
-            params.mutation_model,
-            params.gc_model
+            params.fasta
         )
      }
     //ch_versions = ch_versions.mix(NEAT.out.versions)

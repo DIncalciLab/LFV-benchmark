@@ -9,7 +9,6 @@ process NEAT {
     val coverage
     path bed
     path fasta
-    path neat_path
 
     output:
     tuple val(meta), path("*.vcf.gz")                    , emit: vcf
@@ -42,7 +41,7 @@ process NEAT {
     }
 
     """
-    python3 ${neat_path}/gen_reads.py \
+    gen_reads.py \
         $args \
         -r $fasta \
         -R $readlen \
