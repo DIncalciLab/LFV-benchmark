@@ -26,7 +26,7 @@ process NEAT {
     def args = task.ext.args ?: ''
     def error_model = params.error_model ?: ''
     def mut_model = params.mut_model ?: ''
-    def gc_model = params.gb_model ?: ''
+    def gc_model = params.gc_model ?: ''
     def fraglen_model = params.fraglen_model ?: ''
     def prefix = task.ext.prefix ?: ''
     def version = '3.2' //VERSION IS HARDCODED
