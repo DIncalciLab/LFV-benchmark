@@ -10,13 +10,11 @@ process NEAT {
     path fasta
 
     output:
-    tuple val(meta), path("*.vcf.gz")                    , emit: vcf
-    //tuple val(meta), path("*.tbi")                       , emit: tbi
+    tuple val(meta), path("*.vcf.gz")                                   , emit: vcf
 
-    tuple val(meta), path("*.bam")                       , emit: bam
-    tuple val(meta), path("*.bai")                       , emit: bai
+    tuple val(meta), path("*.bam"), path("*.bai")                       , emit: bam
 
-    tuple val(meta), path("*.yml")                       , emit: versions
+    tuple val(meta), path("*.yml")                                      , emit: versions
 
 
     when:

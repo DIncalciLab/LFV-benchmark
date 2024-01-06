@@ -159,8 +159,15 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
 
     if ( !(params.skip_normal_generation) && !(params.skip_tumor_generation) ){
 
+        input_normal = NEAT
+                        .out
+                        .bam
+                        .map { meta, bam, bai ->
+                               [
+                                    [sample_name: meta.sample_name], [normal_bam: bam, normal_bai: bai ]]}
+
         BAMSURGEON(
-            NEAT.out.bam,
+            input_normal,
             params.mut_number,
             params.min_fraction,
             params.max_fraction,
@@ -169,6 +176,17 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.bed,
             params.picardjar
         )
+
+        input_tumor = BAMSURGEON
+                        .out
+                        .bam
+                        .map { meta, bam, bai ->
+                               [
+                                    [sample_name: meta.sample_name], [tumor_bam: bam, tumor_bai: bai ]
+                                    ]
+                                    }
+
+
     }
     //ch_versions = ch_versions.mix(BAMSURGEON.out.versions)
 

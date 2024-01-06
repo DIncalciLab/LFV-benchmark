@@ -1,12 +1,12 @@
 process BAMSURGEON {
 
-    tag "Spike-in artificial somatic mutations in sample: ${meta.sample}"
+    tag "Spike-in artificial somatic mutations in sample: ${meta.sample_name}"
     label 'process_high'
 
     container "aldosr/bamsurgeon:1.3-custom"
 
     input:
-    tuple val(meta), val(neat)
+    tuple val(meta), val(normal_sample)
 
     val (mut_number)
     val (minvaf)
@@ -60,7 +60,7 @@ process BAMSURGEON {
     addsnv.py \\
         $args2 \\
         -v ${prefix}_random_snv.txt \\
-        -f "${neat}" \\
+        -f "${normal_sample.normal_bam}" \\
         -r "${fasta}" \\
         -o ${prefix}_spiked_snv.bam \\
         --picardjar $picardjar \\
@@ -104,7 +104,7 @@ process BAMSURGEON {
     addindel.py \\
         $args3 \\
         -v ${prefix}_random_indel.txt \\
-        -f "${neat}" \\
+        -f "${normal_sample.normal_bam}" \\
         -r "${fasta}" \\
         -o ${prefix}_spiked_indel.bam \\
         --picardjar $picardjar \\
@@ -158,7 +158,7 @@ process BAMSURGEON {
    addsnv.py \\
         $args2 \\
         -v ${prefix}_random_snv.txt \\
-        -f "${neat}" \\
+        -f "${normal_sample.normal_bam}" \\
         -r "${fasta}" \\
         -o ${prefix}_spiked_snv.bam \\
         --picardjar $picardjar \\

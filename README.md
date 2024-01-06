@@ -20,7 +20,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 ## Quick Start
 
 1. Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#installation) (`>=21.10.3`)
-2. Install [`Picard`](https://github.com/broadinstitute/picard), mandatory for running BAMsurgeon
+2. Install [`Picard`](https://github.com/broadinstitute/picard) (`<3.00` to avoid errors with Java 17), mandatory for running BAMsurgeon
 3. Download the pipeline:
 
    ```console
@@ -29,7 +29,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 
    Note that some form of configuration will be needed so that Nextflow knows how to fetch the required software. This is usually done in the form of a config profile (`YOURPROFILE` in the example command above). You can chain multiple config profiles in a comma-separated string.
 
-   > - The pipeline comes with config profiles called `docker`, `singularity`, `podman`, `shifter`, `charliecloud` and `conda` which instruct the pipeline to use the named tool for software management. For example, `-profile test,docker`.
+   > - The pipeline comes with config profiles called `docker`, `singularity`, `podman`, `shifter`, `charliecloud` and `conda` which instruct the pipeline to use the named tool for software management. For example, `-profile test,docker`. A simple configuration (`test_local`) to run the pipeline in local on a low-memory machine is also provided. You can change it depending on your needs.
    > - If you are using `singularity`, please use the [`nf-core download`](https://nf-co.re/tools/#downloading-pipelines-for-offline-use) command to download images first, before running the pipeline. Setting the [`NXF_SINGULARITY_CACHEDIR` or `singularity.cacheDir`](https://www.nextflow.io/docs/latest/singularity.html?#singularity-docker-hub) Nextflow options enables you to store and re-use the images from a central location for future pipeline runs.
    > - If you are using `conda`, it is highly recommended to use the [`NXF_CONDA_CACHEDIR` or `conda.cacheDir`](https://www.nextflow.io/docs/latest/conda.html) settings to store the environments in a central location for future pipeline runs.
 
@@ -39,16 +39,17 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 
 ## Use cases
 
-### Generate 2 tumor/normal pair with a coverage of 100x with random SNV
+### Generate 2 tumor/normal pair with a coverage of 30x with random SNV
 
    ```console
-   nextflow run DIncalciLab/LFV-benchmark --input_all <input_csv> --outdir <OUTDIR> --bed <path_to_bed> --fasta <FASTA> --picardjar <PICARDJAR> --samples 2 --coverage 100 --type snv --high-sensitivity
+   nextflow run DIncalciLab/LFV-benchmark --input_all <input_csv> --outdir <OUTDIR> --bed <path_to_bed> --fasta <FASTA> --picardjar <PICARDJAR> --samples 2 --coverage 30 --type snv --high-sensitivity -profile test_local
    ```
   where:
 ```console
-  --input_all         path to csv file containing the name of the samples to be generated (/assets/samplesheet.csv is an example of this file)
+  --input_all           path to csv file containing the name of the samples to be generated (`/assets/samplesheet.csv` is an example of this file)
   --outdir              path of the output folder
-  --fasta               path of the fasta file (e.g. hg19/hg38)
+  --bed                 path of the bed file, containing the regions to be generated
+  --fasta               path of the fasta file (e.g. hg19/hg38). NB: the fasta folder should aldo contain the fasta index file
   --picard              path of the picard.jar file (generally in `build/libs/picard.jar`, see the [`Picard repo`](https://github.com/broadinstitute/picard))
   --samples             number of samples to be generated
   --coverage            coverage of the artificial samples to be generated
@@ -69,7 +70,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 ```
 
 
-### Perform the benchmark on 2 existant tumor/normal pair with a coverage of 100X and with random SNVs inserted:
+### Perform the benchmark on 2 existent tumor/normal pair with a coverage of 100X and with random SNVs inserted:
 
    ```console
    nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --picardjar <PICARDJAR> --input_normal <NORMALBAM> --input_tumor <TUMORBAM> --skip_normal_generation --skip_tumor_generation --high-sensitivity
