@@ -17,10 +17,17 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
   - [`FreeBayes`](https://github.com/freebayes/freebayes)
   - [`Strelka2`](https://github.com/Illumina/strelka)
 
+## Requirements
+ - `Nextflow` (`>=21.10.3`)
+ - `Picard` (`< 3.00`) (A copy of the Picard.jar can be found in the `/assets` folder)
+ - `Java` (`< 17`) (to avoid errors with Picard <3.00)
+ - `matplotlib`, `openpyxl` and `cyvcf2` (for performance analysis and plots)
+ - Fasta file, along with its index and dictionary (e.g. hg19/hg38)
+
 ## Quick Start
 
 1. Install [`Nextflow`](https://www.nextflow.io/docs/latest/getstarted.html#installation) (`>=21.10.3`)
-2. Install [`Picard`](https://github.com/broadinstitute/picard) (`<3.00` to avoid errors with Java 17), mandatory for running BAMsurgeon
+2. Install `Java` (`< 17`)
 3. Download the pipeline:
 
    ```console
@@ -42,19 +49,25 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 ### Generate 2 tumor/normal pair with a coverage of 30x with random SNV
 
    ```console
-   nextflow run DIncalciLab/LFV-benchmark --input_all <input_csv> --outdir <OUTDIR> --bed <path_to_bed> --fasta <FASTA> --picardjar <PICARDJAR> --samples 2 --coverage 30 --type snv --high-sensitivity -profile test_local
+   nextflow run DIncalciLab/LFV-benchmark --input_all <input_csv> --outdir <OUTDIR> --bed <path_to_bed> --fasta <FASTA> --samples 2 --coverage 30 --type snv --high-sensitivity -profile test_local
    ```
   where:
 ```console
   --input_all           path to csv file containing the name of the samples to be generated (`/assets/samplesheet.csv` is an example of this file)
   --outdir              path of the output folder
   --bed                 path of the bed file, containing the regions to be generated
-  --fasta               path of the fasta file (e.g. hg19/hg38). NB: the fasta folder should aldo contain the fasta index file
-  --picard              path of the picard.jar file (generally in `build/libs/picard.jar`, see the [`Picard repo`](https://github.com/broadinstitute/picard))
+  --fasta               path of the fasta file (e.g. hg19/hg38). NB: the fasta folder should also contains the fasta index and dictionary files
   --samples             number of samples to be generated
   --coverage            coverage of the artificial samples to be generated
   --type                type of mutations spiked-in (SNVs/INDELs/both)
   --high-sensitivity    use tuned parameters for variant calling
+  -profile local        run the pipeline using the profile for a low-computational machine (for testing purposes only)
+  ```
+  Please note that if you are running the pipeline in local (using `-profile local_test`) it is advised to do not run the most computationally expensive variant callers in high-sensitivity mode (due to the high amount of time required).\
+  To do so, either run the pipeline with varian callers default parameters (remove --high-sensitivity command) or add the following commands to jump Freebayes/Varscan variant callers:
+  ```console
+  --skip_freebayes
+  --skip_varscan
   ```
   Then calculate the performance of the callers by launching the script `benchmark_standalone.py` located in the `/bin` folder, using the following command:
 
@@ -73,7 +86,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 ### Perform the benchmark on 2 existent tumor/normal pair with a coverage of 100X and with random SNVs inserted:
 
    ```console
-   nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --picardjar <PICARDJAR> --input_normal <NORMALBAM> --input_tumor <TUMORBAM> --skip_normal_generation --skip_tumor_generation --high-sensitivity
+   nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --input_normal <NORMALBAM> --input_tumor <TUMORBAM> --skip_normal_generation --skip_tumor_generation --high-sensitivity
    ```
    and give to `--input_normal` and `--input_tumor` the path of the folder with the test BAM files, normal and tumor respectively (can be found in the `test_files` folder of this repo).
 
@@ -81,7 +94,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 
 ### Perform the benchmark on a single tumor sample with a coverage of 30.000X with spiked SNVs/INDELs from BAMSURGEON
    ```console
-   nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --picardjar <PICARDJAR> --input_tumor <TUMORBAM> --skip_normal_generation --skip_tumor_generation --high-sensitivity --tumor_only
+   nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --input_tumor <TUMORBAM> --skip_normal_generation --skip_tumor_generation --high-sensitivity --tumor_only
    ```
 Input tumor can be found in `test_files/tumor_bam/high_coverage`
 Then calculate the performance of the callers by launching the script `benchmark_standalone_tumor_only.py` located in the `/bin` folder, using the following command:
@@ -113,10 +126,10 @@ nextflow run DIncalciLab/LFV-benchmark \
 mandatory arguments:
   --outdir              output directory
   --fasta               path to the fasta file
-  --picardjar           path to the picard.jar file
-  --samples             nunber of artificial samples to be generated
+  --samples             number of artificial samples to be generated
 
 optional arguments:
+  --picardjar           path to the picard.jar file (default: $HOME/.nextflow/assets/DIncalciLab/LFV-benchmark/assets/picard.jar)
   --readlen             int (default: 151)        length of artificial reads generated by NEAT
   --bed                 FASTA                     print version and exit
   --coverage            int (default: 10000)      Coverage depth of the artificial samples generated by NEAT
@@ -126,7 +139,7 @@ optional arguments:
   --fraglen_model       FRAGLEN_MODEL             path of the fragment length model used by NEAT
   --type                string (default: both)    type of low-fraction variants to spike-in in the artificial samples. Can be: snv, indel, both
 ```
-Default models utilized by NEAT are available at: https://github.com/ncsa/NEAT/tree/master/models
+Default models utilized by NEAT are available in the `/assets/neat_models` folder.
 
 ### Skip the generation of normal samples
 

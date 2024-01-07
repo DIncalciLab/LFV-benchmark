@@ -35,16 +35,20 @@ def load_somatic(vcf_path):
     """
     Create somatic dataframes from BAMSurgeon VCF files (spike-in variants)
     """
-    vcf_files = [path for path in Path(vcf_path).glob('*.vcf')]
+    vcf_files = [path for path in Path(vcf_path).glob('*.vcf.gz')]
     df_cols = ["sample", "chrom", "pos", "REF", "ALT", "VAF"]
 
     df_somatic = pd.DataFrame()
 
     for file in vcf_files:
-        samplename = file.stem
+        samplename = file.stem.split('.')[0]
 
         if 'bamsurgeon' in samplename:
             samplename = samplename.replace('bamsurgeon_', '')
+        if 'spiked_snv' in samplename:
+            samplename = samplename.replace('_spiked_snv', '')
+        if 'spiked_indel' in samplename:
+            samplename = samplename.replace('_spiked_indel', '')
 
         for variant in VCF(file):
             tmp = pd.DataFrame(data=
