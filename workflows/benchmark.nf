@@ -202,6 +202,15 @@ workflow LOWFRAC_VARIANT_BENCHMARK {
             params.bed,
             params.picardjar
         )
+
+        input_tumor = BAMSURGEON
+                        .out
+                        .bam
+                        .map { meta, bam, bai ->
+                               [
+                                    [sample_name: meta.sample_name], [tumor_bam: bam, tumor_bai: bai ]
+                                    ]
+                                    }
     }
 
     if ( !params.skip_variant_calling ){

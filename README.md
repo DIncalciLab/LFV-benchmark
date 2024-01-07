@@ -82,6 +82,13 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
   --o              output folder
 ```
 
+### Generate tumor (with random SNVs) from input normal BAM and perform the benchmark
+Very similar to the previous case. Just input the folder with the normal BAM and use the command `--skip_normal_generation` to do not generate the normal samples with NEAT:
+
+   ```console
+   nextflow run DIncalciLab/LFV-benchmark --input_normal <NORMALBAM> --outdir <OUTDIR> --bed <path_to_bed> --fasta <FASTA> --type snv --high-sensitivity -profile test_local --skip_normal_generation
+   ```
+Then calculate the performance of the callers by launching the script `benchmark_standalone.py`.
 
 ### Perform the benchmark on 2 existent tumor/normal pair with a coverage of 100X and with random SNVs inserted:
 
