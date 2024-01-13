@@ -256,7 +256,7 @@ def load_callers(vcf_path):
 
         elif 'lofreq' in name:
             if 'snvs' in name:
-                samplename = file.stem.replace('lofreq_', '').replace('_somatic_final.snvs', '').split('.')[0]
+                samplename = file.stem.replace('lofreq_snv_', '').replace('_somatic_final.snvs', '').split('.')[0]
                 for variant in VCF(file):
                     if variant.is_snp:
                         tmp = pd.DataFrame(data=
@@ -270,7 +270,7 @@ def load_callers(vcf_path):
                         df_lofreq_snv = pd.concat([df_lofreq_snv, tmp])
 
             elif 'indels' in name:
-                samplename = file.stem.replace('lofreq_', '').split('.')[0].replace('_somatic_final.indels', '')
+                samplename = file.stem.replace('lofreq_indel_', '').replace('_somatic_final.indels', '').split('.')[0]
                 for variant in VCF(file):
                     if variant.is_indel:
                         tmp = pd.DataFrame(data=
