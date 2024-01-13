@@ -49,7 +49,7 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 ### Generate 2 tumor/normal pair with a coverage of 30x with random SNV
 
    ```console
-   nextflow run DIncalciLab/LFV-benchmark --input_all <input_csv> --outdir <OUTDIR> --bed <path_to_bed> --fasta <FASTA> --samples 2 --coverage 30 --type snv --high-sensitivity -profile test_local
+   nextflow run DIncalciLab/LFV-benchmark --input_all <input_csv> --outdir <OUTDIR> --bed <path_to_bed> --fasta <FASTA> --samples 2 --coverage 30 --type snv --high_sensitivity -profile test_local
    ```
   where:
 ```console
@@ -86,14 +86,14 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
 Very similar to the previous case. Just input the folder with the normal BAM and use the command `--skip_normal_generation` to do not generate the normal samples with NEAT:
 
    ```console
-   nextflow run DIncalciLab/LFV-benchmark --input_normal <NORMALBAM> --outdir <OUTDIR> --bed <path_to_bed> --fasta <FASTA> --type snv --high-sensitivity -profile test_local --skip_normal_generation
+   nextflow run DIncalciLab/LFV-benchmark --input_normal <NORMALBAM> --outdir <OUTDIR> --bed <path_to_bed> --fasta <FASTA> --type snv --high_sensitivity -profile test_local --skip_normal_generation
    ```
 Then calculate the performance of the callers by launching the script `benchmark_standalone.py`.
 
 ### Perform the benchmark on 2 existent tumor/normal pair with a coverage of 100X and with random SNVs inserted:
 
    ```console
-   nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --input_normal <NORMALBAM> --input_tumor <TUMORBAM> --skip_normal_generation --skip_tumor_generation --high-sensitivity
+   nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --bed <BED> --input_normal <NORMALBAM> --input_tumor <TUMORBAM> --skip_normal_generation --skip_tumor_generation --high_sensitivity
    ```
    and give to `--input_normal` and `--input_tumor` the path of the folder with the test BAM files, normal and tumor respectively (can be found in the `test_files` folder of this repo).
 
@@ -101,7 +101,7 @@ Then calculate the performance of the callers by launching the script `benchmark
 
 ### Perform the benchmark on a single tumor sample with a coverage of 30.000X with spiked SNVs/INDELs from BAMSURGEON
    ```console
-   nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --input_tumor <TUMORBAM> --skip_normal_generation --skip_tumor_generation --high-sensitivity --tumor_only
+   nextflow run DIncalciLab/LFV-benchmark --outdir <OUTDIR> --fasta <FASTA> --input_tumor <TUMORBAM> --bed <BED> --skip_normal_generation --skip_tumor_generation --high_sensitivity --tumor_only
    ```
 Input tumor can be found in `test_files/tumor_bam/high_coverage`
 Then calculate the performance of the callers by launching the script `benchmark_standalone_tumor_only.py` located in the `/bin` folder, using the following command:
@@ -188,7 +188,7 @@ Moreover, each variant caller can be skipped independently, using the commands `
 
 ### High-sensitivity mode
 
-To run the variant callers using the optimized set of parameters (see the related paper for details), just add the command `--high-sensitivity` to the pipeline.
+To run the variant callers using the optimized set of parameters (see the related paper for details), just add the command `--high_sensitivity` to the pipeline.
 
 ## Credits
 
