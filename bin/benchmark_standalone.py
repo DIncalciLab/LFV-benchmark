@@ -157,8 +157,9 @@ def load_callers(vcf_path):
 
 
         elif 'varscan2' in name:
-            samplename = file.stem.replace('varscan2_', '').split('.')[0]
             if 'snp' in name:
+                samplename = file.stem.replace('varscan2_', '').replace('.snp', '').split('.')[0]
+                
                 for variant in VCF(file):
                     # Jump germline variants
                     if variant.INFO['SS'] == '1':
@@ -173,6 +174,7 @@ def load_callers(vcf_path):
                     )
                     df_varscan_snv = pd.concat([df_varscan_snv, tmp])
             if 'indel' in name:
+                samplename = file.stem.replace('varscan2_', '').replace('.indel', '').split('.')[0]
                 for variant in VCF(file):
                     # Jump germline variants
                     if variant.INFO['SS'] == '1':
@@ -254,7 +256,7 @@ def load_callers(vcf_path):
 
         elif 'lofreq' in name:
             if 'snvs' in name:
-                samplename = file.stem.replace('lofreq_', '').replace('_somatic_final', '').split('.')[0]
+                samplename = file.stem.replace('lofreq_', '').replace('_somatic_final.snvs', '').split('.')[0]
                 for variant in VCF(file):
                     if variant.is_snp:
                         tmp = pd.DataFrame(data=
@@ -268,7 +270,7 @@ def load_callers(vcf_path):
                         df_lofreq_snv = pd.concat([df_lofreq_snv, tmp])
 
             elif 'indels' in name:
-                samplename = file.stem.replace('lofreq_', '').split('.')[0].replace('_somatic_final', '')
+                samplename = file.stem.replace('lofreq_', '').split('.')[0].replace('_somatic_final.indels', '')
                 for variant in VCF(file):
                     if variant.is_indel:
                         tmp = pd.DataFrame(data=
