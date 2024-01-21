@@ -72,14 +72,14 @@ The pipeline is built using [Nextflow](https://www.nextflow.io), a workflow tool
   Then calculate the performance of the callers by launching the script `benchmark_standalone.py` located in the `/bin` folder, using the following command:
 
    ```console
-   ./benchmark_standalone.py -t snv -s <BAMSURGEON_VCF> -v <VARIANT_CALLING_FOLDER> --o <OUTDIR>
+   ./benchmark_standalone.py -t snv -s <BAMSURGEON_VCF> -v <VARIANT_CALLING_FOLDER> -o <OUTDIR>
    ```
   where:
 ```console
-  --t              type of variants inserted from BAMSURGEON
-  --s              directory with VCF files generated from BAMSURGEON with the random SNVs inserted in the generated normal samples
-  --v              output folder generated from the pipeline with the variant calling outputs (normally `outdir/variant_calling`
-  --o              output folder
+  -t              type of variants inserted from BAMSURGEON
+  -s              directory with VCF files generated from BAMSURGEON with the random SNVs inserted in the generated normal samples
+  -v              output folder generated from the pipeline with the variant calling outputs (normally `outdir/variant_calling`
+  -o              output folder
 ```
 
 ### Generate tumor (with random SNVs) from input normal BAM and perform the benchmark
