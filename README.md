@@ -107,7 +107,7 @@ Input tumor can be found in `test_files/tumor_bam/high_coverage`
 Then calculate the performance of the callers by launching the script `benchmark_standalone_tumor_only.py` located in the `/bin` folder, using the following command:
 
    ```console
-   ./benchmark_standalone_tumor_only.py -t both -s <BAMSURGEON_VCF> -i <BAMSURGEON_VCF_INDEL> -v <VARIANT_CALLING_FOLDER> --o <OUTDIR>
+   ./benchmark_standalone_tumor_only.py -t both -s <BAMSURGEON_VCF> -i <BAMSURGEON_VCF_INDEL> -v <VARIANT_CALLING_FOLDER> -o <OUTDIR>
    ```
    where `--i` is the directory with VCF files generated from BAMSURGEON with the random INDELs inserted in the generated samples. The VCF files generated from BAMSURGEON with the inserted SNVs/INDELs can be found in `test_files/spiked_vcf/SNV/high_coverage` and `test_files/spiked_vcf/INDEL/high_coverage`
 
